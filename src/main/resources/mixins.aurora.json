@@ -1,0 +1,31 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "package": "me.memeszz.aurora.mixin.mixins",
+  "refmap": "mixins.aurora.refmap.json",
+  "mixins": [
+    "MixinBlockSoulSand",
+    "MixinCPacketChatMessage",
+    "MixinCPacketPlayer",
+    "MixinEntity",
+    "MixinEntityPlayer",
+    "MixinEntityPlayerSP",
+    "MixinEntityRenderer",
+    "MixinGuiBossOverlay",
+    "MixinGuiNewChat",
+    "MixinGuiPlayerTabOverlay",
+    "MixinGuiScreen",
+    "MixinItemChorusFruit",
+    "MixinItemRenderer",
+    "MixinLayerBipedArmor",
+    "MixinMinecraft",
+    "MixinMovementInputFromOptions",
+    "MixinNetworkManager",
+    "MixinPlayerControllerMP",
+    "MixinRendererLivingEntity",
+    "MixinRenderGlobal",
+    "MixinRenderManager",
+    "MixinRenderPlayer",
+    "MixinTimer"
+  ]
+}

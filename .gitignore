@@ -1,0 +1,16 @@
+# idea
+out/
+*.ipr
+*.iws
+*.iml
+.idea/
+classes/
+
+# gradle
+build/
+.gradle
+
+# other
+run/
+*.class
+*.jar
