@@ -130,6 +130,7 @@ public class SaveConfiguration
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -145,6 +146,7 @@ public class SaveConfiguration
         }
         catch (Exception var3)
         {
+            var3.printStackTrace();
         }
 
     }
@@ -167,6 +169,7 @@ public class SaveConfiguration
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -188,6 +191,7 @@ public class SaveConfiguration
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -204,6 +208,7 @@ public class SaveConfiguration
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -223,6 +228,7 @@ public class SaveConfiguration
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -240,6 +246,7 @@ public class SaveConfiguration
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -261,6 +268,7 @@ public class SaveConfiguration
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -285,6 +293,7 @@ public class SaveConfiguration
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -306,6 +315,7 @@ public class SaveConfiguration
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 }
