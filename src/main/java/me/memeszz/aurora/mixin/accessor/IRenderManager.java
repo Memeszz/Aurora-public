@@ -1,7 +1,6 @@
 package me.memeszz.aurora.mixin.accessor;
 
-public interface IRenderManager
-{
+public interface IRenderManager {
 
     double getRenderPosX();
 

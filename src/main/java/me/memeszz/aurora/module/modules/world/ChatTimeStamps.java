@@ -11,15 +11,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ChatTimeStamps extends Module
-{
+public class ChatTimeStamps extends Module {
     Setting.mode format;
     Setting.mode color;
     Setting.mode decoration;
     Setting.b space;
 
-    public ChatTimeStamps()
-    {
+    public ChatTimeStamps() {
         super("ChatTimeStamps", Category.World);
         ArrayList<String> formats = new ArrayList<>();
         formats.add("H24:mm");
@@ -34,8 +32,7 @@ public class ChatTimeStamps extends Module
         deco.add("{ }");
         deco.add(" ");
         ArrayList<String> colors = new ArrayList<>();
-        for (ChatFormatting cf : ChatFormatting.values())
-        {
+        for (ChatFormatting cf : ChatFormatting.values()) {
             colors.add(cf.getName());
         }
 
@@ -46,8 +43,7 @@ public class ChatTimeStamps extends Module
     }
 
     @Listener
-    public void chat(ClientChatReceivedEvent event)
-    {
+    public void chat(ClientChatReceivedEvent event) {
         String decoLeft = decoration.getValue().equalsIgnoreCase(" ") ? "" : decoration.getValue().split(" ")[0];
         String decoRight = decoration.getValue().equalsIgnoreCase(" ") ? "" : decoration.getValue().split(" ")[1];
         if (space.getValue()) decoRight += " ";

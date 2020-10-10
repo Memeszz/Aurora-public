@@ -20,8 +20,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = GuiScreen.class, priority = 9999)
-public abstract class MixinGuiScreen
-{
+public abstract class MixinGuiScreen {
 
     /**
      * @author cookiedragon & bella?
@@ -34,16 +33,12 @@ public abstract class MixinGuiScreen
     FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 
     @Inject(method = "renderToolTip", at = @At("HEAD"), cancellable = true)
-    public void renderToolTip(ItemStack stack, int x, int y, CallbackInfo info)
-    {
-        if (ModuleManager.isModuleEnabled("ShulkerPreview") && stack.getItem() instanceof ItemShulkerBox)
-        {
+    public void renderToolTip(ItemStack stack, int x, int y, CallbackInfo info) {
+        if (ModuleManager.isModuleEnabled("ShulkerPreview") && stack.getItem() instanceof ItemShulkerBox) {
             NBTTagCompound tagCompound = stack.getTagCompound();
-            if (tagCompound != null && tagCompound.hasKey("BlockEntityTag", 10))
-            {
+            if (tagCompound != null && tagCompound.hasKey("BlockEntityTag", 10)) {
                 NBTTagCompound blockEntityTag = tagCompound.getCompoundTag("BlockEntityTag");
-                if (blockEntityTag.hasKey("Items", 9))
-                {
+                if (blockEntityTag.hasKey("Items", 9)) {
                     // We'll take over!
                     info.cancel();
 
@@ -82,8 +77,7 @@ public abstract class MixinGuiScreen
                     GlStateManager.enableLighting();
                     GlStateManager.enableDepth();
                     RenderHelper.enableGUIStandardItemLighting();
-                    for (int i = 0; i < nonnulllist.size(); i++)
-                    {
+                    for (int i = 0; i < nonnulllist.size(); i++) {
                         int iX = x + (i % 9) * 16 + 11;
                         int iY = y + (i / 9) * 16 - 11 + 8;
                         ItemStack itemStack = nonnulllist.get(i);
@@ -104,8 +98,7 @@ public abstract class MixinGuiScreen
         }
     }
 
-    private void drawGradientRectP(int left, int top, int right, int bottom, int startColor, int endColor)
-    {
+    private void drawGradientRectP(int left, int top, int right, int bottom, int startColor, int endColor) {
         float f = (float) (startColor >> 24 & 255) / 255.0F;
         float f1 = (float) (startColor >> 16 & 255) / 255.0F;
         float f2 = (float) (startColor >> 8 & 255) / 255.0F;

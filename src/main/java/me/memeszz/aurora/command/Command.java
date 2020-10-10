@@ -4,38 +4,32 @@ import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentString;
 
-public abstract class Command
-{
+public abstract class Command {
     public static String prefix = ".";
     public static boolean MsgWaterMark = true;
     public static ChatFormatting cf = ChatFormatting.AQUA;
     static Minecraft mc = Minecraft.getMinecraft();
 
-    public static void sendClientMessage(String message)
-    {
+    public static void sendClientMessage(String message) {
         if (MsgWaterMark)
             mc.player.sendMessage(new TextComponentString(ChatFormatting.DARK_AQUA + "[" + ChatFormatting.AQUA + "Aurora" + ChatFormatting.DARK_AQUA + "] " + message));
         else
             mc.player.sendMessage(new TextComponentString(cf + message));
     }
 
-    public static char SECTIONSIGN()
-    {
+    public static char SECTIONSIGN() {
         return '§';
     }
 
-    public static void sendRawMessage(String message)
-    {
+    public static void sendRawMessage(String message) {
         mc.player.sendMessage(new TextComponentString(message));
     }
 
-    public static String getPrefix()
-    {
+    public static String getPrefix() {
         return prefix;
     }
 
-    public static void setPrefix(String p)
-    {
+    public static void setPrefix(String p) {
         prefix = p;
     }
 

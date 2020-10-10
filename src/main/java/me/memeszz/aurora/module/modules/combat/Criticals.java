@@ -10,17 +10,14 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.ArrayList;
 
-public class Criticals extends Module
-{
+public class Criticals extends Module {
     Setting.mode mode;
 
-    public Criticals()
-    {
+    public Criticals() {
         super("Criticals", Category.Combat, "Increases chance for a critical hit");
     }
 
-    public void setup()
-    {
+    public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Packet");
         modes.add("Jump");
@@ -28,20 +25,14 @@ public class Criticals extends Module
     }
 
     @Listener
-    public void onUpdate(PacketEvent.Send event)
-    {
-        if ((mc.player.getHeldItemMainhand().getItem() instanceof ItemSword))
-        {
-            if (event.getPacket() instanceof CPacketUseEntity)
-            {
-                if (((CPacketUseEntity) event.getPacket()).getAction() == CPacketUseEntity.Action.ATTACK && mc.player.onGround)
-                {
-                    if (mode.getValue().equals("Jump"))
-                    {
+    public void onUpdate(PacketEvent.Send event) {
+        if ((mc.player.getHeldItemMainhand().getItem() instanceof ItemSword)) {
+            if (event.getPacket() instanceof CPacketUseEntity) {
+                if (((CPacketUseEntity) event.getPacket()).getAction() == CPacketUseEntity.Action.ATTACK && mc.player.onGround) {
+                    if (mode.getValue().equals("Jump")) {
                         mc.player.jump();
                     }
-                    if (mode.getValue().equals("Packet"))
-                    {
+                    if (mode.getValue().equals("Packet")) {
                         mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY + 0.1f, mc.player.posZ, false));
                         mc.player.connection.sendPacket(new CPacketPlayer.Position(mc.player.posX, mc.player.posY, mc.player.posZ, false));
                     }
@@ -52,8 +43,7 @@ public class Criticals extends Module
 
 
     @Override
-    public String getHudInfo()
-    {
+    public String getHudInfo() {
         return "§7[§f" + mode.getValue() + "§7]";
     }
 }

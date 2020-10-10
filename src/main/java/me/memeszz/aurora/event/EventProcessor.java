@@ -40,98 +40,81 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
-public class EventProcessor
-{
+public class EventProcessor {
     public static EventProcessor INSTANCE;
     private final Map<String, String> uuidNameCache = Maps.newConcurrentMap();
     Minecraft mc = Minecraft.getMinecraft();
     CommandManager commandManager = new CommandManager();
 
 
-    public EventProcessor()
-    {
+    public EventProcessor() {
         INSTANCE = this;
     }
 
-    public void init()
-    {
+    public void init() {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    public void onUnload()
-    {
+    public void onUnload() {
         MinecraftForge.EVENT_BUS.unregister(this);
     }
 
-    public boolean isNull()
-    {
+    public boolean isNull() {
         return (mc.player == null || mc.world == null);
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event)
-    {
+    public void onTick(TickEvent.ClientTickEvent event) {
         if (isNull()) return;
         ModuleManager.onTick();
     }
 
     //player disconnect
     @SubscribeEvent
-    public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event)
-    {
+    public void onDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         Stopper.saveConfig();
         System.out.println("Saved Aurora config!");
     }
 
     @SubscribeEvent
-    public void onWorldRender(RenderWorldLastEvent event)
-    {
+    public void onWorldRender(RenderWorldLastEvent event) {
         if (event.isCanceled()) return;
         ModuleManager.onWorldRender(event);
     }
 
     @SubscribeEvent
-    public void onRender(RenderGameOverlayEvent.Post event)
-    {
+    public void onRender(RenderGameOverlayEvent.Post event) {
         if (isNull()) return;
         Aurora.getInstance().getEventManager().dispatchEvent(event);
-        if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR)
-        {
+        if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
             ModuleManager.onRender();
         }
     }
 
     @SubscribeEvent(receiveCanceled = true)
-    public void onKeyInput(InputEvent.KeyInputEvent event)
-    {
-        if (Keyboard.getEventKeyState())
-        {
+    public void onKeyInput(InputEvent.KeyInputEvent event) {
+        if (Keyboard.getEventKeyState()) {
             if (Keyboard.getEventKey() == 0 || Keyboard.getEventKey() == Keyboard.KEY_NONE) return;
             ModuleManager.onBind(Keyboard.getEventKey());
         }
     }
 
     @SubscribeEvent
-    public void onMouseInput(InputEvent.MouseInputEvent event)
-    {
+    public void onMouseInput(InputEvent.MouseInputEvent event) {
         if (Mouse.getEventButtonState())
             Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onChatSent(ClientChatEvent event)
-    {
+    public void onChatSent(ClientChatEvent event) {
 
-        if (event.getMessage().startsWith(Command.getPrefix()))
-        {
+        if (event.getMessage().startsWith(Command.getPrefix())) {
             event.setCanceled(true);
-            try
-            {
+            try {
                 mc.ingameGUI.getChatGUI().addToSentMessages(event.getMessage());
                 commandManager.callCommand(event.getMessage().substring(1));
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 e.printStackTrace();
                 Wrapper.sendClientMessage(ChatFormatting.DARK_RED + "Error: " + e.getMessage());
             }
@@ -140,81 +123,65 @@ public class EventProcessor
     }
 
     @SubscribeEvent
-    public void onRenderScreen(RenderGameOverlayEvent.Text event)
-    {
+    public void onRenderScreen(RenderGameOverlayEvent.Text event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onChatReceived(ClientChatReceivedEvent event)
-    {
+    public void onChatReceived(ClientChatReceivedEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onAttackEntity(AttackEntityEvent event)
-    {
+    public void onAttackEntity(AttackEntityEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event)
-    {
+    public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onDrawBlockHighlight(DrawBlockHighlightEvent event)
-    {
+    public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onRenderBlockOverlay(RenderBlockOverlayEvent event)
-    {
+    public void onRenderBlockOverlay(RenderBlockOverlayEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onLivingDamage(LivingDamageEvent event)
-    {
+    public void onLivingDamage(LivingDamageEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onLivingEntityUseItemFinish(LivingEntityUseItemEvent.Finish event)
-    {
+    public void onLivingEntityUseItemFinish(LivingEntityUseItemEvent.Finish event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onInputUpdate(InputUpdateEvent event)
-    {
+    public void onInputUpdate(InputUpdateEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onLivingDeath(LivingDeathEvent event)
-    {
+    public void onLivingDeath(LivingDeathEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @Listener
-    public void onPacketRecieve(PacketEvent.Receive event)
-    {
-        if (event.getPacket() instanceof SPacketPlayerListItem)
-        {
+    public void onPacketRecieve(PacketEvent.Receive event) {
+        if (event.getPacket() instanceof SPacketPlayerListItem) {
             SPacketPlayerListItem packet = (SPacketPlayerListItem) event.getPacket();
-            if (packet.getAction() == SPacketPlayerListItem.Action.ADD_PLAYER)
-            {
-                for (SPacketPlayerListItem.AddPlayerData playerData : packet.getEntries())
-                {
-                    if (playerData.getProfile().getId() != ((IMinecraft) mc).getSession().getProfile().getId())
-                    {
+            if (packet.getAction() == SPacketPlayerListItem.Action.ADD_PLAYER) {
+                for (SPacketPlayerListItem.AddPlayerData playerData : packet.getEntries()) {
+                    if (playerData.getProfile().getId() != ((IMinecraft) mc).getSession().getProfile().getId()) {
                         new Thread(() -> {
                             String name = resolveName(playerData.getProfile().getId().toString());
-                            if (name != null)
-                            {
+                            if (name != null) {
                                 if (mc.player != null && mc.player.ticksExisted >= 1000)
                                     Aurora.getInstance().getEventManager().dispatchEvent(new PlayerJoinEvent(name));
                             }
@@ -222,16 +189,12 @@ public class EventProcessor
                     }
                 }
             }
-            if (packet.getAction() == SPacketPlayerListItem.Action.REMOVE_PLAYER)
-            {
-                for (SPacketPlayerListItem.AddPlayerData playerData : packet.getEntries())
-                {
-                    if (playerData.getProfile().getId() != ((IMinecraft) mc).getSession().getProfile().getId())
-                    {
+            if (packet.getAction() == SPacketPlayerListItem.Action.REMOVE_PLAYER) {
+                for (SPacketPlayerListItem.AddPlayerData playerData : packet.getEntries()) {
+                    if (playerData.getProfile().getId() != ((IMinecraft) mc).getSession().getProfile().getId()) {
                         new Thread(() -> {
                             final String name = resolveName(playerData.getProfile().getId().toString());
-                            if (name != null)
-                            {
+                            if (name != null) {
                                 if (mc.player != null && mc.player.ticksExisted >= 1000)
                                     Aurora.getInstance().getEventManager().dispatchEvent(new PlayerLeaveEvent(name));
                             }
@@ -242,33 +205,26 @@ public class EventProcessor
         }
     }
 
-    public String resolveName(String uuid)
-    {
+    public String resolveName(String uuid) {
         uuid = uuid.replace("-", "");
-        if (uuidNameCache.containsKey(uuid))
-        {
+        if (uuidNameCache.containsKey(uuid)) {
             return uuidNameCache.get(uuid);
         }
 
         final String url = "https://api.mojang.com/user/profiles/" + uuid + "/names";
-        try
-        {
+        try {
             final String nameJson = IOUtils.toString(new URL(url));
-            if (nameJson != null && nameJson.length() > 0)
-            {
+            if (nameJson != null && nameJson.length() > 0) {
                 final JSONArray jsonArray = (JSONArray) JSONValue.parseWithException(nameJson);
-                if (jsonArray != null)
-                {
+                if (jsonArray != null) {
                     final JSONObject latestName = (JSONObject) jsonArray.get(jsonArray.size() - 1);
-                    if (latestName != null)
-                    {
+                    if (latestName != null) {
                         return latestName.get("name").toString();
                     }
                 }
             }
         }
-        catch (IOException | ParseException e)
-        {
+        catch (IOException | ParseException e) {
             e.printStackTrace();
         }
 
@@ -277,14 +233,12 @@ public class EventProcessor
 
 
     @SubscribeEvent
-    public void onWorldUnload(WorldEvent.Unload event)
-    {
+    public void onWorldUnload(WorldEvent.Unload event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onWorldLoad(WorldEvent.Load event)
-    {
+    public void onWorldLoad(WorldEvent.Load event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 

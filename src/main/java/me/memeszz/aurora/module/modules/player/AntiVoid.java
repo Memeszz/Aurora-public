@@ -9,19 +9,16 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.ArrayList;
 
-public class AntiVoid extends Module
-{
+public class AntiVoid extends Module {
 
     Setting.mode mode;
 
-    public AntiVoid()
-    {
+    public AntiVoid() {
         super("AntiVoid", Category.Player, "Attacks nearby players");
     }
 
     //ez
-    public void setup()
-    {
+    public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Bounce");
         modes.add("Mini");
@@ -30,44 +27,36 @@ public class AntiVoid extends Module
     }
 
     @Listener
-    public void onUpdate(UpdateEvent event)
-    {
+    public void onUpdate(UpdateEvent event) {
         double yLevel = mc.player.posY;
-        if (yLevel <= .5)
-        {
+        if (yLevel <= .5) {
             Wrapper.sendClientMessage(("§aAttempting To Get ") + ChatFormatting.RED + mc.player.getName() + ChatFormatting.GREEN + " Out Of The void!");
-            if (mode.getValue().equals("Bounce"))
-            {
+            if (mode.getValue().equals("Bounce")) {
                 mc.player.moveVertical = 10;
                 mc.player.jump();
             }
-            if (mode.getValue().equals("Mini"))
-            {
+            if (mode.getValue().equals("Mini")) {
                 mc.player.moveVertical = 5;
                 mc.player.jump();
             }
-            if (mode.getValue().equals("Dolphin"))
-            {
+            if (mode.getValue().equals("Dolphin")) {
                 mc.player.moveVertical = 2;
                 mc.player.jump();
             }
             event.setY(event.getY() + 0.10984509);
         }
-        else
-        {
+        else {
             mc.player.moveVertical = 0;
         }
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         mc.player.moveVertical = 0;
     }
 
     @Override
-    public String getHudInfo()
-    {
+    public String getHudInfo() {
         return "§7[§f" + mode.getValue() + "§7]";
     }
 }

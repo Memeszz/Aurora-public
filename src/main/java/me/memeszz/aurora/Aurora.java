@@ -21,8 +21,7 @@ import java.awt.*;
 
 
 @Mod(modid = Aurora.MODID, name = Aurora.FORGENAME, version = Aurora.MODVER, clientSideOnly = true)
-public class Aurora
-{
+public class Aurora {
     public static final String MODID = "aurora";
     public static final String MODVER = "4.2";
     public static final String FORGENAME = "Aurora";
@@ -45,19 +44,16 @@ public class Aurora
     EventProcessor eventProcessor;
     private EventManager eventManager;
 
-    public Aurora()
-    {
+    public Aurora() {
         INSTANCE = this;
     }
 
-    public static Aurora getInstance()
-    {
+    public static Aurora getInstance() {
         return INSTANCE;
     }
 
     @Mod.EventHandler
-    public void init(FMLInitializationEvent event)
-    {
+    public void init(FMLInitializationEvent event) {
         //hwid();
         eventProcessor = new EventProcessor();
         eventProcessor.init();
@@ -101,10 +97,8 @@ public class Aurora
         log.info("Initialization complete!\n");
     }
 
-    public EventManager getEventManager()
-    {
-        if (this.eventManager == null)
-        {
+    public EventManager getEventManager() {
+        if (this.eventManager == null) {
             this.eventManager = new AnnotatedEventManager();
         }
 

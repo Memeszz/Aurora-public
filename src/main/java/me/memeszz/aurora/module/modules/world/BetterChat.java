@@ -9,47 +9,38 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-public class BetterChat extends Module
-{
+public class BetterChat extends Module {
     public Setting.b clearBkg;
     Setting.b nameHighlight;
     Setting.b friendHighlight;
 
-    public BetterChat()
-    {
+    public BetterChat() {
         super("BetterChat", Category.World);
     }
 
-    public void setup()
-    {
+    public void setup() {
         clearBkg = this.registerB("Clear", "Clear", true);
         nameHighlight = this.registerB("NameHighlight", "NameHighlight", false);
         friendHighlight = this.registerB("FriendHighlight", "FriendHighlight", false);
     }
 
     @Listener
-    public void chat(ClientChatReceivedEvent event)
-    {
+    public void chat(ClientChatReceivedEvent event) {
         if (mc.player == null) return;
         String name = mc.player.getName().toLowerCase();
-        if (friendHighlight.getValue())
-        {
-            if (!event.getMessage().getUnformattedText().startsWith("<" + mc.player.getName() + ">"))
-            {
+        if (friendHighlight.getValue()) {
+            if (!event.getMessage().getUnformattedText().startsWith("<" + mc.player.getName() + ">")) {
                 Friends.getFriends().forEach(f -> {
-                    if (event.getMessage().getUnformattedText().contains(f.getName()))
-                    {
+                    if (event.getMessage().getUnformattedText().contains(f.getName())) {
                         event.getMessage().setStyle(event.getMessage().getStyle().setColor(TextFormatting.LIGHT_PURPLE));
                     }
                 });
             }
         }
-        if (nameHighlight.getValue())
-        {
+        if (nameHighlight.getValue()) {
             String s = ChatFormatting.GOLD + "" + ChatFormatting.BOLD + mc.player.getName() + ChatFormatting.RESET;
             Style style = event.getMessage().getStyle();
-            if (!event.getMessage().getUnformattedText().startsWith("<" + mc.player.getName() + ">") && event.getMessage().getUnformattedText().toLowerCase().contains(name))
-            {
+            if (!event.getMessage().getUnformattedText().startsWith("<" + mc.player.getName() + ">") && event.getMessage().getUnformattedText().toLowerCase().contains(name)) {
                 event.getMessage().getStyle().setParentStyle(style.setBold(true).setColor(TextFormatting.GOLD));
             }
         }

@@ -12,10 +12,8 @@ import java.awt.*;
 /**
  * Hexecption
  */
-public class OutlineUtils
-{
-    public static void renderOne(float width)
-    {
+public class OutlineUtils {
+    public static void renderOne(float width) {
         checkSetupFBO();
         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
         GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -33,22 +31,19 @@ public class OutlineUtils
         GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
     }
 
-    public static void renderTwo()
-    {
+    public static void renderTwo() {
         GL11.glStencilFunc(GL11.GL_NEVER, 0, 0xF);
         GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
         GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
     }
 
-    public static void renderThree()
-    {
+    public static void renderThree() {
         GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xF);
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
         GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
     }
 
-    public static void renderFour()
-    {
+    public static void renderFour() {
         setColor(new Color(255, 255, 255));
         GL11.glDepthMask(false);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -57,8 +52,7 @@ public class OutlineUtils
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
     }
 
-    public static void renderFive()
-    {
+    public static void renderFive() {
         GL11.glPolygonOffset(1.0F, 2000000F);
         GL11.glDisable(GL11.GL_POLYGON_OFFSET_LINE);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -73,22 +67,18 @@ public class OutlineUtils
         GL11.glPopAttrib();
     }
 
-    public static void setColor(Color c)
-    {
+    public static void setColor(Color c) {
         GL11.glColor4d(c.getRed() / 255f, c.getGreen() / 255f, c.getBlue() / 255f, c.getAlpha() / 255f);
     }
 
-    public static void checkSetupFBO()
-    {
+    public static void checkSetupFBO() {
         // Gets the FBO of Minecraft
         Framebuffer fbo = Minecraft.getMinecraft().getFramebuffer();
 
         // Check if FBO isn't null
-        if (fbo != null)
-        {
+        if (fbo != null) {
             // Checks if screen has been resized or new FBO has been created
-            if (fbo.depthBuffer > -1)
-            {
+            if (fbo.depthBuffer > -1) {
                 // Sets up the FBO with depth and stencil extensions (24/8 bit)
                 setupFBO(fbo);
                 // Reset the ID to prevent multiple FBO's
@@ -102,8 +92,7 @@ public class OutlineUtils
      *
      * @param fbo Framebuffer
      */
-    public static void setupFBO(Framebuffer fbo)
-    {
+    public static void setupFBO(Framebuffer fbo) {
         // Deletes old render buffer extensions such as depth
         // Args: Render Buffer ID
         EXTFramebufferObject.glDeleteRenderbuffersEXT(fbo.depthBuffer);

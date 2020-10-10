@@ -10,18 +10,15 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.ArrayList;
 
-public class ChatSuffix extends Module
-{
+public class ChatSuffix extends Module {
     Setting.b blue;
     Setting.mode mode;
 
-    public ChatSuffix()
-    {
+    public ChatSuffix() {
         super("ChatSuffix", Category.Misc, "Adds a suffix to your messages");
     }
 
-    public void setup()
-    {
+    public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Green");
         modes.add("Blue");
@@ -30,10 +27,8 @@ public class ChatSuffix extends Module
     }
 
     @Listener
-    public void packet(PacketEvent.Send event)
-    {
-        if (event.getPacket() instanceof CPacketChatMessage)
-        {
+    public void packet(PacketEvent.Send event) {
+        if (event.getPacket() instanceof CPacketChatMessage) {
             if (((CPacketChatMessage) event.getPacket()).getMessage().startsWith("/") || ((CPacketChatMessage) event.getPacket()).getMessage().startsWith(Command.getPrefix()))
                 return;
             String old = ((CPacketChatMessage) event.getPacket()).getMessage();

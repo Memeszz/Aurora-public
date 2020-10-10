@@ -9,105 +9,82 @@ import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemStack;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-public class AutoTotem extends Module
-{
+public class AutoTotem extends Module {
     public int totems;
     public Setting mode;
     Setting.b soft;
     boolean moving = false;
     boolean returnI = false;
 
-    public AutoTotem()
-    {
+    public AutoTotem() {
         super("AutoTotem", Category.Combat, "Respawn when you die");
     }
 
-    public void setup()
-    {
+    public void setup() {
         soft = this.registerB("Soft", "Soft", false);
     }
 
     @Listener
-    public void onUpdate(UpdateEvent event)
-    {
-        if (mc.currentScreen instanceof GuiContainer)
-        {
+    public void onUpdate(UpdateEvent event) {
+        if (mc.currentScreen instanceof GuiContainer) {
             return;
         }
-        if (returnI)
-        {
+        if (returnI) {
             int t = -1;
-            for (int i = 0; i < 45; i++)
-            {
-                if (mc.player.inventory.getStackInSlot(i).isEmpty())
-                {
+            for (int i = 0; i < 45; i++) {
+                if (mc.player.inventory.getStackInSlot(i).isEmpty()) {
                     t = i;
                     break;
                 }
             }
-            if (t == -1)
-            {
+            if (t == -1) {
                 return;
             }
             mc.playerController.windowClick(0, t < 9 ? t + 36 : t, 0, ClickType.PICKUP, mc.player);
             returnI = false;
         }
         totems = mc.player.inventory.mainInventory.stream().filter(itemStack -> itemStack.getItem() == Items.TOTEM_OF_UNDYING).mapToInt(ItemStack::getCount).sum();
-        if (mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING)
-        {
+        if (mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING) {
             totems++;
         }
-        else
-        {
-            if (soft.getValue() && !mc.player.getHeldItemOffhand().isEmpty())
-            {
+        else {
+            if (soft.getValue() && !mc.player.getHeldItemOffhand().isEmpty()) {
                 return;
             }
-            if (moving)
-            {
+            if (moving) {
                 mc.playerController.windowClick(0, 45, 0, ClickType.PICKUP, mc.player);
                 moving = false;
-                if (!mc.player.inventory.getItemStack().isEmpty())
-                {
+                if (!mc.player.inventory.getItemStack().isEmpty()) {
                     returnI = true;
                 }
                 return;
             }
-            if (mc.player.inventory.getItemStack().isEmpty())
-            {
-                if (totems == 0)
-                {
+            if (mc.player.inventory.getItemStack().isEmpty()) {
+                if (totems == 0) {
                     return;
                 }
                 int t = -1;
-                for (int i = 0; i < 45; i++)
-                {
-                    if (mc.player.inventory.getStackInSlot(i).getItem() == Items.TOTEM_OF_UNDYING)
-                    {
+                for (int i = 0; i < 45; i++) {
+                    if (mc.player.inventory.getStackInSlot(i).getItem() == Items.TOTEM_OF_UNDYING) {
                         t = i;
                         break;
                     }
                 }
-                if (t == -1)
-                {
+                if (t == -1) {
                     return;
                 }
                 mc.playerController.windowClick(0, t < 9 ? t + 36 : t, 0, ClickType.PICKUP, mc.player);
                 moving = true;
             }
-            else if (!soft.getValue())
-            {
+            else if (!soft.getValue()) {
                 int t = -1;
-                for (int i = 0; i < 45; i++)
-                {
-                    if (mc.player.inventory.getStackInSlot(i).isEmpty())
-                    {
+                for (int i = 0; i < 45; i++) {
+                    if (mc.player.inventory.getStackInSlot(i).isEmpty()) {
                         t = i;
                         break;
                     }
                 }
-                if (t == -1)
-                {
+                if (t == -1) {
                     return;
                 }
                 mc.playerController.windowClick(0, t < 9 ? t + 36 : t, 0, ClickType.PICKUP, mc.player);
@@ -116,8 +93,7 @@ public class AutoTotem extends Module
     }
 
     @Override
-    public String getHudInfo()
-    {
+    public String getHudInfo() {
         return "§7[§f" + totems + "§7]";
     }
 }

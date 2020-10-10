@@ -19,8 +19,7 @@ import static net.minecraft.client.renderer.RenderGlobal.drawSelectionBoundingBo
 import static org.lwjgl.opengl.GL11.*;
 
 @Mixin(RenderGlobal.class)
-public abstract class MixinRenderGlobal
-{
+public abstract class MixinRenderGlobal {
 
     @Shadow
     private WorldClient world;
@@ -30,18 +29,14 @@ public abstract class MixinRenderGlobal
      */
 
     @Overwrite
-    public void drawSelectionBox(EntityPlayer player, RayTraceResult movingObjectPositionIn, int execute, float partialTicks)
-    {
-        if (ModuleManager.isModuleEnabled("BlockHighlight"))
-        {
-            if (execute == 0 && movingObjectPositionIn.typeOfHit == RayTraceResult.Type.BLOCK)
-            {
+    public void drawSelectionBox(EntityPlayer player, RayTraceResult movingObjectPositionIn, int execute, float partialTicks) {
+        if (ModuleManager.isModuleEnabled("BlockHighlight")) {
+            if (execute == 0 && movingObjectPositionIn.typeOfHit == RayTraceResult.Type.BLOCK) {
                 RenderUtil.prepare(GL11.GL_QUADS);
                 glEnable(GL_LINE_SMOOTH);
                 BlockPos blockpos = movingObjectPositionIn.getBlockPos();
                 IBlockState iblockstate = this.world.getBlockState(blockpos);
-                if (iblockstate.getMaterial() != Material.AIR && this.world.getWorldBorder().contains(blockpos))
-                {
+                if (iblockstate.getMaterial() != Material.AIR && this.world.getWorldBorder().contains(blockpos)) {
                     double d3 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double) partialTicks;
                     double d4 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double) partialTicks;
                     double d5 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double) partialTicks;

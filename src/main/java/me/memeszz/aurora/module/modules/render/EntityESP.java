@@ -12,8 +12,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class EntityESP extends Module
-{
+public class EntityESP extends Module {
 
     public static Setting.mode mode;
     public static Setting.b player;
@@ -23,13 +22,11 @@ public class EntityESP extends Module
     Setting.b orbs;
     Setting.b skeleton;
 
-    public EntityESP()
-    {
+    public EntityESP() {
         super("EntityESP", Category.Render);
     }
 
-    public void setup()
-    {
+    public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Outline");
         modes.add("Wireframe");
@@ -43,14 +40,10 @@ public class EntityESP extends Module
     }
 
     @Listener
-    public void onWorldRender(RenderEvent event)
-    {
-        for (Entity e : mc.world.loadedEntityList)
-        {
-            if (e != mc.player)
-            {
-                if (e instanceof EntityExpBottle)
-                {
+    public void onWorldRender(RenderEvent event) {
+        for (Entity e : mc.world.loadedEntityList) {
+            if (e != mc.player) {
+                if (e instanceof EntityExpBottle) {
                     RenderUtil.prepare(GL11.GL_QUADS);
                     RenderUtil.drawBox(e.getRenderBoundingBox(), new Color(255, 255, 255, 150).getRGB(), RenderUtil.Quad.ALL);
                     RenderUtil.release();
@@ -60,8 +53,7 @@ public class EntityESP extends Module
 
     }
 
-    public String getHudInfo()
-    {
+    public String getHudInfo() {
         return "§7[§f" + mode.getValue() + "§7]";
     }
 }

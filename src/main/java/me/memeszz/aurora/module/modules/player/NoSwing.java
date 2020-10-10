@@ -5,18 +5,14 @@ import me.memeszz.aurora.module.Module;
 import net.minecraft.network.play.client.CPacketAnimation;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-public class NoSwing extends Module
-{
-    public NoSwing()
-    {
+public class NoSwing extends Module {
+    public NoSwing() {
         super("NoSwing", Category.Player, "Prevents swinging animation server side");
     }
 
     @Listener
-    public void onUpdate(PacketEvent.Send event)
-    {
-        if (event.getPacket() instanceof CPacketAnimation)
-        {
+    public void onUpdate(PacketEvent.Send event) {
+        if (event.getPacket() instanceof CPacketAnimation) {
             event.setCanceled(true);
         }
     }

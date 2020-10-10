@@ -14,64 +14,53 @@ import net.minecraft.util.text.event.HoverEvent;
 import net.minecraft.world.World;
 
 
-public class Wrapper
-{
+public class Wrapper {
     public static final Aurora mod;
     public static final Minecraft mc;
     private static final String prefix;
     public static volatile Wrapper INSTANCE = new Wrapper();
     private static CFontRenderer fontRenderer;
 
-    static
-    {
+    static {
         mc = Minecraft.getMinecraft();
         mod = Aurora.getInstance();
         prefix = ChatFormatting.DARK_AQUA + "[" + ChatFormatting.AQUA + "Aurora" + ChatFormatting.DARK_AQUA + "] ";
     }
 
-    public static void init()
-    {
+    public static void init() {
         fontRenderer = Aurora.fontRenderer;
     }
 
-    public static Minecraft getMinecraft()
-    {
+    public static Minecraft getMinecraft() {
         return Minecraft.getMinecraft();
     }
 
-    public static Entity getRenderEntity()
-    {
+    public static Entity getRenderEntity() {
         return mc.getRenderViewEntity();
     }
 
-    public static EntityPlayerSP getPlayer()
-    {
+    public static EntityPlayerSP getPlayer() {
         return (getMinecraft()).player;
     }
 
 
-    public static World getWorld()
-    {
+    public static World getWorld() {
         return (getMinecraft()).world;
     }
 
-    public static void sendClientMessage(final String message)
-    {
-        if (mc.player == null)
-        {
+    public static void sendClientMessage(final String message) {
+        if (mc.player == null) {
             return;
         }
         final ITextComponent itc = new TextComponentString(prefix + ChatFormatting.GRAY + message).setStyle(new Style().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Aurora"))));
         mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(itc, 5936);
     }
 
-    public static CFontRenderer getFontRenderer()
-    {
+    public static CFontRenderer getFontRenderer() {
         return fontRenderer;
     }
 
-    public Minecraft mc()
-    {
+    public Minecraft mc() {
         return Minecraft.getMinecraft();
     }
 }

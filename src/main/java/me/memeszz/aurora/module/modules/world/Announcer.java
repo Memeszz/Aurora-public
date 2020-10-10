@@ -21,8 +21,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Announcer extends Module
-{
+public class Announcer extends Module {
     public static int blockBrokeDelay = 0;
     public static String walkMessage;
     public static String placeMessage;
@@ -53,13 +52,11 @@ public class Announcer extends Module
     private Setting.d delay;
     private Setting.mode lang;
 
-    public Announcer()
-    {
+    public Announcer() {
         super("Announcer", Category.World, "Announces what you do in chat");
     }
 
-    public void setup()
-    {
+    public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("English");
         modes.add("Finnish");
@@ -77,8 +74,7 @@ public class Announcer extends Module
 
 
     @Listener
-    public void onUpdate(UpdateEvent event)
-    {
+    public void onUpdate(UpdateEvent event) {
         blockBrokeDelay++;
         blockPlacedDelay++;
         jumpDelay++;
@@ -86,8 +82,7 @@ public class Announcer extends Module
         eattingDelay++;
         heldItem = mc.player.getHeldItemMainhand().getDisplayName();
 
-        if (lang.getValue().equals("English"))
-        {
+        if (lang.getValue().equals("English")) {
             walkMessage = "I just fucking flew {blocks} blocks thanks to the power of Aurora!";
             placeMessage = "I just placed {amount} {name} thanks to power of Aurora!";
             jumpMessage = "I just jumped thanks to the power of Aurora!";
@@ -95,8 +90,7 @@ public class Announcer extends Module
             attackMessage = "I just attacked {name} with a {item} thanks to Aurora!";
             eatMessage = "I just ate {amount] {name} thanks to Aurora!";
         }
-        if (lang.getValue().equals("Finnish"))
-        {
+        if (lang.getValue().equals("Finnish")) {
             walkMessage = "Mä just lensin {blocks} metrii, kiitokset Aurora!";
             placeMessage = "Mä just pistin {amount} {name} blockii, kiitokset Aurora!";
             jumpMessage = "Mä hyppäsin vitun korkeelle, kiitokset Aurora!";
@@ -104,8 +98,7 @@ public class Announcer extends Module
             attackMessage = "Mä just pistin {name} päähä {item} avul, kiitokset Aurora!";
             eatMessage = "Mä just söin {amount} {name}, kiitokset Aurora!";
         }
-        if (lang.getValue().equals("English"))
-        {
+        if (lang.getValue().equals("English")) {
             walkMessage = "Ich bin gerade {blocks} verfickte Blöcke geflogen dank der Kraft von Aurora!";
             placeMessage = "Ich habe gerade {amount} {name} platziert dank der Kraft von Aurora!";
             jumpMessage = "Ich bin gesprungen dank der Kraft von Aurora!";
@@ -114,10 +107,8 @@ public class Announcer extends Module
             eatMessage = "Ich habe gerade {amount] {name} dank Aurora gegessen!";
         }
 
-        if (walk.getValue())
-        {
-            if (lastPositionUpdate + (5000L * delay.getValue()) < System.currentTimeMillis())
-            {
+        if (walk.getValue()) {
+            if (lastPositionUpdate + (5000L * delay.getValue()) < System.currentTimeMillis()) {
 
                 double d0 = lastPositionX - mc.player.lastTickPosX;
                 double d2 = lastPositionY - mc.player.lastTickPosY;
@@ -125,16 +116,13 @@ public class Announcer extends Module
 
                 speed = Math.sqrt(d0 * d0 + d2 * d2 + d3 * d3);
 
-                if (!(speed <= 1) && !(speed > 5000))
-                {
+                if (!(speed <= 1) && !(speed > 5000)) {
                     String walkAmount = new DecimalFormat("0").format(speed);
 
-                    if (clientSide.getValue())
-                    {
+                    if (clientSide.getValue()) {
                         Wrapper.sendClientMessage(walkMessage.replace("{blocks}", walkAmount));
                     }
-                    else
-                    {
+                    else {
                         mc.player.sendChatMessage(walkMessage.replace("{blocks}", walkAmount));
                     }
                     lastPositionUpdate = System.currentTimeMillis();
@@ -148,25 +136,18 @@ public class Announcer extends Module
     }
 
     @Listener
-    public void idk(LivingEntityUseItemEvent.Finish event)
-    {
+    public void idk(LivingEntityUseItemEvent.Finish event) {
         int randomNum = ThreadLocalRandom.current().nextInt(1, 10 + 1);
-        if (event.getEntity() == mc.player)
-        {
-            if (event.getItem().getItem() instanceof ItemFood || event.getItem().getItem() instanceof ItemAppleGold)
-            {
+        if (event.getEntity() == mc.player) {
+            if (event.getItem().getItem() instanceof ItemFood || event.getItem().getItem() instanceof ItemAppleGold) {
                 eaten++;
-                if (eattingDelay >= 300 * delay.getValue())
-                {
-                    if (eat.getValue() && eaten > randomNum)
-                    {
-                        if (clientSide.getValue())
-                        {
+                if (eattingDelay >= 300 * delay.getValue()) {
+                    if (eat.getValue() && eaten > randomNum) {
+                        if (clientSide.getValue()) {
                             Wrapper.sendClientMessage
                                     (eatMessage.replace("{amount}", eaten + "").replace("{name}", mc.player.getHeldItemMainhand().getDisplayName()));
                         }
-                        else
-                        {
+                        else {
                             mc.player.sendChatMessage
                                     (eatMessage.replace("{amount}", eaten + "").replace("{name}", mc.player.getHeldItemMainhand().getDisplayName()));
                         }
@@ -179,23 +160,17 @@ public class Announcer extends Module
     }
 
     @Listener
-    public void send(PacketEvent.Send event)
-    {
-        if (event.getPacket() instanceof CPacketPlayerTryUseItemOnBlock && mc.player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemBlock)
-        {
+    public void send(PacketEvent.Send event) {
+        if (event.getPacket() instanceof CPacketPlayerTryUseItemOnBlock && mc.player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemBlock) {
             blocksPlaced++;
             int randomNum = ThreadLocalRandom.current().nextInt(1, 10 + 1);
-            if (blockPlacedDelay >= 150 * delay.getValue())
-            {
-                if (place.getValue() && blocksPlaced > randomNum)
-                {
+            if (blockPlacedDelay >= 150 * delay.getValue()) {
+                if (place.getValue() && blocksPlaced > randomNum) {
                     String msg = placeMessage.replace("{amount}", blocksPlaced + "").replace("{name}", mc.player.getHeldItemMainhand().getDisplayName());
-                    if (clientSide.getValue())
-                    {
+                    if (clientSide.getValue()) {
                         Wrapper.sendClientMessage(msg);
                     }
-                    else
-                    {
+                    else {
                         mc.player.sendChatMessage(msg);
                     }
                     blocksPlaced = 0;
@@ -206,23 +181,18 @@ public class Announcer extends Module
     }
 
     @Listener
-    public void setBreaking(DestroyBlockEvent event)
-    {
+    public void setBreaking(DestroyBlockEvent event) {
         blocksBroken++;
         int randomNum = ThreadLocalRandom.current().nextInt(1, 10 + 1);
-        if (blockBrokeDelay >= 300 * delay.getValue())
-        {
-            if (breaking.getValue() && blocksBroken > randomNum)
-            {
+        if (blockBrokeDelay >= 300 * delay.getValue()) {
+            if (breaking.getValue() && blocksBroken > randomNum) {
                 String msg = breakMessage
                         .replace("{amount}", blocksBroken + "")
                         .replace("{name}", mc.world.getBlockState(event.getBlockPos()).getBlock().getLocalizedName());
-                if (clientSide.getValue())
-                {
+                if (clientSide.getValue()) {
                     Wrapper.sendClientMessage(msg);
                 }
-                else
-                {
+                else {
                     mc.player.sendChatMessage(msg);
                 }
                 blocksBroken = 0;
@@ -232,19 +202,14 @@ public class Announcer extends Module
     }
 
     @Listener
-    public void setAttack(AttackEntityEvent event)
-    {
-        if (attack.getValue() && !(event.getTarget() instanceof EntityEnderCrystal))
-        {
-            if (attackDelay >= 300 * delay.getValue())
-            {
+    public void setAttack(AttackEntityEvent event) {
+        if (attack.getValue() && !(event.getTarget() instanceof EntityEnderCrystal)) {
+            if (attackDelay >= 300 * delay.getValue()) {
                 String msg = attackMessage.replace("{name}", event.getTarget().getName()).replace("{item}", mc.player.getHeldItemMainhand().getDisplayName());
-                if (clientSide.getValue())
-                {
+                if (clientSide.getValue()) {
                     Wrapper.sendClientMessage(msg);
                 }
-                else
-                {
+                else {
                     mc.player.sendChatMessage(msg);
                 }
                 attackDelay = 0;
@@ -253,18 +218,13 @@ public class Announcer extends Module
     }
 
     @Listener
-    public void setJump(PlayerJumpEvent event)
-    {
-        if (jump.getValue())
-        {
-            if (jumpDelay >= 300 * delay.getValue())
-            {
-                if (clientSide.getValue())
-                {
+    public void setJump(PlayerJumpEvent event) {
+        if (jump.getValue()) {
+            if (jumpDelay >= 300 * delay.getValue()) {
+                if (clientSide.getValue()) {
                     Wrapper.sendClientMessage(jumpMessage);
                 }
-                else
-                {
+                else {
                     mc.player.sendChatMessage(jumpMessage);
                 }
                 jumpDelay = 0;
@@ -272,8 +232,7 @@ public class Announcer extends Module
         }
     }
 
-    public void onEnable()
-    {
+    public void onEnable() {
         blocksPlaced = 0;
         blocksBroken = 0;
         eaten = 0;

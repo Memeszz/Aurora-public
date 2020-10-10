@@ -8,15 +8,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-public class SkyColor extends Module
-{
+public class SkyColor extends Module {
     Setting.i r;
     Setting.i g;
     Setting.i b;
     Setting.b rainbow;
 
-    public SkyColor()
-    {
+    public SkyColor() {
         super("SkyColor", Category.Render, "Changes skycolor");
         r = this.registerI("Red", "Red", 255, 0, 255);
         g = this.registerI("Green", "Green", 0, 0, 255);
@@ -25,30 +23,25 @@ public class SkyColor extends Module
     }
 
     @Listener
-    public void onUpdate(UpdateEvent event)
-    {
-        if (this.isEnabled())
-        {
+    public void onUpdate(UpdateEvent event) {
+        if (this.isEnabled()) {
             MinecraftForge.EVENT_BUS.register(this);
         }
-        else
-        {
+        else {
             MinecraftForge.EVENT_BUS.unregister(this);
         }
     }
 
 
     @SubscribeEvent
-    public void fogColors(EntityViewRenderEvent.FogColors event)
-    {
+    public void fogColors(EntityViewRenderEvent.FogColors event) {
         event.setRed((float) r.getValue() / 255f); //colours in java are in decimal between 0 and 1 stupid paster
         event.setGreen((float) g.getValue() / 255f);
         event.setBlue((float) b.getValue() / 255f);
     }
 
     @SubscribeEvent
-    public void fogDensity(EntityViewRenderEvent.FogDensity event)
-    {
+    public void fogDensity(EntityViewRenderEvent.FogDensity event) {
 
         event.setDensity(0);
         event.setCanceled(true);
@@ -56,15 +49,13 @@ public class SkyColor extends Module
 
 
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         MinecraftForge.EVENT_BUS.register(this);
 
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         MinecraftForge.EVENT_BUS.unregister(this);
 
     }

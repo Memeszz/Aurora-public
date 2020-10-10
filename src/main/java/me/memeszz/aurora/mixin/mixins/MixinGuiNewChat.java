@@ -10,14 +10,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 
 @Mixin(GuiNewChat.class)
-public abstract class MixinGuiNewChat
-{
+public abstract class MixinGuiNewChat {
 
     @Redirect(method = "drawChat", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiNewChat;drawRect(IIIII)V"))
-    private void drawRectBackgroundClean(int left, int top, int right, int bottom, int color)
-    {
-        if (!ModuleManager.isModuleEnabled("BetterChat") || !((BetterChat) ModuleManager.getModuleByName("BetterChat")).clearBkg.getValue())
-        {
+    private void drawRectBackgroundClean(int left, int top, int right, int bottom, int color) {
+        if (!ModuleManager.isModuleEnabled("BetterChat") || !((BetterChat) ModuleManager.getModuleByName("BetterChat")).clearBkg.getValue()) {
             Gui.drawRect(left, top, right, bottom, color);
         }
     }

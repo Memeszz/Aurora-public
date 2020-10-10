@@ -6,8 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(RenderManager.class)
-public abstract class MixinRenderManager implements IRenderManager
-{
+public abstract class MixinRenderManager implements IRenderManager {
 
     @Accessor
     @Override

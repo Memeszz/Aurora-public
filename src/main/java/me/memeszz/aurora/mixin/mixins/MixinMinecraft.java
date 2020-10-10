@@ -23,8 +23,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = Minecraft.class)
-public abstract class MixinMinecraft implements IMinecraft
-{
+public abstract class MixinMinecraft implements IMinecraft {
 
     @Shadow
     @Final
@@ -56,29 +55,25 @@ public abstract class MixinMinecraft implements IMinecraft
     public abstract ServerData getCurrentServerData();
 
     @Inject(method = "shutdown()V", at = @At("HEAD")) // saves the config when the game shuts down
-    public void saveSettingsOnShutdown(CallbackInfo ci)
-    {
+    public void saveSettingsOnShutdown(CallbackInfo ci) {
         Stopper.saveConfig();
         System.out.println("Saved Aurora config!");
     }
 
     @Inject(method = "displayGuiScreen", at = @At("HEAD"))
-    private void displayGuiScreen(GuiScreen guiScreenIn, CallbackInfo info)
-    {
+    private void displayGuiScreen(GuiScreen guiScreenIn, CallbackInfo info) {
         GuiScreenDisplayedEvent screenEvent = new GuiScreenDisplayedEvent(guiScreenIn);
         Aurora.getInstance().getEventManager().dispatchEvent(screenEvent);
     }
 
     @Redirect(method = "sendClickBlockToController", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;isHandActive()Z"))
-    private boolean isHandActive(EntityPlayerSP player)
-    {
+    private boolean isHandActive(EntityPlayerSP player) {
         if (ModuleManager.isModuleEnabled("MultiTask")) return false;
         return this.player.isHandActive();
     }
 
     @Redirect(method = "rightClickMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerControllerMP;getIsHittingBlock()Z"))
-    private boolean isHittingBlock(PlayerControllerMP playerControllerMP)
-    {
+    private boolean isHittingBlock(PlayerControllerMP playerControllerMP) {
         if (ModuleManager.isModuleEnabled("MultiTask")) return false;
         return this.playerController.getIsHittingBlock();
     }

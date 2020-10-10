@@ -30,8 +30,7 @@ import java.util.Objects;
 /**
  * @author Memeszz & hollow
  */
-public class Hud extends Module
-{
+public class Hud extends Module {
     static final RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
     public static Setting.b rainbow;
     public static Setting.i red;
@@ -56,14 +55,12 @@ public class Hud extends Module
     Setting.mode mode;
     String coords;
 
-    public Hud()
-    {
+    public Hud() {
         super("Hud", Category.Gui, "Attacks nearby players");
         setDrawn(false);
     }
 
-    public void setup()
-    {
+    public void setup() {
         watermark = this.registerB("Watermark", "Watermark", true);
         welcomer = this.registerB("Welcomer", "Welcomer", true);
         server = this.registerB("Server", "Server", true);
@@ -88,45 +85,36 @@ public class Hud extends Module
     }
 
 
-    public void onRender()
-    {
+    public void onRender() {
         int modCount = 0;
         int[] counter1 = {1};
         ScaledResolution resolution = new ScaledResolution(mc);
 
-        if (arraylist.getValue())
-        {
+        if (arraylist.getValue()) {
             int[] counter = {1};
             ArrayList<Module> modules = new ArrayList<>(ModuleManager.getModules());
             modules.sort(Comparator.comparing(m -> -FontUtils.getStringWidth(ClickGuiModule.customFont.getValue(), m.getName() + m.getHudInfo())));
-            for (int i = 0; i < modules.size(); i++)
-            {
+            for (int i = 0; i < modules.size(); i++) {
                 Module module = modules.get(i);
-                if (module.isEnabled() && module.isDrawn())
-                {
+                if (module.isEnabled() && module.isDrawn()) {
                     int x = resolution.getScaledWidth();
                     int y = 3 + (modCount * 10);
                     int lWidth = FontUtils.getStringWidth(ClickGuiModule.customFont.getValue(), module.getName() + ChatFormatting.GRAY + module.getHudInfo());
-                    if (module.animPos < lWidth && module.isEnabled())
-                    {
+                    if (module.animPos < lWidth && module.isEnabled()) {
                         module.animPos = Animation.moveTowards(module.animPos, lWidth + 1, 0.01f + animS.getValue() / 30, 0.1f);
                     }
-                    else if (module.animPos > 1.5f && !module.isEnabled())
-                    {
+                    else if (module.animPos > 1.5f && !module.isEnabled()) {
                         module.animPos = Animation.moveTowards(module.animPos, -1.5f, 0.01f + animS.getValue() / 30, 0.1f);
                     }
-                    else if (module.animPos <= 1.5f && !module.isEnabled())
-                    {
+                    else if (module.animPos <= 1.5f && !module.isEnabled()) {
                         module.animPos = -1f;
                     }
-                    if (module.animPos > lWidth && module.isEnabled())
-                    {
+                    if (module.animPos > lWidth && module.isEnabled()) {
                         module.animPos = lWidth;
                     }
 
                     x -= module.animPos;
-                    if (arraylistOutline.getValue())
-                    {
+                    if (arraylistOutline.getValue()) {
                         RenderUtil.drawBorderedRect(x - 6, y - 3, resolution.getScaledWidth(), y + FontUtils.getFontHeight(false), 1, new Color(20, 20, 20, 200).getRGB(), 0);
                         RenderUtil.drawGradient(resolution.getScaledWidth() - 2, y - 4, resolution.getScaledWidth(), y + FontUtils.getFontHeight(false), rainbow.getValue() ? RainbowUtil.rainbow(counter[0] * 100) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB(), rainbow.getValue() ? RainbowUtil.rainbow(counter[0] * 100) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
                     }
@@ -139,14 +127,12 @@ public class Hud extends Module
         }
 
 
-        if (ArmorHud.getValue())
-        {
+        if (ArmorHud.getValue()) {
             GlStateManager.enableTexture2D();
             int i = resolution.getScaledWidth() / 2;
             int iteration = 0;
             int y = resolution.getScaledHeight() - 55 - (mc.player.isInWater() ? 10 : 0);
-            for (ItemStack is : mc.player.inventory.armorInventory)
-            {
+            for (ItemStack is : mc.player.inventory.armorInventory) {
                 ++iteration;
                 if (is.isEmpty()) continue;
                 int x = i - 90 + (9 - iteration) * 20 + 2;
@@ -171,20 +157,16 @@ public class Hud extends Module
 
         int posY = 2;
 
-        if (watermark.getValue())
-        {
+        if (watermark.getValue()) {
             final String text = Aurora.MODNAME + " " + Aurora.MODVER;
             FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), text, 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
             counter1[0]++;
             posY += 10;
         }
 
-        if (server.getValue())
-        {
-            if (mc.player != null)
-            {
-                if (!mc.isSingleplayer())
-                {
+        if (server.getValue()) {
+            if (mc.player != null) {
+                if (!mc.isSingleplayer()) {
                     FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "§rServer §f" + ((IMinecraft) mc).getCurrentServerData().serverIP + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
                     counter1[0]++;
                     posY += 10;
@@ -192,76 +174,64 @@ public class Hud extends Module
             }
         }
 
-        if (ping.getValue())
-        {
+        if (ping.getValue()) {
             FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "§rPing §f" + getPing() + "ms", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
             counter1[0]++;
             posY += 10;
         }
 
-        if (time1.getValue())
-        {
+        if (time1.getValue()) {
             FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), time, 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
             counter1[0]++;
             posY += 10;
         }
 
-        if (tps.getValue())
-        {
+        if (tps.getValue()) {
             FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "§rTPS §f" + TickRate.TPS + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
             counter1[0]++;
             posY += 10;
         }
 
 
-        if (fps.getValue())
-        {
+        if (fps.getValue()) {
             FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "§rFPS §f" + Minecraft.getDebugFPS() + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
             counter1[0]++;
         }
 
 
-        if (coordinates.getValue())
-        {
+        if (coordinates.getValue()) {
             y = ((mc.currentScreen instanceof GuiChat) ? 15 : 2);
-            if (mc.player.dimension == -1)
-            {
+            if (mc.player.dimension == -1) {
                 coords = ChatFormatting.GRAY + "XYZ " + ChatFormatting.WHITE + mc.player.getPosition().getX() + ", " + mc.player.getPosition().getY() + ", " + mc.player.getPosition().getZ() +
                         ChatFormatting.GRAY + " [" + ChatFormatting.WHITE + mc.player.getPosition().getX() * 8 + ", " + mc.player.getPosition().getZ() * 8 + ChatFormatting.GRAY + "]";
             }
-            else
-            {
+            else {
                 coords = ChatFormatting.GRAY + "XYZ " + ChatFormatting.WHITE + mc.player.getPosition().getX() + ", " + mc.player.getPosition().getY() + ", " + Math.floor(mc.player.getPosition().getZ()) +
                         ChatFormatting.GRAY + " [" + ChatFormatting.WHITE + mc.player.getPosition().getX() / 8 + ", " + mc.player.getPosition().getZ() / 8 + ChatFormatting.GRAY + "]";
             }
             FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), coords, 0, resolution.getScaledHeight() - y - Aurora.fontRenderer.getHeight(), new Color(255, 255, 255, 255).getRGB());
         }
 
-        if (welcomer.getValue())
-        {
+        if (welcomer.getValue()) {
             final String text = "Welcome " + mc.player.getName() + " :^)";
             drawCentredString(text, resolution.getScaledWidth() / 2, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
             counter1[0]++;
         }
     }
 
-    public int getPing()
-    {
+    public int getPing() {
         int p;
-        if (mc.player == null || mc.getConnection() == null || mc.getConnection().getPlayerInfo(mc.player.getName()) == null)
-        {
+        if (mc.player == null || mc.getConnection() == null || mc.getConnection().getPlayerInfo(mc.player.getName()) == null) {
             p = -1;
         }
-        else
-        {
+        else {
             mc.player.getName();
             p = Objects.requireNonNull(mc.getConnection().getPlayerInfo(mc.player.getName())).getResponseTime();
         }
         return p;
     }
 
-    private void drawCentredString(String text, int x, int color)
-    {
+    private void drawCentredString(String text, int x, int color) {
         FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), text, x - FontUtils.getStringWidth(ClickGuiModule.customFont.getValue(), text) / 2, 2, color);
     }
 }

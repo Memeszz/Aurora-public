@@ -6,8 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(CPacketChatMessage.class)
-public abstract class MixinCPacketChatMessage implements ICPacketChatMessage
-{
+public abstract class MixinCPacketChatMessage implements ICPacketChatMessage {
 
     @Accessor
     @Override

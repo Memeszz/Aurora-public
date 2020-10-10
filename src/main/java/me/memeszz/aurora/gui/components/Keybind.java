@@ -10,8 +10,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 
-public class Keybind extends Component
-{
+public class Keybind extends Component {
     private final Button parent;
     private boolean hovered;
     private boolean binding;
@@ -19,8 +18,7 @@ public class Keybind extends Component
     private int x;
     private int y;
 
-    public Keybind(final Button button, final int offset)
-    {
+    public Keybind(final Button button, final int offset) {
         this.parent = button;
         this.x = button.parent.getX() + button.parent.getWidth();
         this.y = button.parent.getY() + button.offset;
@@ -28,14 +26,12 @@ public class Keybind extends Component
     }
 
     @Override
-    public void setOff(final int newOff)
-    {
+    public void setOff(final int newOff) {
         this.offset = newOff;
     }
 
     @Override
-    public void renderComponent()
-    {
+    public void renderComponent() {
         Gui.drawRect(this.parent.parent.getX(), this.parent.parent.getY() + this.offset + 1, this.parent.parent.getX() + this.parent.parent.getWidth(), this.parent.parent.getY() + this.offset + 15, this.hovered ? new Color(0, 0, 0, 150).darker().darker().getRGB() : new Color(0, 0, 0, 150).getRGB());
         Gui.drawRect(this.parent.parent.getX(), this.parent.parent.getY() + this.offset, this.parent.parent.getX() + this.parent.parent.getWidth(), this.parent.parent.getY() + this.offset + 1, new Color(0, 0, 0, 255).getRGB());
         Gui.drawRect(this.parent.parent.getX(), this.parent.parent.getY() + this.offset + 15, this.parent.parent.getX() + this.parent.parent.getWidth(), this.parent.parent.getY() + this.offset + 16, new Color(0, 0, 0, 150).getRGB());
@@ -43,41 +39,33 @@ public class Keybind extends Component
     }
 
     @Override
-    public void updateComponent(final int mouseX, final int mouseY)
-    {
+    public void updateComponent(final int mouseX, final int mouseY) {
         this.hovered = this.isMouseOnButton(mouseX, mouseY);
         this.y = this.parent.parent.getY() + this.offset;
         this.x = this.parent.parent.getX();
     }
 
     @Override
-    public void mouseClicked(final int mouseX, final int mouseY, final int button)
-    {
-        if (this.isMouseOnButton(mouseX, mouseY) && button == 0 && this.parent.open)
-        {
+    public void mouseClicked(final int mouseX, final int mouseY, final int button) {
+        if (this.isMouseOnButton(mouseX, mouseY) && button == 0 && this.parent.open) {
             this.binding = !this.binding;
         }
     }
 
     @Override
-    public void keyTyped(final char typedChar, final int key)
-    {
-        if (this.binding)
-        {
-            if (key == 211)
-            {
+    public void keyTyped(final char typedChar, final int key) {
+        if (this.binding) {
+            if (key == 211) {
                 this.parent.mod.setBind(0);
             }
-            else
-            {
+            else {
                 this.parent.mod.setBind(key);
             }
             this.binding = false;
         }
     }
 
-    public boolean isMouseOnButton(final int x, final int y)
-    {
+    public boolean isMouseOnButton(final int x, final int y) {
         return x > this.x && x < this.x + 95 && y > this.y && y < this.y + 16;
     }
 }

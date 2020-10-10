@@ -13,8 +13,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 
-public class Frame
-{
+public class Frame {
     private final int width;
     private final int barHeight;
     public ArrayList<Component> components;
@@ -28,8 +27,7 @@ public class Frame
     private boolean isDragging;
     private int height;
 
-    public Frame(final Module.Category cat)
-    {
+    public Frame(final Module.Category cat) {
         this.components = new ArrayList<>();
         this.category = cat;
         this.width = 95;
@@ -40,8 +38,7 @@ public class Frame
         this.open = true;
         this.isDragging = false;
         int tY = this.barHeight;
-        for (final Module mod : ModuleManager.getModulesInCategory(cat))
-        {
+        for (final Module mod : ModuleManager.getModulesInCategory(cat)) {
             final Button modButton = new Button(mod, this, tY);
             this.components.add(modButton);
             tY += 13;
@@ -50,48 +47,39 @@ public class Frame
     }
 
 
-    public ArrayList<Component> getComponents()
-    {
+    public ArrayList<Component> getComponents() {
         return this.components;
     }
 
-    public void setDrag(final boolean drag)
-    {
+    public void setDrag(final boolean drag) {
         this.isDragging = drag;
     }
 
-    public boolean isOpen()
-    {
+    public boolean isOpen() {
         return this.open;
     }
 
-    public void setOpen(final boolean open)
-    {
+    public void setOpen(final boolean open) {
         this.open = open;
     }
 
-    public void renderFrame()
-    {
+    public void renderFrame() {
         Gui.drawRect(this.x, this.y, this.x + this.width, this.y + this.barHeight, new Color(ClickGuiModule.red.getValue(), ClickGuiModule.green.getValue(), ClickGuiModule.blue.getValue(), 244).getRGB());
         RenderUtil.drawGradientSideways(this.x, this.y, this.x + this.width, this.y + this.barHeight - 3.0f, this.dragY + this.y + 4, Colors.getColor(55, 177, 218));
         RenderUtil.drawGradientSideways(this.x, this.y, this.x + this.width, this.y + this.barHeight - 3.0f, this.dragY + this.y + 4, Colors.getColor(204, 77, 198));
-        if (this.hue > 255.0f)
-        {
+        if (this.hue > 255.0f) {
             this.hue = 0.0f;
         }
         float h = this.hue;
         float h2 = this.hue + 85.0f;
         float h3 = this.hue + 170.0f;
-        if (h > 255.0f)
-        {
+        if (h > 255.0f) {
             h = 0.0f;
         }
-        if (h2 > 255.0f)
-        {
+        if (h2 > 255.0f) {
             h2 -= 255.0f;
         }
-        if (h3 > 255.0f)
-        {
+        if (h3 > 255.0f) {
             h3 -= 255.0f;
         }
         final Color color33 = Color.getHSBColor(h / 255.0f, (float) ClickGuiModule.rainbowSat.getValue(), (float) ClickGuiModule.rainbowBri.getValue());
@@ -106,68 +94,55 @@ public class Frame
         RenderUtil.drawGradientSideways(this.x, this.y - 3, this.x + this.width, this.y, color36, color37);
         RenderUtil.drawGradientSideways(this.x, this.y - 3, this.x + this.width, this.y, color37, color38);
         drawCentredString(this.category.name(), x + this.width / 2, -1);
-        if (this.open && !this.components.isEmpty())
-        {
-            for (final Component component : this.components)
-            {
+        if (this.open && !this.components.isEmpty()) {
+            for (final Component component : this.components) {
                 component.renderComponent();
             }
         }
 
     }
 
-    public void refresh()
-    {
+    public void refresh() {
         int off = this.barHeight;
-        for (final Component comp : this.components)
-        {
+        for (final Component comp : this.components) {
             comp.setOff(off);
             off += comp.getHeight();
         }
         this.height = off;
     }
 
-    private void drawCentredString(String text, int x, int color)
-    {
+    private void drawCentredString(String text, int x, int color) {
         FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), text, x - FontUtils.getStringWidth(ClickGuiModule.customFont.getValue(), text) / 2, this.y + 3, color);
     }
 
-    public int getX()
-    {
+    public int getX() {
         return this.x;
     }
 
-    public void setX(final int newX)
-    {
+    public void setX(final int newX) {
         this.x = newX;
     }
 
-    public int getY()
-    {
+    public int getY() {
         return this.y;
     }
 
-    public void setY(final int newY)
-    {
+    public void setY(final int newY) {
         this.y = newY;
     }
 
-    public int getWidth()
-    {
+    public int getWidth() {
         return this.width;
     }
 
-    public void updatePosition(final int mouseX, final int mouseY)
-    {
-        if (this.isDragging)
-        {
+    public void updatePosition(final int mouseX, final int mouseY) {
+        if (this.isDragging) {
             this.setX(mouseX - this.dragX);
             this.setY(mouseY - this.dragY);
         }
     }
 
-    public boolean isWithinHeader(final int x, final int y)
-    {
+    public boolean isWithinHeader(final int x, final int y) {
         return x >= this.x && x <= this.x + this.width && y >= this.y && y <= this.y + this.barHeight;
     }
 }

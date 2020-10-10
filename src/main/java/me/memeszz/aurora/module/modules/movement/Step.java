@@ -7,24 +7,20 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.ArrayList;
 
-public class Step extends Module
-{
+public class Step extends Module {
     Setting.d height;
     Setting.mode mode;
 
-    public Step()
-    {
+    public Step() {
         super("Step", Category.Movement);
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         mc.player.stepHeight = 0.5f;
     }
 
-    public void setup()
-    {
+    public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Vanilla");
         mode = registerMode("Mode", "Mode", modes, "Vanilla");
@@ -32,12 +28,9 @@ public class Step extends Module
     }
 
     @Listener
-    public void onUpdate(UpdateEvent event)
-    {
-        if (mc.player != null || mc.world != null)
-        {
-            if (mode.getValue().equals("Vanilla"))
-            {
+    public void onUpdate(UpdateEvent event) {
+        if (mc.player != null || mc.world != null) {
+            if (mode.getValue().equals("Vanilla")) {
                 mc.player.stepHeight = (float) height.getValue();
             }
         }

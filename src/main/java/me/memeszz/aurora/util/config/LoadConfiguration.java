@@ -15,11 +15,9 @@ import java.io.*;
 import java.util.Iterator;
 
 
-public class LoadConfiguration
-{
+public class LoadConfiguration {
 
-    public LoadConfiguration()
-    {
+    public LoadConfiguration() {
 
         //loads functions on client startup
         loadAutoGG();
@@ -34,17 +32,14 @@ public class LoadConfiguration
         loadClientname();
     }
 
-    public void loadMacros()
-    {
-        try
-        {
+    public void loadMacros() {
+        try {
             File file = new File(SaveConfiguration.Miscellaneous.getAbsolutePath(), "ClientMacros.json");
             FileInputStream fstream = new FileInputStream(file.getAbsolutePath());
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 String curLine = line.trim();
                 String bind = curLine.split(":")[0];
                 String value = curLine.split(":")[1];
@@ -52,101 +47,84 @@ public class LoadConfiguration
             }
             br.close();
         }
-        catch (Exception var6)
-        {
+        catch (Exception var6) {
             var6.printStackTrace();
             SaveConfiguration.saveMacros();
         }
     }
 
-    public void loadClientname()
-    {
-        try
-        {
+    public void loadClientname() {
+        try {
             File file = new File(SaveConfiguration.Miscellaneous.getAbsolutePath(), "Clientname.json");
             FileInputStream fstream = new FileInputStream(file.getAbsolutePath());
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 me.memeszz.aurora.Aurora.MODNAME = line;
             }
             br.close();
         }
-        catch (Exception var6)
-        {
+        catch (Exception var6) {
             var6.printStackTrace();
             SaveConfiguration.saveMacros();
         }
     }
 
     //loads friends
-    public void loadFriends()
-    {
-        try
-        {
+    public void loadFriends() {
+        try {
             File file = new File(SaveConfiguration.Miscellaneous.getAbsolutePath(), "Friends.json");
             FileInputStream fstream = new FileInputStream(file.getAbsolutePath());
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             Friends.friends.clear();
             String line;
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 Aurora.getInstance().friends.addFriend(line);
             }
             br.close();
         }
-        catch (Exception var6)
-        {
+        catch (Exception var6) {
             var6.printStackTrace();
             SaveConfiguration.saveFriends();
         }
     }
 
     //loads enemies
-    public void loadEnemies()
-    {
-        try
-        {
+    public void loadEnemies() {
+        try {
             File file = new File(SaveConfiguration.Miscellaneous.getAbsolutePath(), "Enemies.json");
             FileInputStream fstream = new FileInputStream(file.getAbsolutePath());
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             Enemies.enemies.clear();
             String line;
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 Enemies.addEnemy(line);
             }
             br.close();
         }
-        catch (Exception var6)
-        {
+        catch (Exception var6) {
             var6.printStackTrace();
             SaveConfiguration.saveEnemies();
         }
     }
 
     //loads client command prefix
-    public void loadPrefix()
-    {
-        try
-        {
+    public void loadPrefix() {
+        try {
             File file = new File(SaveConfiguration.Miscellaneous.getAbsolutePath(), "CommandPrefix.json");
             FileInputStream fstream = new FileInputStream(file.getAbsolutePath());
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 Command.setPrefix(line);
             }
             br.close();
         }
-        catch (Exception var6)
-        {
+        catch (Exception var6) {
             var6.printStackTrace();
             SaveConfiguration.savePrefix();
         }
@@ -154,40 +132,33 @@ public class LoadConfiguration
 
 
     //loads AutoGG message
-    public void loadAutoGG()
-    {
-        try
-        {
+    public void loadAutoGG() {
+        try {
             File file = new File(SaveConfiguration.Messages.getAbsolutePath(), "AutoGG.json");
             FileInputStream fstream = new FileInputStream(file.getAbsolutePath());
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 AutoGG.addAutoGgMessage(line);
             }
             br.close();
         }
-        catch (Exception var6)
-        {
+        catch (Exception var6) {
             var6.printStackTrace();
             SaveConfiguration.saveAutoGG();
         }
     }
 
     //loads client messages such as the watermark
-    public void loadMessages()
-    {
-        try
-        {
+    public void loadMessages() {
+        try {
             File file = new File(SaveConfiguration.Messages.getAbsolutePath(), "ClientMessages.json");
             FileInputStream fstream = new FileInputStream(file.getAbsolutePath());
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 String curLine = line.trim();
                 String watermark = curLine.split(",")[0];
                 String color = curLine.split(",")[1];
@@ -198,104 +169,85 @@ public class LoadConfiguration
             }
             br.close();
         }
-        catch (Exception var6)
-        {
+        catch (Exception var6) {
             var6.printStackTrace();
             SaveConfiguration.saveMessages();
         }
     }
 
     //loads drawn modules
-    public void loadDrawn()
-    {
-        try
-        {
+    public void loadDrawn() {
+        try {
             File file = new File(SaveConfiguration.Miscellaneous.getAbsolutePath(), "DrawnModules.json");
             FileInputStream fstream = new FileInputStream(file.getAbsolutePath());
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 String curLine = line.trim();
                 String name = curLine.split(":")[0];
                 String isOn = curLine.split(":")[1];
                 boolean drawn = Boolean.parseBoolean(isOn);
-                for (Module m : ModuleManager.getModules())
-                {
-                    if (m.getName().equalsIgnoreCase(name))
-                    {
+                for (Module m : ModuleManager.getModules()) {
+                    if (m.getName().equalsIgnoreCase(name)) {
                         m.setDrawn(drawn);
                     }
                 }
             }
             br.close();
         }
-        catch (Exception var6)
-        {
+        catch (Exception var6) {
             var6.printStackTrace();
             SaveConfiguration.saveDrawn();
         }
     }
 
     //loads enabled/disabled modules
-    public void loadEnabled()
-    {
-        try
-        {
+    public void loadEnabled() {
+        try {
             File file = new File(SaveConfiguration.Miscellaneous.getAbsolutePath(), "EnabledModules.json");
             FileInputStream fstream = new FileInputStream(file.getAbsolutePath());
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 Iterator var6 = ModuleManager.getModules().iterator();
-                while (var6.hasNext())
-                {
+                while (var6.hasNext()) {
                     Module m = (Module) var6.next();
-                    if (m.getName().equals(line))
-                    {
+                    if (m.getName().equals(line)) {
                         m.enable();
                     }
                 }
             }
             br.close();
         }
-        catch (Exception var6)
-        {
+        catch (Exception var6) {
             var6.printStackTrace();
             SaveConfiguration.saveEnabled();
         }
     }
 
     //loads module binds
-    public void loadBinds()
-    {
-        try
-        {
+    public void loadBinds() {
+        try {
             File file = new File(SaveConfiguration.Miscellaneous.getAbsolutePath(), "ModuleBinds.json");
             FileInputStream fstream = new FileInputStream(file.getAbsolutePath());
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
-            while ((line = br.readLine()) != null)
-            {
+            while ((line = br.readLine()) != null) {
                 String curLine = line.trim();
                 String name = curLine.split(":")[0];
                 String bind = curLine.split(":")[1];
-                for (Module m : ModuleManager.getModules())
-                {
-                    if (m != null && m.getName().equalsIgnoreCase(name))
-                    {
+                for (Module m : ModuleManager.getModules()) {
+                    if (m != null && m.getName().equalsIgnoreCase(name)) {
                         m.setBind(Keyboard.getKeyIndex(bind));
                     }
                 }
             }
             br.close();
         }
-        catch (Exception var6)
-        {
+        catch (Exception var6) {
             var6.printStackTrace();
             SaveConfiguration.saveBinds();
         }

@@ -10,15 +10,13 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.ArrayList;
 
-public class Fov extends Module
-{
+public class Fov extends Module {
 
     public float defaultFov;
     Setting.i fovSlider;
     Setting.mode mode;
 
-    public Fov()
-    {
+    public Fov() {
         super("FOV", Category.Render, "Change Fov and Make it lower/higher than vanilla");
         fovSlider = this.registerI("Fov", "Fov", 120, 0, 180);
 
@@ -31,33 +29,27 @@ public class Fov extends Module
     }
 
     @SubscribeEvent
-    public void fovOn(EntityViewRenderEvent.FOVModifier e)
-    {
-        if (mode.getValue().equals("ViewModelChanger"))
-        {
+    public void fovOn(EntityViewRenderEvent.FOVModifier e) {
+        if (mode.getValue().equals("ViewModelChanger")) {
             e.setFOV(fovSlider.getValue());
 
         }
     }
 
     @Listener
-    public void gui(GuiScreenDisplayedEvent event)
-    {
-        if (mode.getValue().equals("FovChanger"))
-        {
+    public void gui(GuiScreenDisplayedEvent event) {
+        if (mode.getValue().equals("FovChanger")) {
             mc.gameSettings.fovSetting = fovSlider.getValue();
         }
     }
 
 
-    public void onEnable()
-    {
+    public void onEnable() {
         MinecraftForge.EVENT_BUS.register(this);
         defaultFov = mc.gameSettings.fovSetting;
     }
 
-    public void onDisable()
-    {
+    public void onDisable() {
         MinecraftForge.EVENT_BUS.unregister(this);
         mc.gameSettings.fovSetting = defaultFov;
     }

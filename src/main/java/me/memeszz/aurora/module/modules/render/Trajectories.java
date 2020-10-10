@@ -13,21 +13,17 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 
-public class Trajectories extends Module
-{
+public class Trajectories extends Module {
     ArrayList<Vec3d> positions = new ArrayList<>();
     HueCycler cycler = new HueCycler(100);
 
-    public Trajectories()
-    {
+    public Trajectories() {
         super("Trajectories", Category.Render);
     }
 
     @Override
-    public void onWorldRender(RenderEvent event)
-    {
-        try
-        {
+    public void onWorldRender(RenderEvent event) {
+        try {
             mc.world.loadedEntityList.stream()
                     .filter(entity -> entity instanceof EntityLivingBase)
                     .map(entity -> (EntityLivingBase) entity)
@@ -37,8 +33,7 @@ public class Trajectories extends Module
                         if (tt == TrajectoryCalculator.ThrowingType.NONE) return;
                         TrajectoryCalculator.FlightPath flightPath = new TrajectoryCalculator.FlightPath(entity, tt);
 
-                        while (!flightPath.isCollided())
-                        {
+                        while (!flightPath.isCollided()) {
                             flightPath.onUpdate();
                             positions.add(flightPath.position);
                         }
@@ -51,8 +46,7 @@ public class Trajectories extends Module
                         GL11.glDisable(GL11.GL_TEXTURE_2D);
                         GL11.glDisable(GL11.GL_LIGHTING);
                         GL11.glDisable(GL11.GL_DEPTH_TEST);
-                        if (hit != null)
-                        {
+                        if (hit != null) {
                             RenderUtil.prepare(GL11.GL_QUADS);
                             GL11.glColor4f(1, 1, 1, .3f);
                             RenderUtil.drawBox(hit, 0x33ffffff, RenderUtil.FACEMAP.get(flightPath.getCollidingTarget().sideHit));
@@ -73,8 +67,7 @@ public class Trajectories extends Module
 
                         Vec3d a = positions.get(0);
                         GL11.glVertex3d(a.x - ((IRenderManager) mc.getRenderManager()).getRenderPosX(), a.y - ((IRenderManager) mc.getRenderManager()).getRenderPosY(), a.z - ((IRenderManager) mc.getRenderManager()).getRenderPosZ());
-                        for (Vec3d v : positions)
-                        {
+                        for (Vec3d v : positions) {
                             GL11.glVertex3d(v.x - ((IRenderManager) mc.getRenderManager()).getRenderPosX(), v.y - ((IRenderManager) mc.getRenderManager()).getRenderPosY(), v.z - ((IRenderManager) mc.getRenderManager()).getRenderPosZ());
                             GL11.glVertex3d(v.x - ((IRenderManager) mc.getRenderManager()).getRenderPosX(), v.y - ((IRenderManager) mc.getRenderManager()).getRenderPosY(), v.z - ((IRenderManager) mc.getRenderManager()).getRenderPosZ());
                             if (hit == null)
@@ -88,8 +81,7 @@ public class Trajectories extends Module
                         cycler.reset();
                     });
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
     }

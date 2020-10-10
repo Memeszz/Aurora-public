@@ -3,11 +3,9 @@ package me.memeszz.aurora.util.config;
 
 import me.memeszz.aurora.Aurora;
 
-public class Stopper extends Thread
-{
+public class Stopper extends Thread {
 
-    public static void saveConfig()
-    {
+    public static void saveConfig() {
 
         Aurora.getInstance().saveModules.saveModules();
         SaveConfiguration.saveAutoGG();
@@ -23,8 +21,7 @@ public class Stopper extends Thread
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         saveConfig();
     }
 }

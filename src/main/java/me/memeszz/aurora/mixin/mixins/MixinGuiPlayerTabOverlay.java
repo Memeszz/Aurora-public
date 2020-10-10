@@ -14,18 +14,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 //Credit 086
 @Mixin(GuiPlayerTabOverlay.class)
-public class MixinGuiPlayerTabOverlay
-{
+public class MixinGuiPlayerTabOverlay {
 
     @Inject(method = "getPlayerName", at = @At("HEAD"), cancellable = true)
-    public void getPlayerName(NetworkPlayerInfo networkPlayerInfoIn, CallbackInfoReturnable returnable)
-    {
+    public void getPlayerName(NetworkPlayerInfo networkPlayerInfoIn, CallbackInfoReturnable returnable) {
         returnable.cancel();
         returnable.setReturnValue(getPlayerName(networkPlayerInfoIn));
     }
 
-    public String getPlayerName(NetworkPlayerInfo networkPlayerInfoIn)
-    {
+    public String getPlayerName(NetworkPlayerInfo networkPlayerInfoIn) {
         String dname = networkPlayerInfoIn.getDisplayName() != null ? networkPlayerInfoIn.getDisplayName().getFormattedText() : ScorePlayerTeam.formatPlayerName(networkPlayerInfoIn.getPlayerTeam(), networkPlayerInfoIn.getGameProfile().getName());
         if (Friends.isFriend(dname)) return TextFormatting.AQUA + dname;
         else if (Enemies.isEnemy(dname)) return TextFormatting.RED + dname;

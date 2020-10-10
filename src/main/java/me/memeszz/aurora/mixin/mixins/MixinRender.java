@@ -6,8 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(value = Render.class, priority = 2147483647)
-public abstract class MixinRender<T extends Entity>
-{
+public abstract class MixinRender<T extends Entity> {
     @Shadow
     protected abstract boolean bindEntityTexture(T entity);
 

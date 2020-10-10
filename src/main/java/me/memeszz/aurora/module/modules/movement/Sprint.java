@@ -7,17 +7,14 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.ArrayList;
 
-public class Sprint extends Module
-{
+public class Sprint extends Module {
     Setting.mode mode;
 
-    public Sprint()
-    {
+    public Sprint() {
         super("Sprint", Category.Movement, "Automatically sprint");
     }
 
-    public void setup()
-    {
+    public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Legit");
         modes.add("Rage");
@@ -25,39 +22,32 @@ public class Sprint extends Module
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         super.onDisable();
 
-        if (mc.world != null)
-        {
+        if (mc.world != null) {
             mc.player.setSprinting(false);
         }
     }
 
     @Override
-    public String getHudInfo()
-    {
+    public String getHudInfo() {
         return "§7[§f" + mode.getValue() + "§7]";
     }
 
 
     @Listener
-    public void onUpdate(UpdateEvent event)
-    {
-        switch (mode.getValue())
-        {
+    public void onUpdate(UpdateEvent event) {
+        switch (mode.getValue()) {
             case "Rage":
                 if ((mc.gameSettings.keyBindForward.isKeyDown() || mc.gameSettings.keyBindBack.isKeyDown() || mc.gameSettings.keyBindLeft.isKeyDown() || mc.gameSettings.keyBindRight.isKeyDown())
-                        && !(mc.player.isSneaking()) && !(mc.player.collidedHorizontally) && !(mc.player.getFoodStats().getFoodLevel() <= 6f))
-                {
+                        && !(mc.player.isSneaking()) && !(mc.player.collidedHorizontally) && !(mc.player.getFoodStats().getFoodLevel() <= 6f)) {
                     mc.player.setSprinting(true);
                 }
                 break;
             case "Legit":
                 if ((mc.gameSettings.keyBindForward.isKeyDown()) && !(mc.player.isSneaking()) && !(mc.player.isHandActive()) && !(mc.player.collidedHorizontally) && mc.currentScreen == null
-                        && !(mc.player.getFoodStats().getFoodLevel() <= 6f))
-                {
+                        && !(mc.player.getFoodStats().getFoodLevel() <= 6f)) {
                     mc.player.setSprinting(true);
                 }
                 break;

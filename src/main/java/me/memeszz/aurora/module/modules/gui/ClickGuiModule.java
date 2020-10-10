@@ -5,8 +5,7 @@ import me.memeszz.aurora.module.Module;
 import me.memeszz.aurora.util.setting.Setting;
 import org.lwjgl.input.Keyboard;
 
-public class ClickGuiModule extends Module
-{
+public class ClickGuiModule extends Module {
     public static Setting.i red;
     public static Setting.i green;
     public static Setting.i blue;
@@ -20,8 +19,7 @@ public class ClickGuiModule extends Module
     public static Setting.d rainbowBri;
     public ClickGuiModule INSTANCE;
 
-    public ClickGuiModule()
-    {
+    public ClickGuiModule() {
         super("ClickGUI", Category.Gui, "Opens the ClickGUI");
         setBind(Keyboard.KEY_P);
         INSTANCE = this;
@@ -38,8 +36,7 @@ public class ClickGuiModule extends Module
         customFont = this.registerB("CustomFont", "CustomFont", false);
     }
 
-    public void onEnable()
-    {
+    public void onEnable() {
         mc.displayGuiScreen(Aurora.getInstance().clickGui);
         disable();
     }

@@ -9,18 +9,15 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.ArrayList;
 
 
-public class FastWebFall extends Module
-{
+public class FastWebFall extends Module {
     Setting.mode mode;
     Setting.i speed;
 
-    public FastWebFall()
-    {
+    public FastWebFall() {
         super("FastFallWeb", Category.Player);
     }
 
-    public void setup()
-    {
+    public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("2b");
         modes.add("Non2b");
@@ -29,14 +26,10 @@ public class FastWebFall extends Module
     }
 
     @Listener
-    public void onUpdate(UpdateEvent event)
-    {
-        if (((IEntity) mc.player).getIsInWeb())
-        {
-            if (mode.getValue().equalsIgnoreCase("non2b"))
-            {
-                for (int i = 0; i < speed.getValue(); i++)
-                {
+    public void onUpdate(UpdateEvent event) {
+        if (((IEntity) mc.player).getIsInWeb()) {
+            if (mode.getValue().equalsIgnoreCase("non2b")) {
+                for (int i = 0; i < speed.getValue(); i++) {
                     mc.player.motionY--;
                 }
             }

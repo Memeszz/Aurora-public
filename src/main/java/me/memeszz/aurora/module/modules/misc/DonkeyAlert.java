@@ -14,8 +14,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.ArrayList;
 
-public class DonkeyAlert extends Module
-{
+public class DonkeyAlert extends Module {
 
     Setting.b donkeyAlert;
     Setting.b muleAlert;
@@ -24,8 +23,7 @@ public class DonkeyAlert extends Module
     Setting.mode mode;
     private int antiSpam;
 
-    public DonkeyAlert()
-    {
+    public DonkeyAlert() {
         super("DonkeyAlert", Category.Misc, "Announces the location of any donkeys in the players render distance");
     }
 
@@ -36,8 +34,7 @@ public class DonkeyAlert extends Module
 
     private Setting<DonkeyAlert.colour> mode = register(Settings.e("Colour", DonkeyAlert.colour.DARK_PURPLE)); */
 
-    public void setup()
-    {
+    public void setup() {
 
         donkeyAlert = this.registerB("DonkeyAlert", "DonkeyAlert", true);
         muleAlert = this.registerB("MuleAlert", "MuleAlert", true);
@@ -68,43 +65,33 @@ public class DonkeyAlert extends Module
     }
 
     @Listener
-    public void onUpdate(UpdateEvent event)
-    {
+    public void onUpdate(UpdateEvent event) {
         antiSpam++;
 
-        for (Entity e : Minecraft.getMinecraft().world.loadedEntityList)
-        {
-            if (e instanceof EntityDonkey && donkeyAlert.getValue())
-            {
-                if (antiSpam >= 100)
-                {
+        for (Entity e : Minecraft.getMinecraft().world.loadedEntityList) {
+            if (e instanceof EntityDonkey && donkeyAlert.getValue()) {
+                if (antiSpam >= 100) {
                     Wrapper.sendClientMessage(colorchoice() + " Found Donkey!" + " X:" + (int) e.posX + " Z:" + (int) e.posZ);
                     antiSpam = -600;
                 }
             }
-            if (e instanceof EntityMule && muleAlert.getValue())
-            {
-                if (antiSpam >= 100)
-                {
+            if (e instanceof EntityMule && muleAlert.getValue()) {
+                if (antiSpam >= 100) {
                     Wrapper.sendClientMessage(colorchoice() + " Found Mule!" + " X:" + (int) e.posX + " Z:" + (int) e.posZ);
                     antiSpam = -600;
                 }
 
             }
-            if (e instanceof EntityLlama && llamaAlert.getValue())
-            {
-                if (antiSpam >= 100)
-                {
+            if (e instanceof EntityLlama && llamaAlert.getValue()) {
+                if (antiSpam >= 100) {
                     Wrapper.sendClientMessage(colorchoice() + " Found Llama!" + " X:" + (int) e.posX + " Z:" + (int) e.posZ);
 
                     antiSpam = -600;
                 }
 
             }
-            if (e instanceof EntityHorse && horseAlert.getValue())
-            {
-                if (antiSpam >= 100)
-                {
+            if (e instanceof EntityHorse && horseAlert.getValue()) {
+                if (antiSpam >= 100) {
                     Wrapper.sendClientMessage(colorchoice() + " Found Horse!" + " X:" + (int) e.posX + " Z:" + (int) e.posZ);
 
                     antiSpam = -600;
@@ -115,10 +102,8 @@ public class DonkeyAlert extends Module
         }
     }
 
-    private String colorchoice()
-    {
-        switch (mode.getValue())
-        {
+    private String colorchoice() {
+        switch (mode.getValue()) {
             case "BLACK":
                 return "§0";
             case "RED":

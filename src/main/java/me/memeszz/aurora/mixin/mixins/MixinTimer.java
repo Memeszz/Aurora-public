@@ -6,8 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(Timer.class)
-public abstract class MixinTimer implements ITimer
-{
+public abstract class MixinTimer implements ITimer {
 
     @Accessor
     @Override

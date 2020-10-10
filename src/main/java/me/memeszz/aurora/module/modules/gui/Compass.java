@@ -12,57 +12,48 @@ import java.awt.*;
 /*
 ForgeHax!!!!
  */
-public class Compass extends Module
-{
+public class Compass extends Module {
     private static final double HALF_PI = Math.PI / 2;
     Setting.d scale;
     ScaledResolution resolution = new ScaledResolution(mc);
 
-    public Compass()
-    {
+    public Compass() {
         super("Compass", Category.Render, "Draws A Compass On Ur Screen Thanks ForgeHax");
     }
 
     // return the position on the circle in radians
-    private static double getPosOnCompass(Direction dir)
-    {
+    private static double getPosOnCompass(Direction dir) {
         double yaw = Math.toRadians(MathHelper.wrapDegrees(Wrapper.getRenderEntity().rotationYaw)); // player yaw
         int index = dir.ordinal();
         return yaw + (index * HALF_PI);
     }
 
-    public void setup()
-    {
+    public void setup() {
         scale = this.registerD("Radius", "Radius", 3, 1, 5);
     }
 
     @Override
-    public void onRender()
-    {
+    public void onRender() {
         final double centerX = resolution.getScaledWidth() * 1.11;
         final double centerY = resolution.getScaledHeight_double() * 1.8;
 
-        for (Direction dir : Direction.values())
-        {
+        for (Direction dir : Direction.values()) {
             double rad = getPosOnCompass(dir);
             FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), dir.name(), (int) (centerX + getX(rad)), (int) (centerY + getY(rad)), dir == Direction.N ? new Color(255, 0, 0, 255).getRGB() : new Color(255, 255, 255, 255).getRGB());
         }
     }
 
-    private double getX(double rad)
-    {
+    private double getX(double rad) {
         return Math.sin(rad) * (scale.getValue() * 10);
     }
 
-    private double getY(double rad)
-    {
+    private double getY(double rad) {
         final double epicPitch = MathHelper.clamp(Wrapper.getRenderEntity().rotationPitch + 30f, -90f, 90f);
         final double pitchRadians = Math.toRadians(epicPitch); // player pitch
         return Math.cos(rad) * Math.sin(pitchRadians) * (scale.getValue() * 10);
     }
 
-    private enum Direction
-    {
+    private enum Direction {
         N,
         W,
         S,

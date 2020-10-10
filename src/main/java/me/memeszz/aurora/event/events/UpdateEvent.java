@@ -2,14 +2,12 @@ package me.memeszz.aurora.event.events;
 
 import me.memeszz.aurora.event.EventCancellable;
 
-public class UpdateEvent extends EventCancellable
-{
+public class UpdateEvent extends EventCancellable {
     public float yaw, pitch;
     private double x, y, z;
     private boolean onGround;
 
-    public UpdateEvent(EventStage stage, float yaw, float pitch, double x, double y, double z, boolean onGround)
-    {
+    public UpdateEvent(EventStage stage, float yaw, float pitch, double x, double y, double z, boolean onGround) {
         super(stage);
         this.yaw = yaw;
         this.pitch = pitch;
@@ -19,68 +17,55 @@ public class UpdateEvent extends EventCancellable
         this.onGround = onGround;
     }
 
-    public UpdateEvent()
-    {
+    public UpdateEvent() {
 
     }
 
-    public boolean isOnGround()
-    {
+    public boolean isOnGround() {
         return onGround;
     }
 
-    public void setOnGround(boolean onGround)
-    {
+    public void setOnGround(boolean onGround) {
         this.onGround = onGround;
     }
 
-    public float getYaw()
-    {
+    public float getYaw() {
         return yaw;
     }
 
-    public void setYaw(float yaw)
-    {
+    public void setYaw(float yaw) {
         this.yaw = yaw;
     }
 
-    public float getPitch()
-    {
+    public float getPitch() {
         return pitch;
     }
 
-    public void setPitch(float pitch)
-    {
+    public void setPitch(float pitch) {
         this.pitch = pitch;
     }
 
-    public double getX()
-    {
+    public double getX() {
         return x;
     }
 
-    public void setX(double x)
-    {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public double getY()
-    {
+    public double getY() {
         return y;
     }
 
-    public void setY(double y)
-    {
+    public void setY(double y) {
         this.y = y;
     }
 
-    public double getZ()
-    {
+    public double getZ() {
         return z;
     }
 
-    public void setZ(double z)
-    {
+    public void setZ(double z) {
         this.z = z;
     }
 

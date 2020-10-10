@@ -7,21 +7,18 @@ import net.minecraft.init.MobEffects;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-public class NoRender extends Module
-{
+public class NoRender extends Module {
     public Setting.b armor;
     public Setting.b hurtCam;
     Setting.b fire;
     Setting.b blind;
     Setting.b nausea;
 
-    public NoRender()
-    {
+    public NoRender() {
         super("NoRender", Category.Render, "Prevents rendering some things");
     }
 
-    public void setup()
-    {
+    public void setup() {
         armor = this.registerB("Armor", "Armor", false);
         fire = this.registerB("Fire", "Fire", true);
         blind = this.registerB("Blindness", "Blindness", true);
@@ -31,8 +28,7 @@ public class NoRender extends Module
 
 
     @Listener
-    public void onUpdate(UpdateEvent event)
-    {
+    public void onUpdate(UpdateEvent event) {
         if (blind.getValue() && mc.player.isPotionActive(MobEffects.BLINDNESS))
             mc.player.removePotionEffect(MobEffects.BLINDNESS);
         if (nausea.getValue() && mc.player.isPotionActive(MobEffects.NAUSEA))
@@ -40,8 +36,7 @@ public class NoRender extends Module
     }
 
     @Listener
-    public void kek(RenderBlockOverlayEvent event)
-    {
+    public void kek(RenderBlockOverlayEvent event) {
         if (fire.getValue() && event.getOverlayType() == RenderBlockOverlayEvent.OverlayType.FIRE)
             event.setCanceled(true);
     }

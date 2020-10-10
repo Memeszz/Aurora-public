@@ -30,8 +30,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.ArrayList;
 
 
-public class Surround extends Module
-{
+public class Surround extends Module {
     private int totalTicksRunning = 0;
     private int playerHotbarSlot = -1;
     private int lastHotbarSlot = -1;
@@ -49,8 +48,7 @@ public class Surround extends Module
     private Setting.i timeoutTicks;
     private Setting.b offInAir;
 
-    public Surround()
-    {
+    public Surround() {
         super("Surround", Category.Combat, "Attacks nearby players");
     }
 
@@ -76,31 +74,26 @@ public class Surround extends Module
 
         return false;
     }*/
-    public static IBlockState getState(BlockPos pos)
-    {
+    public static IBlockState getState(BlockPos pos) {
         return mc.world.getBlockState(pos);
     }
 
-    public static Block getBlock(BlockPos pos)
-    {
+    public static Block getBlock(BlockPos pos) {
         return getState(pos).getBlock();
     }
 
-    public static boolean canBeClicked(BlockPos pos)
-    {
+    public static boolean canBeClicked(BlockPos pos) {
         return getBlock(pos).canCollideCheck(getState(pos), false);
     }
 
-    public static void faceVectorPacketInstant(Vec3d vec)
-    {
+    public static void faceVectorPacketInstant(Vec3d vec) {
         float[] rotations = getNeededRotations2(vec);
 
         mc.player.connection.sendPacket(new CPacketPlayer.Rotation(rotations[0],
                 rotations[1], mc.player.onGround));
     }
 
-    private static float[] getNeededRotations2(Vec3d vec)
-    {
+    private static float[] getNeededRotations2(Vec3d vec) {
         Vec3d eyesPos = getEyesPos();
 
         double diffX = vec.x - eyesPos.x;
@@ -119,15 +112,13 @@ public class Surround extends Module
                         .wrapDegrees(pitch - mc.player.rotationPitch)};
     }
 
-    public static Vec3d getEyesPos()
-    {
+    public static Vec3d getEyesPos() {
         return new Vec3d(mc.player.posX,
                 mc.player.posY + mc.player.getEyeHeight(),
                 mc.player.posZ);
     }
 
-    public void setup()
-    {
+    public void setup() {
         tickDelay = this.registerI("Delay", "Delay", 0, 0, 10);
         timeoutTicks = this.registerI("TimeoutTicks", "TimeoutTicks", 0, 0, 10);
         blocksPerTick = this.registerI("Bpt", "Bpt", 10, 0, 10);
@@ -144,21 +135,18 @@ public class Surround extends Module
 
     }
 
-    private void centerPlayer(double x, double y, double z)
-    {
+    private void centerPlayer(double x, double y, double z) {
         mc.player.connection.sendPacket(new CPacketPlayer.Position(x, y, z, true));
         mc.player.setPosition(x, y, z);
     }
 
-    double getDst(Vec3d vec)
-    {
+    double getDst(Vec3d vec) {
         return playerPos.distanceTo(vec);
     }
 
     /* End of Autocenter */
     @Override
-    protected void onEnable()
-    {
+    protected void onEnable() {
         /* Autocenter */
         BlockPos centerPos = mc.player.getPosition();
         playerPos = mc.player.getPositionVector();
@@ -171,28 +159,23 @@ public class Surround extends Module
         final Vec3d minusMinus = new Vec3d(x - 0.5, y, z - 0.5);
         final Vec3d minusPlus = new Vec3d(x - 0.5, y, z + 0.5);
 
-        if (autoCenter.getValue())
-        {
-            if (getDst(plusPlus) < getDst(plusMinus) && getDst(plusPlus) < getDst(minusMinus) && getDst(plusPlus) < getDst(minusPlus))
-            {
+        if (autoCenter.getValue()) {
+            if (getDst(plusPlus) < getDst(plusMinus) && getDst(plusPlus) < getDst(minusMinus) && getDst(plusPlus) < getDst(minusPlus)) {
                 x = centerPos.getX() + 0.5;
                 z = centerPos.getZ() + 0.5;
                 centerPlayer(x, y, z);
             }
-            if (getDst(plusMinus) < getDst(plusPlus) && getDst(plusMinus) < getDst(minusMinus) && getDst(plusMinus) < getDst(minusPlus))
-            {
+            if (getDst(plusMinus) < getDst(plusPlus) && getDst(plusMinus) < getDst(minusMinus) && getDst(plusMinus) < getDst(minusPlus)) {
                 x = centerPos.getX() + 0.5;
                 z = centerPos.getZ() - 0.5;
                 centerPlayer(x, y, z);
             }
-            if (getDst(minusMinus) < getDst(plusPlus) && getDst(minusMinus) < getDst(plusMinus) && getDst(minusMinus) < getDst(minusPlus))
-            {
+            if (getDst(minusMinus) < getDst(plusPlus) && getDst(minusMinus) < getDst(plusMinus) && getDst(minusMinus) < getDst(minusPlus)) {
                 x = centerPos.getX() - 0.5;
                 z = centerPos.getZ() - 0.5;
                 centerPlayer(x, y, z);
             }
-            if (getDst(minusPlus) < getDst(plusPlus) && getDst(minusPlus) < getDst(plusMinus) && getDst(minusPlus) < getDst(minusMinus))
-            {
+            if (getDst(minusPlus) < getDst(plusPlus) && getDst(minusPlus) < getDst(plusMinus) && getDst(minusPlus) < getDst(minusMinus)) {
                 x = centerPos.getX() - 0.5;
                 z = centerPos.getZ() + 0.5;
                 centerPlayer(x, y, z);
@@ -209,16 +192,13 @@ public class Surround extends Module
     }
 
     @Override
-    protected void onDisable()
-    {
+    protected void onDisable() {
         // load initial player hand
-        if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1)
-        {
+        if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1) {
             mc.player.inventory.currentItem = playerHotbarSlot;
         }
 
-        if (isSneaking)
-        {
+        if (isSneaking) {
             mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
             isSneaking = false;
         }
@@ -228,59 +208,47 @@ public class Surround extends Module
     }
 
     @Listener
-    public void onChorus(EventChorusTeleport event)
-    {
+    public void onChorus(EventChorusTeleport event) {
         if (onChorus.getValue().equals("None")) return;
-        if (onChorus.getValue().equals("Enable"))
-        {
+        if (onChorus.getValue().equals("Enable")) {
             enable();
         }
-        else
-        {
+        else {
             enable();
-            if (StopwatchUtil.hasCompleted(1000))
-            {
+            if (StopwatchUtil.hasCompleted(1000)) {
                 disable();
             }
         }
     }
 
     @Listener
-    public void onUpdate(UpdateEvent event)
-    {
-        if (triggerable.getValue() && totalTicksRunning >= timeoutTicks.getValue())
-        {
+    public void onUpdate(UpdateEvent event) {
+        if (triggerable.getValue() && totalTicksRunning >= timeoutTicks.getValue()) {
             totalTicksRunning = 0;
             this.disable();
             return;
         }
-        if (offInAir.getValue() && !mc.player.onGround)
-        {
+        if (offInAir.getValue() && !mc.player.onGround) {
             this.disable();
         }
 
-        if (!firstRun)
-        {
-            if (delayStep < tickDelay.getValue())
-            {
+        if (!firstRun) {
+            if (delayStep < tickDelay.getValue()) {
                 delayStep++;
                 return;
             }
-            else
-            {
+            else {
                 delayStep = 0;
             }
         }
 
-        if (firstRun)
-        {
+        if (firstRun) {
             firstRun = false;
         }
 
         int blocksPlaced = 0;
 
-        while (blocksPlaced < blocksPerTick.getValue())
-        {
+        while (blocksPlaced < blocksPerTick.getValue()) {
 
             Vec3d[] offsetPattern = new Vec3d[0];
             int maxSteps = 0;
@@ -291,8 +259,7 @@ public class Surround extends Module
                 maxSteps = Offsets.SURROUND.length;
             }
 
-            if (offsetStep >= maxSteps)
-            {
+            if (offsetStep >= maxSteps) {
                 offsetStep = 0;
                 break;
             }
@@ -300,8 +267,7 @@ public class Surround extends Module
             BlockPos offsetPos = new BlockPos(offsetPattern[offsetStep]);
             BlockPos targetPos = new BlockPos(mc.player.getPositionVector()).add(offsetPos.getX(), offsetPos.getY(), offsetPos.getZ());
 
-            if (placeBlock(targetPos))
-            {
+            if (placeBlock(targetPos)) {
                 blocksPlaced++;
             }
 
@@ -309,17 +275,14 @@ public class Surround extends Module
 
         }
 
-        if (blocksPlaced > 0)
-        {
+        if (blocksPlaced > 0) {
 
-            if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1)
-            {
+            if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1) {
                 mc.player.inventory.currentItem = playerHotbarSlot;
                 lastHotbarSlot = playerHotbarSlot;
             }
 
-            if (isSneaking)
-            {
+            if (isSneaking) {
                 mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
                 isSneaking = false;
             }
@@ -330,20 +293,16 @@ public class Surround extends Module
 
     }
 
-    private boolean placeBlock(BlockPos pos)
-    {
+    private boolean placeBlock(BlockPos pos) {
         // check if block is already placed
         Block block = mc.world.getBlockState(pos).getBlock();
-        if (!(block instanceof BlockAir) && !(block instanceof BlockLiquid))
-        {
+        if (!(block instanceof BlockAir) && !(block instanceof BlockLiquid)) {
             return false;
         }
 
         // check if entity blocks placing
-        for (Entity entity : mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)))
-        {
-            if (!(entity instanceof EntityItem) && !(entity instanceof EntityXPOrb))
-            {
+        for (Entity entity : mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos))) {
+            if (!(entity instanceof EntityItem) && !(entity instanceof EntityXPOrb)) {
                 return false;
             }
         }
@@ -351,8 +310,7 @@ public class Surround extends Module
         EnumFacing side = BlockInteractionHelper.getPlaceableSide(pos);
 
         // check if we have a block adjacent to blockpos to click at
-        if (side == null)
-        {
+        if (side == null) {
             return false;
         }
 
@@ -360,8 +318,7 @@ public class Surround extends Module
         EnumFacing opposite = side.getOpposite();
 
         // check if neighbor can be right clicked
-        if (BlockInteractionHelper.canBeClicked(neighbour))
-        {
+        if (BlockInteractionHelper.canBeClicked(neighbour)) {
             return false;
         }
 
@@ -370,25 +327,21 @@ public class Surround extends Module
 
         int obiSlot = findObiInHotbar();
 
-        if (obiSlot == -1)
-        {
+        if (obiSlot == -1) {
             this.disable();
         }
 
-        if (lastHotbarSlot != obiSlot)
-        {
+        if (lastHotbarSlot != obiSlot) {
             mc.player.inventory.currentItem = obiSlot;
             lastHotbarSlot = obiSlot;
         }
 
-        if (!isSneaking && BlockInteractionHelper.blackList.contains(neighbourBlock) || BlockInteractionHelper.shulkerList.contains(neighbourBlock))
-        {
+        if (!isSneaking && BlockInteractionHelper.blackList.contains(neighbourBlock) || BlockInteractionHelper.shulkerList.contains(neighbourBlock)) {
             mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
             isSneaking = true;
         }
 
-        if (rotate.getValue())
-        {
+        if (rotate.getValue()) {
             BlockInteractionHelper.faceVectorPacketInstant(hitVec);
         }
 
@@ -400,25 +353,21 @@ public class Surround extends Module
 
     }
 
-    private int findObiInHotbar()
-    {
+    private int findObiInHotbar() {
 
         // search blocks in hotbar
         int slot = -1;
-        for (int i = 0; i < 9; i++)
-        {
+        for (int i = 0; i < 9; i++) {
 
             // filter out non-block items
             ItemStack stack = mc.player.inventory.getStackInSlot(i);
 
-            if (stack == ItemStack.EMPTY || !(stack.getItem() instanceof ItemBlock))
-            {
+            if (stack == ItemStack.EMPTY || !(stack.getItem() instanceof ItemBlock)) {
                 continue;
             }
 
             Block block = ((ItemBlock) stack.getItem()).getBlock();
-            if (block instanceof BlockObsidian)
-            {
+            if (block instanceof BlockObsidian) {
                 slot = i;
                 break;
             }
@@ -429,8 +378,7 @@ public class Surround extends Module
 
     }
 
-    private static class Offsets
-    {
+    private static class Offsets {
 
         private static final Vec3d[] SURROUND = {
                 new Vec3d(1, 0, 0),

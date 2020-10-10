@@ -18,26 +18,22 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 import java.util.ArrayList;
 
-public class SpeedMine extends Module
-{
+public class SpeedMine extends Module {
     Setting.mode mode;
     Setting.b reset;
     Setting.b FastFall;
     Setting.b doubleBreak;
 
-    public SpeedMine()
-    {
+    public SpeedMine() {
         super("SpeedMine", Category.Player, "Mine blocks faster");
     }
 
     @Override
-    public String getHudInfo()
-    {
+    public String getHudInfo() {
         return "§7[§f" + mode.getValue() + "§7]";
     }
 
-    public void setup()
-    {
+    public void setup() {
         reset = this.registerB("Reset", "Reset", false);
         FastFall = this.registerB("FastFall", "FastFall", false);
         doubleBreak = this.registerB("DoubleBreak", "DoubleBreak", false);
@@ -52,15 +48,12 @@ public class SpeedMine extends Module
 
 
     @Listener
-    public void onUpdate(UpdateEvent event)
-    {
+    public void onUpdate(UpdateEvent event) {
         ((IPlayerControllerMP) mc.playerController).setBlockHitDelay(0);
-        if (this.reset.getValue() && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown())
-        {
+        if (this.reset.getValue() && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
             ((IPlayerControllerMP) mc.playerController).setIsHittingBlock(false);
         }
-        if (FastFall.getValue())
-        {
+        if (FastFall.getValue()) {
             if (mc.player.onGround)
                 --mc.player.motionY;
         }
@@ -68,22 +61,17 @@ public class SpeedMine extends Module
 
 
     @Listener
-    public void setReset(EventPlayerResetBlockRemoving event)
-    {
-        if (this.reset.getValue())
-        {
+    public void setReset(EventPlayerResetBlockRemoving event) {
+        if (this.reset.getValue()) {
             event.setCanceled(true);
         }
     }
 
 
     @Listener
-    public void clickBlock(EventPlayerClickBlock event)
-    {
-        if (this.reset.getValue())
-        {
-            if (((IPlayerControllerMP) mc.playerController).getCurBlockDamageMP() > 0.1f)
-            {
+    public void clickBlock(EventPlayerClickBlock event) {
+        if (this.reset.getValue()) {
+            if (((IPlayerControllerMP) mc.playerController).getCurBlockDamageMP() > 0.1f) {
                 ((IPlayerControllerMP) mc.playerController).setIsHittingBlock(true);
             }
         }
@@ -91,17 +79,13 @@ public class SpeedMine extends Module
 
 
     @Listener
-    public void damageBlock(EventPlayerDamageBlock event)
-    {
-        if (canBreak(event.getPos()))
-        {
-            if (this.reset.getValue())
-            {
+    public void damageBlock(EventPlayerDamageBlock event) {
+        if (canBreak(event.getPos())) {
+            if (this.reset.getValue()) {
                 ((IPlayerControllerMP) mc.playerController).setIsHittingBlock(false);
             }
 
-            if (mode.getValue().equalsIgnoreCase("Instant"))
-            {
+            if (mode.getValue().equalsIgnoreCase("Instant")) {
                 mc.player.swingArm(EnumHand.MAIN_HAND);
                 mc.player.connection.sendPacket(new CPacketPlayerDigging(
                         CPacketPlayerDigging.Action.START_DESTROY_BLOCK, event.getPos(), event.getDirection()));
@@ -110,11 +94,9 @@ public class SpeedMine extends Module
                 mc.playerController.onPlayerDestroyBlock(event.getPos());
                 mc.world.setBlockToAir(event.getPos());
             }
-            if ((mc.player.getHeldItemMainhand().getItem() instanceof ItemPickaxe))
-            {
+            if ((mc.player.getHeldItemMainhand().getItem() instanceof ItemPickaxe)) {
 
-                if (mode.getValue().equalsIgnoreCase("Packet"))
-                {
+                if (mode.getValue().equalsIgnoreCase("Packet")) {
                     mc.player.swingArm(EnumHand.MAIN_HAND);
                     mc.player.connection.sendPacket(new CPacketPlayerDigging(
                             CPacketPlayerDigging.Action.START_DESTROY_BLOCK, event.getPos(), event.getDirection()));
@@ -122,10 +104,8 @@ public class SpeedMine extends Module
                             event.getPos(), event.getDirection()));
                     event.setCanceled(true);
                 }
-                if (mode.getValue().equalsIgnoreCase("Damage"))
-                {
-                    if (((IPlayerControllerMP) mc.playerController).getCurBlockDamageMP() >= 0.7f)
-                    {
+                if (mode.getValue().equalsIgnoreCase("Damage")) {
+                    if (((IPlayerControllerMP) mc.playerController).getCurBlockDamageMP() >= 0.7f) {
                         ((IPlayerControllerMP) mc.playerController).setCurBlockDamageMP(1);
                     }
                 }
@@ -133,12 +113,10 @@ public class SpeedMine extends Module
             }
 
 
-            if (this.doubleBreak.getValue())
-            {
+            if (this.doubleBreak.getValue()) {
                 final BlockPos above = event.getPos().add(0, 1, 0);
 
-                if (canBreak(above) && mc.player.getDistance(above.getX(), above.getY(), above.getZ()) <= 5f)
-                {
+                if (canBreak(above) && mc.player.getDistance(above.getX(), above.getY(), above.getZ()) <= 5f) {
                     mc.player.swingArm(EnumHand.MAIN_HAND);
                     mc.player.connection.sendPacket(new CPacketPlayerDigging(
                             CPacketPlayerDigging.Action.START_DESTROY_BLOCK, above, event.getDirection()));
@@ -151,8 +129,7 @@ public class SpeedMine extends Module
         }
     }
 
-    private boolean canBreak(BlockPos pos)
-    {
+    private boolean canBreak(BlockPos pos) {
         final IBlockState blockState = mc.world.getBlockState(pos);
         final Block block = blockState.getBlock();
 

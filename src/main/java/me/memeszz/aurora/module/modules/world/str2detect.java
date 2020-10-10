@@ -13,24 +13,19 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 
-public class str2detect extends Module
-{
+public class str2detect extends Module {
     public static final Minecraft mc = Minecraft.getMinecraft();
     private final Set<EntityPlayer> str = Collections.newSetFromMap(new WeakHashMap());
 
-    public str2detect()
-    {
+    public str2detect() {
         super("StrengthDetect", Category.World, "Tells you in chat when someone has str 2/1");
     }
 
     @Listener
-    public void onUpdate(UpdateEvent event)
-    {
-        for (EntityPlayer player : mc.world.playerEntities)
-        {
+    public void onUpdate(UpdateEvent event) {
+        for (EntityPlayer player : mc.world.playerEntities) {
             if (player.equals(mc.player)) continue;
-            if (player.isPotionActive(MobEffects.STRENGTH) && !this.str.contains(player))
-            {
+            if (player.isPotionActive(MobEffects.STRENGTH) && !this.str.contains(player)) {
                 Wrapper.sendClientMessage(player.getDisplayNameString() + " Has Strength");
                 this.str.add(player);
             }

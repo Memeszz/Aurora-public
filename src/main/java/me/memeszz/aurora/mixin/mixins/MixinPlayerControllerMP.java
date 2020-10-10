@@ -18,8 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerControllerMP.class)
-public abstract class MixinPlayerControllerMP implements IPlayerControllerMP
-{
+public abstract class MixinPlayerControllerMP implements IPlayerControllerMP {
 
     @Accessor
     @Override
@@ -38,43 +37,36 @@ public abstract class MixinPlayerControllerMP implements IPlayerControllerMP
     public abstract void setCurBlockDamageMP(float blockDamageMP);
 
     @Inject(method = "onPlayerDestroyBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;playEvent(ILnet/minecraft/util/math/BlockPos;I)V"), cancellable = true)
-    private void onPlayerDestroyBlock(BlockPos pos, CallbackInfoReturnable<Boolean> info)
-    {
+    private void onPlayerDestroyBlock(BlockPos pos, CallbackInfoReturnable<Boolean> info) {
         Aurora.getInstance().getEventManager().dispatchEvent(new DestroyBlockEvent(pos));
     }
 
     @Inject(method = "resetBlockRemoving", at = @At("HEAD"), cancellable = true)
-    public void resetBlockRemoving(CallbackInfo p_Info)
-    {
+    public void resetBlockRemoving(CallbackInfo p_Info) {
         EventPlayerResetBlockRemoving l_Event = new EventPlayerResetBlockRemoving();
 
         Aurora.getInstance().getEventManager().dispatchEvent(l_Event);
-        if (l_Event.isCanceled() || ModuleManager.isModuleEnabled("MultiTask"))
-        {
+        if (l_Event.isCanceled() || ModuleManager.isModuleEnabled("MultiTask")) {
             p_Info.cancel();
         }
     }
 
     @Inject(method = "clickBlock", at = @At("HEAD"), cancellable = true)
-    public void clickBlock(BlockPos loc, EnumFacing face, CallbackInfoReturnable<Boolean> callback)
-    {
+    public void clickBlock(BlockPos loc, EnumFacing face, CallbackInfoReturnable<Boolean> callback) {
         EventPlayerClickBlock l_Event = new EventPlayerClickBlock(loc, face);
 
         Aurora.getInstance().getEventManager().dispatchEvent(l_Event);
-        if (l_Event.isCanceled())
-        {
+        if (l_Event.isCanceled()) {
             callback.setReturnValue(false);
             callback.cancel();
         }
     }
 
     @Inject(method = "onPlayerDamageBlock", at = @At("HEAD"), cancellable = true)
-    public void onPlayerDamageBlock(BlockPos posBlock, EnumFacing directionFacing, CallbackInfoReturnable<Boolean> p_Info)
-    {
+    public void onPlayerDamageBlock(BlockPos posBlock, EnumFacing directionFacing, CallbackInfoReturnable<Boolean> p_Info) {
         EventPlayerDamageBlock l_Event = new EventPlayerDamageBlock(posBlock, directionFacing);
         Aurora.getInstance().getEventManager().dispatchEvent(l_Event);
-        if (l_Event.isCanceled())
-        {
+        if (l_Event.isCanceled()) {
             p_Info.setReturnValue(false);
             p_Info.cancel();
         }
