@@ -42,34 +42,9 @@ public class HoleFill extends Module
     private Entity closestTarget;
     private int delay = 0;
 
-
     public HoleFill()
     {
         super("HoleFiller", Category.Combat, "Attacks nearby players");
-    }
-
-    public static BlockPos getPlayerPos()
-    {
-        return new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ));
-    }
-
-    // this modifies packets being sent so no extra ones are made. NCP used to flag
-    // with "too many packets"
-    private static void setYawAndPitch(float yaw1, float pitch1)
-    {
-        yaw = yaw1;
-        pitch = pitch1;
-        isSpoofingAngles = true;
-    }
-
-    private static void resetRotation()
-    {
-        if (isSpoofingAngles)
-        {
-            yaw = mc.player.rotationYaw;
-            pitch = mc.player.rotationPitch;
-            isSpoofingAngles = false;
-        }
     }
 
     public void setup()
@@ -80,6 +55,15 @@ public class HoleFill extends Module
         toggleOff = this.registerB("ToggleOff", "ToggleOff", true);
         webs = this.registerB("Webs", "Webs", true);
 
+    }
+
+    // this modifies packets being sent so no extra ones are made. NCP used to flag
+    // with "too many packets"
+    private static void setYawAndPitch(float yaw1, float pitch1)
+    {
+        yaw = yaw1;
+        pitch = pitch1;
+        isSpoofingAngles = true;
     }
 
     public void onEnable()
@@ -166,6 +150,11 @@ public class HoleFill extends Module
         }
     }
 
+    public static BlockPos getPlayerPos()
+    {
+        return new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ));
+    }
+
     private void lookAtPacket(double px, double py, double pz, EntityPlayer me)
     {
         double[] v = calculateLookAt(px, py, pz, me);
@@ -194,8 +183,8 @@ public class HoleFill extends Module
                 && ((mc.world.getBlockState(boost9).getBlock() == Blocks.OBSIDIAN) || (mc.world.getBlockState(boost9).getBlock() == Blocks.BEDROCK));
     }
 
-    // Better Rotation Spoofing System:
 
+    // Better Rotation Spoofing System:
     public BlockPos getClosestTargetPos()
     {
         if (closestTarget != null)
@@ -251,6 +240,16 @@ public class HoleFill extends Module
 
         }
 
+    }
+
+    private static void resetRotation()
+    {
+        if (isSpoofingAngles)
+        {
+            yaw = mc.player.rotationYaw;
+            pitch = mc.player.rotationPitch;
+            isSpoofingAngles = false;
+        }
     }
 
     private boolean isInRange(BlockPos blockPos)
