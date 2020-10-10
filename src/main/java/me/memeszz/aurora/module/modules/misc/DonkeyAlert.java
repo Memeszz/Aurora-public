@@ -120,37 +120,37 @@ public class DonkeyAlert extends Module
         switch (mode.getValue())
         {
             case "BLACK":
-                return "\u00A70";
+                return "§0";
             case "RED":
-                return "\u00A7c";
+                return "§c";
             case "AQUA":
-                return "\u00A7b";
+                return "§b";
             case "BLUE":
-                return "\u00A79";
+                return "§9";
             case "GOLD":
-                return "\u00A76";
+                return "§6";
             case "GRAY":
-                return "\u00A77";
+                return "§7";
             case "WHITE":
-                return "\u00A7f";
+                return "§f";
             case "GREEN":
-                return "\u00A7a";
+                return "§a";
             case "YELLOW":
-                return "\u00A7e";
+                return "§e";
             case "DARK_RED":
-                return "\u00A74";
+                return "§4";
             case "DARK_AQUA":
-                return "\u00A73";
+                return "§3";
             case "DARK_BLUE":
-                return "\u00A71";
+                return "§1";
             case "DARK_GRAY":
-                return "\u00A78";
+                return "§8";
             case "DARK_GREEN":
-                return "\u00A72";
+                return "§2";
             case "DARK_PURPLE":
-                return "\u00A75";
+                return "§5";
             case "LIGHT_PURPLE":
-                return "\u00A7d";
+                return "§d";
             default:
                 return "";
         }

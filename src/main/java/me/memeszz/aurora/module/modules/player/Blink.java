@@ -58,6 +58,6 @@ public class Blink extends Module
 
     public String getHudInfo()
     {
-        return "\u00A77[\u00A7f" + packets.size() + "\u00A77]";
+        return "§7[§f" + packets.size() + "§7]";
     }
 }

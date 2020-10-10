@@ -117,6 +117,6 @@ public class AutoTotem extends Module
     @Override
     public String getHudInfo()
     {
-        return "\u00A77[\u00A7f" + totems + "\u00A77]";
+        return "§7[§f" + totems + "§7]";
     }
 }

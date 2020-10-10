@@ -378,7 +378,7 @@ public class AutoTrap extends Module
     @Override
     public String getHudInfo()
     {
-        return "\u00A77[\u00A7f" + mode.getValue() + "\u00A77]";
+        return "§7[§f" + mode.getValue() + "§7]";
     }
 
     private static class Offsets

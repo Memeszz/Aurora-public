@@ -44,7 +44,7 @@ public class OffHandCrystal extends Module
         }
         if (announceUsage2.getValue())
         {
-            Wrapper.sendClientMessage("\u00A7aOffHandCrystal Enabled");
+            Wrapper.sendClientMessage("§aOffHandCrystal Enabled");
         }
     }
 
@@ -56,7 +56,7 @@ public class OffHandCrystal extends Module
         }
         if (announceUsage2.getValue())
         {
-            Wrapper.sendClientMessage("\u00A7cOffHandCrystal Disabled");
+            Wrapper.sendClientMessage("§cOffHandCrystal Disabled");
         }
     }
 
@@ -125,7 +125,7 @@ public class OffHandCrystal extends Module
     @Override
     public String getHudInfo()
     {
-        return "\u00A77[\u00A7f" + crystals + "\u00A77]";
+        return "§7[§f" + crystals + "§7]";
     }
 }
 

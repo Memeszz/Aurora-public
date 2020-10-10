@@ -95,22 +95,22 @@ public class NameTags extends Module
         GL11.glPushMatrix();
 
         String nameS;
-        String nameColor = "\u00A7f";
+        String nameColor = "§f";
         if (Friends.isFriend(player.getName()))
         {
-            nameColor = "\u00A7b";
+            nameColor = "§b";
         }
 
         if (Enemies.isEnemy(player.getName()))
         {
-            nameColor = "\u00A7c";
+            nameColor = "§c";
         }
 
         if (sneak.getValue())
         {
             if (player.isSneaking())
             {
-                nameColor = "\u00A75";
+                nameColor = "§5";
             }
         }
 
@@ -118,7 +118,7 @@ public class NameTags extends Module
         String gamemodeS = "";
         if (gamemode.getValue())
         {
-            gamemodeS += "" + ChatFormatting.WHITE + getGMText(player) + "\u00A7f";
+            gamemodeS += "" + ChatFormatting.WHITE + getGMText(player) + "§f";
         }
 
         String pingS = "";
@@ -134,27 +134,27 @@ public class NameTags extends Module
             String healthColor;
             if (health > 18.0f)
             {
-                healthColor = "\u00A7a";
+                healthColor = "§a";
             }
             else if (health > 16.0f)
             {
-                healthColor = "\u00A72";
+                healthColor = "§2";
             }
             else if (health > 12.0f)
             {
-                healthColor = "\u00A7e";
+                healthColor = "§e";
             }
             else if (health > 8.0f)
             {
-                healthColor = "\u00A76";
+                healthColor = "§6";
             }
             else if (health > 5.0f)
             {
-                healthColor = "\u00A7c";
+                healthColor = "§c";
             }
             else
             {
-                healthColor = "\u00A74";
+                healthColor = "§4";
             }
             healthS += healthColor + (MathHelper.ceil(player.getHealth() + player.getAbsorptionAmount()));
         }

@@ -314,11 +314,11 @@ public class AutoCrystal extends Module
     {
         if (target2 != null)
         {
-            return "\u00A77[\u00A7a" + target2.getName() + "\u00A77]";
+            return "§7[§a" + target2.getName() + "§7]";
         }
         else
         {
-            return "\u00A77[\u00A7c" + "No target!" + "\u00A77]";
+            return "§7[§c" + "No target!" + "§7]";
         }
     }
 }

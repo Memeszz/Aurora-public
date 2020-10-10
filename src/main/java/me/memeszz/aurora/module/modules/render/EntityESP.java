@@ -61,6 +61,6 @@ public class EntityESP extends Module
 
     public String getHudInfo()
     {
-        return "\u00A77[\u00A7f" + mode.getValue() + "\u00A77]";
+        return "§7[§f" + mode.getValue() + "§7]";
     }
 }

@@ -184,7 +184,7 @@ public class Hud extends Module
             {
                 if (!mc.isSingleplayer())
                 {
-                    FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "\u00A7rServer \u00A7f" + ((IMinecraft) mc).getCurrentServerData().serverIP + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
+                    FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "§rServer §f" + ((IMinecraft) mc).getCurrentServerData().serverIP + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
                     counter1[0]++;
                     posY += 10;
                 }
@@ -193,7 +193,7 @@ public class Hud extends Module
 
         if (ping.getValue())
         {
-            FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "\u00A7rPing \u00A7f" + getPing() + "ms", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
+            FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "§rPing §f" + getPing() + "ms", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
             counter1[0]++;
             posY += 10;
         }
@@ -207,7 +207,7 @@ public class Hud extends Module
 
         if (tps.getValue())
         {
-            FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "\u00A7rTPS \u00A7f" + TickRate.TPS + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
+            FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "§rTPS §f" + TickRate.TPS + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
             counter1[0]++;
             posY += 10;
         }
@@ -215,7 +215,7 @@ public class Hud extends Module
 
         if (fps.getValue())
         {
-            FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "\u00A7rFPS \u00A7f" + Minecraft.getDebugFPS() + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
+            FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "§rFPS §f" + Minecraft.getDebugFPS() + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
             counter1[0]++;
         }
 

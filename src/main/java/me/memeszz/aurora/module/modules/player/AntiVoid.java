@@ -35,7 +35,7 @@ public class AntiVoid extends Module
         double yLevel = mc.player.posY;
         if (yLevel <= .5)
         {
-            Wrapper.sendClientMessage(("\u00A7aAttempting To Get ") + ChatFormatting.RED + mc.player.getName() + ChatFormatting.GREEN + " Out Of The void!");
+            Wrapper.sendClientMessage(("§aAttempting To Get ") + ChatFormatting.RED + mc.player.getName() + ChatFormatting.GREEN + " Out Of The void!");
             if (mode.getValue().equals("Bounce"))
             {
                 mc.player.moveVertical = 10;
@@ -68,6 +68,6 @@ public class AntiVoid extends Module
     @Override
     public String getHudInfo()
     {
-        return "\u00A77[\u00A7f" + mode.getValue() + "\u00A77]";
+        return "§7[§f" + mode.getValue() + "§7]";
     }
 }
