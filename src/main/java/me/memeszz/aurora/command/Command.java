@@ -21,7 +21,7 @@ public abstract class Command
 
     public static char SECTIONSIGN()
     {
-        return '\u00a7';
+        return '§';
     }
 
     public static void sendRawMessage(String message)
