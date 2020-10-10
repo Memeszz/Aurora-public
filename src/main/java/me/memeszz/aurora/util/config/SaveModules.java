@@ -52,6 +52,7 @@ public class SaveModules
         }
         catch (Exception var7)
         {
+            var7.printStackTrace();
         }
         try
         {
@@ -70,6 +71,7 @@ public class SaveModules
         }
         catch (Exception var6)
         {
+            var6.printStackTrace();
         }
         try
         {
@@ -88,6 +90,7 @@ public class SaveModules
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -119,6 +122,7 @@ public class SaveModules
         }
         catch (Exception var7)
         {
+            var7.printStackTrace();
         }
         try
         {
@@ -137,6 +141,7 @@ public class SaveModules
         }
         catch (Exception var6)
         {
+            var6.printStackTrace();
         }
         try
         {
@@ -155,6 +160,7 @@ public class SaveModules
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -186,6 +192,7 @@ public class SaveModules
         }
         catch (Exception var7)
         {
+            var7.printStackTrace();
         }
         try
         {
@@ -204,6 +211,7 @@ public class SaveModules
         }
         catch (Exception var6)
         {
+            var6.printStackTrace();
         }
         try
         {
@@ -222,6 +230,7 @@ public class SaveModules
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -253,6 +262,7 @@ public class SaveModules
         }
         catch (Exception var7)
         {
+            var7.printStackTrace();
         }
         try
         {
@@ -271,6 +281,7 @@ public class SaveModules
         }
         catch (Exception var6)
         {
+            var6.printStackTrace();
         }
         try
         {
@@ -289,6 +300,7 @@ public class SaveModules
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -319,6 +331,7 @@ public class SaveModules
         }
         catch (Exception var7)
         {
+            var7.printStackTrace();
         }
         try
         {
@@ -337,6 +350,7 @@ public class SaveModules
         }
         catch (Exception var6)
         {
+            var6.printStackTrace();
         }
         try
         {
@@ -355,6 +369,7 @@ public class SaveModules
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -386,6 +401,7 @@ public class SaveModules
         }
         catch (Exception var7)
         {
+            var7.printStackTrace();
         }
         try
         {
@@ -404,6 +420,7 @@ public class SaveModules
         }
         catch (Exception var6)
         {
+            var6.printStackTrace();
         }
         try
         {
@@ -422,6 +439,7 @@ public class SaveModules
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 
@@ -453,6 +471,7 @@ public class SaveModules
         }
         catch (Exception var7)
         {
+            var7.printStackTrace();
         }
         try
         {
@@ -471,6 +490,7 @@ public class SaveModules
         }
         catch (Exception var6)
         {
+            var6.printStackTrace();
         }
         try
         {
@@ -489,6 +509,7 @@ public class SaveModules
         }
         catch (Exception var5)
         {
+            var5.printStackTrace();
         }
     }
 }
