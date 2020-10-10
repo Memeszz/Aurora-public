@@ -166,11 +166,11 @@ public class AutoWeb extends Module
             Collections.addAll(placeTargets, Offsets.BODY);
         }
 
-        // TODO: dont use static bridging in offset but calculate them on the fly
+        ä
         //  based on view direction (or relative direction of target to player)
         //  (add full/half n/e/s/w patterns to append dynamically)
 
-        // TODO: sort offsetList by optimal caging success factor ->
+        ä
         // sort them by pos y up AND start building behind target
 
         int blocksPlaced = 0;
