@@ -24,6 +24,7 @@ public class AutoGG extends Module
     Setting.mode mode;
     int index = -1;
     private ConcurrentHashMap targetedPlayers = null;
+
     public AutoGG()
     {
         super("AutoGG", Category.World, "Sends a message in chat when you kill someone");

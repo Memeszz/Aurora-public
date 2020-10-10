@@ -18,6 +18,7 @@ public class OffHandCrystal extends Module
     Setting.b totemdisable;
     Setting.d health;
     Setting.b announceUsage2;
+
     public OffHandCrystal()
     {
         super("OffHandCrystal", Category.Combat, "Attacks nearby players");

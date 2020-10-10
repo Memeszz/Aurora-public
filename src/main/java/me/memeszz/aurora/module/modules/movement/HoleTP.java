@@ -17,6 +17,7 @@ public class HoleTP extends Module
     private final double[] oneblockPositions = new double[]{0.42, 0.75};
     private int packets;
     private boolean jumped;
+
     public HoleTP()
     {
         super("HoleTP", Category.Movement);

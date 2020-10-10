@@ -28,6 +28,7 @@ public class Speed extends Module
     private int stage;
     private int cooldownHops;
     private double moveSpeed, lastDist;
+
     public Speed()
     {
         super("Speed", Category.Movement, "Makes you go fast");

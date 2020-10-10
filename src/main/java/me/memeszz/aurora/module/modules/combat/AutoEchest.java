@@ -34,6 +34,7 @@ public class AutoEchest extends Module
     private Setting.i tickDelay2;
     private Setting.i blocksPerTick2;
     private Setting.b rotate2;
+
     public AutoEchest()
     {
         super("AutoEChest", Category.Combat, "Places echest around you");

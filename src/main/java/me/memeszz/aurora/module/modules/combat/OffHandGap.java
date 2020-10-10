@@ -20,6 +20,7 @@ public class OffHandGap extends Module
     Setting.b totemdisable;
     Setting.d health;
     int gapples;
+
     public OffHandGap()
     {
         super("OffHandGap", Category.Combat, "Attacks nearby players");

@@ -52,6 +52,7 @@ public class Announcer extends Module
     private Setting.b eat;
     private Setting.d delay;
     private Setting.mode lang;
+
     public Announcer()
     {
         super("Announcer", Category.World, "Announces what you do in chat");

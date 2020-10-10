@@ -13,6 +13,7 @@ public class FastWebFall extends Module
 {
     Setting.mode mode;
     Setting.i speed;
+
     public FastWebFall()
     {
         super("FastFallWeb", Category.Player);

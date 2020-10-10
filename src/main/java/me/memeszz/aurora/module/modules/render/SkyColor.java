@@ -14,6 +14,7 @@ public class SkyColor extends Module
     Setting.i g;
     Setting.i b;
     Setting.b rainbow;
+
     public SkyColor()
     {
         super("SkyColor", Category.Render, "Changes skycolor");

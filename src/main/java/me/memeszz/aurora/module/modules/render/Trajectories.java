@@ -17,6 +17,7 @@ public class Trajectories extends Module
 {
     ArrayList<Vec3d> positions = new ArrayList<>();
     HueCycler cycler = new HueCycler(100);
+
     public Trajectories()
     {
         super("Trajectories", Category.Render);

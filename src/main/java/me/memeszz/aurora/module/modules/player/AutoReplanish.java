@@ -20,6 +20,7 @@ public class AutoReplanish extends Module
     Setting.i threshold;
     Setting.i tickDelay;
     private int delayStep = 0;
+
     public AutoReplanish()
     {
         super("AutoReplenish", Category.Player, "Replenishes items in your hotbar");

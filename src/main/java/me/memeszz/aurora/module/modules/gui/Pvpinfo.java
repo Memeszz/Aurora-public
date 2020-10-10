@@ -21,6 +21,7 @@ public class Pvpinfo extends Module
     static Setting.i x;
     static Setting.i y;
     Setting.b customFont;
+
     public Pvpinfo()
     {
         super("PvPInfo", Category.Gui);

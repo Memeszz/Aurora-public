@@ -9,6 +9,7 @@ public class BlockHighlight extends Module
     public static Setting.i green;
     public static Setting.i blue;
     public static Setting.i alpha;
+
     public BlockHighlight()
     {
         super("BlockHighlight", Category.Render, "Highlights the block you're looking at");

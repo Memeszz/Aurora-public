@@ -14,6 +14,7 @@ public class Blink extends Module
 {
     private final Queue<Packet> packets = new ConcurrentLinkedQueue<>();
     EntityOtherPlayerMP entity;
+
     public Blink()
     {
         super("Blink", Category.Player, "Cancels most packets");

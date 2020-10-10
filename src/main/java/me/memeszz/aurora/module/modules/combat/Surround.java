@@ -48,6 +48,7 @@ public class Surround extends Module
     private Setting.b triggerable;
     private Setting.i timeoutTicks;
     private Setting.b offInAir;
+
     public Surround()
     {
         super("Surround", Category.Combat, "Attacks nearby players");

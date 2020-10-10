@@ -18,9 +18,9 @@ public class Wrapper
 {
     public static final Aurora mod;
     public static final Minecraft mc;
+    private static final String prefix;
     public static volatile Wrapper INSTANCE = new Wrapper();
     private static CFontRenderer fontRenderer;
-    private static final String prefix;
 
     static
     {

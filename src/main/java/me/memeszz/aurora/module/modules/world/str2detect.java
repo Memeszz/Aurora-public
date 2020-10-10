@@ -17,6 +17,7 @@ public class str2detect extends Module
 {
     public static final Minecraft mc = Minecraft.getMinecraft();
     private final Set<EntityPlayer> str = Collections.newSetFromMap(new WeakHashMap());
+
     public str2detect()
     {
         super("StrengthDetect", Category.World, "Tells you in chat when someone has str 2/1");

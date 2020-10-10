@@ -16,6 +16,7 @@ public class AutoTotem extends Module
     Setting.b soft;
     boolean moving = false;
     boolean returnI = false;
+
     public AutoTotem()
     {
         super("AutoTotem", Category.Combat, "Respawn when you die");

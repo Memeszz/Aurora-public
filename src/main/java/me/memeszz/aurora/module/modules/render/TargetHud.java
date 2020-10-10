@@ -21,6 +21,7 @@ public class TargetHud extends Module
 {
     Setting.i x_;
     Setting.i y_;
+
     public TargetHud()
     {
         super("TargetHud", Category.Render);

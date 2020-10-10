@@ -14,6 +14,7 @@ public class NoRender extends Module
     Setting.b fire;
     Setting.b blind;
     Setting.b nausea;
+
     public NoRender()
     {
         super("NoRender", Category.Render, "Prevents rendering some things");

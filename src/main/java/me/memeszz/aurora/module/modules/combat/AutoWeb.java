@@ -42,6 +42,7 @@ public class AutoWeb extends Module
     private boolean isSneaking = false;
     private int offsetStep = 0;
     private boolean firstRun;
+
     public AutoWeb()
     {
         super("AutoWeb", Category.Combat, "Webs Players");
@@ -167,10 +168,10 @@ public class AutoWeb extends Module
         }
 
         ä
-        //  based on view direction (or relative direction of target to player)
-        //  (add full/half n/e/s/w patterns to append dynamically)
+                //  based on view direction (or relative direction of target to player)
+                //  (add full/half n/e/s/w patterns to append dynamically)
 
-        ä
+                ä
         // sort them by pos y up AND start building behind target
 
         int blocksPlaced = 0;

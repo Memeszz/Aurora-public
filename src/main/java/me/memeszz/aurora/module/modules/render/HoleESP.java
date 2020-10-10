@@ -19,6 +19,7 @@ public class HoleESP extends Module
 {
     public final List<Hole> holes = new ArrayList<>();
     public int radius = 8;
+
     public HoleESP()
     {
         super("HoleESP", Category.Render, "Shows holes nigga");

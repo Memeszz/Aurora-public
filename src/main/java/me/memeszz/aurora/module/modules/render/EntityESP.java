@@ -22,6 +22,7 @@ public class EntityESP extends Module
     Setting.b items;
     Setting.b orbs;
     Setting.b skeleton;
+
     public EntityESP()
     {
         super("EntityESP", Category.Render);

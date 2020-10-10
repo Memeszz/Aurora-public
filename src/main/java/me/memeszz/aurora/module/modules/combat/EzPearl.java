@@ -14,6 +14,7 @@ public class EzPearl extends Module
     private int playerHotbarSlot = -1;
     private int lastHotbarSlot = -1;
     private int delay;
+
     public EzPearl()
     {
         super("EasyPearl", Category.Combat, "Throws a pearl");

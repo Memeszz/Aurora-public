@@ -21,6 +21,7 @@ public class CFontRenderer extends CFont
     protected DynamicTexture texItalicBold;
     String fontName;
     int fontSize;
+
     public CFontRenderer(Font font, boolean antiAlias, boolean fractionalMetrics)
     {
         super(font, antiAlias, fractionalMetrics);

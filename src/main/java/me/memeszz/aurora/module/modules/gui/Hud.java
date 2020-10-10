@@ -55,6 +55,7 @@ public class Hud extends Module
     Setting.i thing;
     Setting.mode mode;
     String coords;
+
     public Hud()
     {
         super("Hud", Category.Gui, "Attacks nearby players");

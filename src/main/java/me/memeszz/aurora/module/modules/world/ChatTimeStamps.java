@@ -17,6 +17,7 @@ public class ChatTimeStamps extends Module
     Setting.mode color;
     Setting.mode decoration;
     Setting.b space;
+
     public ChatTimeStamps()
     {
         super("ChatTimeStamps", Category.World);

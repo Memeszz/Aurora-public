@@ -50,6 +50,7 @@ public class NameTags extends Module
     private GlobalProperties popList;
     private boolean customfont;
     private Map<EntityPlayer, Integer> poplist;
+
     public NameTags()
     {
         super("NameTags", Category.Render);

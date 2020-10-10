@@ -14,6 +14,7 @@ public class BetterChat extends Module
     public Setting.b clearBkg;
     Setting.b nameHighlight;
     Setting.b friendHighlight;
+
     public BetterChat()
     {
         super("BetterChat", Category.World);

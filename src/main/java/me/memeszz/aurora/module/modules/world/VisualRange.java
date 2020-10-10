@@ -15,6 +15,7 @@ public class VisualRange extends Module
 {
     List<Entity> knownPlayers = new ArrayList<>();
     List<Entity> players;
+
     public VisualRange()
     {
         super("VisualRange", Category.World, "Sends a client side message when someone enters your render distance");

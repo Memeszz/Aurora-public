@@ -67,6 +67,7 @@ public class AutoCrystal extends Module
     Timah breakTimer = new Timah();
     boolean mainhand = false;
     boolean offhand = false;
+
     public AutoCrystal()
     {
         super("AutoCrystal", Category.Combat, "Places and breaks crystals on nearby players");

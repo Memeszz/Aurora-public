@@ -18,6 +18,7 @@ public class FastUse extends Module
     Setting.b all;
     Setting.b breakS;
     Setting.b fastBow;
+
     public FastUse()
     {
         super("FastUse", Category.Player, "Sets right click / block break delay to 0");

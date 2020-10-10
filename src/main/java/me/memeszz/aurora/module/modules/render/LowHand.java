@@ -11,6 +11,7 @@ public class LowHand extends Module
 {
     Setting.d offhand;
     Setting.d mainhand;
+
     public LowHand()
     {
         super("LowHand", Category.Render);

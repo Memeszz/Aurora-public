@@ -24,6 +24,7 @@ public class SpeedMine extends Module
     Setting.b reset;
     Setting.b FastFall;
     Setting.b doubleBreak;
+
     public SpeedMine()
     {
         super("SpeedMine", Category.Player, "Mine blocks faster");

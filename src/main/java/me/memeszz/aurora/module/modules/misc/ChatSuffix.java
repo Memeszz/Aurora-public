@@ -14,6 +14,7 @@ public class ChatSuffix extends Module
 {
     Setting.b blue;
     Setting.mode mode;
+
     public ChatSuffix()
     {
         super("ChatSuffix", Category.Misc, "Adds a suffix to your messages");

@@ -11,6 +11,7 @@ public class Step extends Module
 {
     Setting.d height;
     Setting.mode mode;
+
     public Step()
     {
         super("Step", Category.Movement);
