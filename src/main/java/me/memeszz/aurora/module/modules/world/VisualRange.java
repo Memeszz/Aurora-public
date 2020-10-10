@@ -41,6 +41,7 @@ public class VisualRange extends Module
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         } // ez no crasherino
         try
         {
@@ -57,6 +58,7 @@ public class VisualRange extends Module
         }
         catch (Exception e)
         {
+            e.printStackTrace();
         } // ez no crasherino pt.2
     }
 
