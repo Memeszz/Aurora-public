@@ -65,11 +65,9 @@ public class KillAura extends Module
                             {
                                 float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), player.getPositionVector());
                                 mc.player.rotationYaw = angle[0];
-                                switch (aimMode.getValue())
+                                if ("Leg".equals(aimMode.getValue()))
                                 {
-                                    case "Leg":
-                                        mc.player.rotationPitch = angle[1];
-                                        break;
+                                    mc.player.rotationPitch = angle[1];
                                 }
                             }
                             attackPlayer(player);

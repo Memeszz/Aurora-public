@@ -109,6 +109,8 @@ public class Lagger extends Module
                     //mc.player.connection.sendPacket(new CPacketClickWindow(0, 0, 0, ClickType.PICKUP, itemStack, (short)0));
                 }
                 break;
+            default:
+                break;
         }
     }
 }

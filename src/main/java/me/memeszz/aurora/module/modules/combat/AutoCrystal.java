@@ -210,6 +210,8 @@ public class AutoCrystal extends Module
             case "PLACEBREAK":
                 gloop();
                 daThing();
+            default:
+                break;
         }
     }
 

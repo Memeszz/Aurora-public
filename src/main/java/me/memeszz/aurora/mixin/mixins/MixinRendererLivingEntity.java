@@ -105,6 +105,8 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> exte
                         break;
 
                     }
+                default:
+                    break;
             }
         }
 

@@ -97,10 +97,7 @@ public class HoleFill extends Module
             {
                 if (webs.getValue())
                 {
-                    if (mc.player.inventory.getStackInSlot(l).getItem() == Item.getItemFromBlock(Blocks.WEB))
-                    {
-                    }
-                    else
+                    if (mc.player.inventory.getStackInSlot(l).getItem() != Item.getItemFromBlock(Blocks.WEB))
                     {
                         if (mc.player.inventory.getStackInSlot(l).getItem() == Item.getItemFromBlock(Blocks.OBSIDIAN))
                         {

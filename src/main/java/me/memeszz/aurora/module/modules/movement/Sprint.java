@@ -61,6 +61,8 @@ public class Sprint extends Module
                     mc.player.setSprinting(true);
                 }
                 break;
+            default:
+                break;
         }
     }
 

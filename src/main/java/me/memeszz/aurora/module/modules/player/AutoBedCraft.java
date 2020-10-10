@@ -57,15 +57,13 @@ public class AutoBedCraft extends Module
         int tableSlot = getTableSlot();
 
         //why not hopefully stops a kick error if ctable not in hotbar too lazy to add another filter thing
-        if (tableSlot == -1)
+        if (tableSlot != -1)
         {
-
-        }
-        else
             tablePostition = BlockInteractionHelper.getSphere(BlockInteractionHelper.GetLocalPlayerPosFloored(), 4.0f, 4, false, true, 0).stream()
                     .filter(this::IsValidBlockPos)
                     .min(Comparator.comparing(p_Pos -> EntityUtil.getDistanceOfEntityToBlock(mc.player, p_Pos)))
                     .orElse(null);
+        }
 
 
         if (tablePostition == null)

@@ -62,6 +62,8 @@ public class Button extends Component
                         this.subcomponents.add(new IntSlider((Setting.i) s, this, opY));
                         opY += 16;
                     }
+                    default:
+                        break;
                 }
             }
         }

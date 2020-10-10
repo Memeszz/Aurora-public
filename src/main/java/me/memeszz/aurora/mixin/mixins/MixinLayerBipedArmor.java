@@ -36,6 +36,8 @@ public abstract class MixinLayerBipedArmor
                 case FEET:
                     model.bipedRightLeg.showModel = false;
                     model.bipedLeftLeg.showModel = false;
+                default:
+                    break;
             }
         }
     }
