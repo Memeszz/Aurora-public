@@ -96,12 +96,12 @@ public class Announcer extends Module
         }
         if (lang.getValue().equals("Finnish"))
         {
-            walkMessage = "M\u00E4 just lensin {blocks} metrii, kiitokset Aurora!";
-            placeMessage = "M\u00E4 just pistin {amount} {name} blockii, kiitokset Aurora!";
-            jumpMessage = "M\u00E4 hyppäsin vitun korkeelle, kiitokset Aurora!";
-            breakMessage = "M\u00E4 paskoin {amount} {name}, kiitokset Aurora!";
-            attackMessage = "M\u00E4 just pistin {name} p\u00E4\u00E4h\u00E4 {item} avul, kiitokset Aurora!";
-            eatMessage = "M\u00E4 just s\u00F6in {amount} {name}, kiitokset Aurora!";
+            walkMessage = "Mä just lensin {blocks} metrii, kiitokset Aurora!";
+            placeMessage = "Mä just pistin {amount} {name} blockii, kiitokset Aurora!";
+            jumpMessage = "Mä hyppäsin vitun korkeelle, kiitokset Aurora!";
+            breakMessage = "Mä paskoin {amount} {name}, kiitokset Aurora!";
+            attackMessage = "Mä just pistin {name} päähä {item} avul, kiitokset Aurora!";
+            eatMessage = "Mä just söin {amount} {name}, kiitokset Aurora!";
         }
         if (lang.getValue().equals("English"))
         {
