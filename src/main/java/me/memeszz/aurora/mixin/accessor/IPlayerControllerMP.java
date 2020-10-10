@@ -1,6 +1,7 @@
 package me.memeszz.aurora.mixin.accessor;
 
-public interface IPlayerControllerMP {
+public interface IPlayerControllerMP
+{
 
     void setBlockHitDelay(int delay);
 

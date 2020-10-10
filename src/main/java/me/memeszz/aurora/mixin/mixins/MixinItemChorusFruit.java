@@ -12,10 +12,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = ItemChorusFruit.class, priority = 29999)
-public abstract class MixinItemChorusFruit {
+public abstract class MixinItemChorusFruit
+{
 
     @Inject(method = "onItemUseFinish", at = @At("HEAD"), cancellable = true)
-    public void onUpdate(ItemStack stack, World worldIn, EntityLivingBase entityLiving, CallbackInfoReturnable<ItemStack> cir) {
+    public void onUpdate(ItemStack stack, World worldIn, EntityLivingBase entityLiving, CallbackInfoReturnable<ItemStack> cir)
+    {
         EventChorusTeleport event = new EventChorusTeleport();
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }

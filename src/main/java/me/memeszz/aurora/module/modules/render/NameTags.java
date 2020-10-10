@@ -38,15 +38,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 
-public class NameTags extends Module {
-    private GlobalProperties popList;
-    private boolean customfont;
-
-    public NameTags() {
-        super("NameTags", Category.Render);
-
-    }
-
+public class NameTags extends Module
+{
     Setting.d scale;
     Setting.b rainbowOutline;
     Setting.b ping;
@@ -54,30 +47,42 @@ public class NameTags extends Module {
     Setting.b health;
     Setting.b totemPops;
     Setting.b sneak;
+    private GlobalProperties popList;
+    private boolean customfont;
     private Map<EntityPlayer, Integer> poplist;
+    public NameTags()
+    {
+        super("NameTags", Category.Render);
 
-    public void setup(){
+    }
+
+    public void setup()
+    {
         this.poplist = new ConcurrentHashMap<>();
-        scale = this.registerD("Scale", "Scale",3.6, 0.1, 10.0);
-        gamemode = this.registerB("Gamemode", "Gamemode",true);
-        ping = this.registerB("Ping","Ping", true);
-        health = this.registerB("Health","Health", true);
-        sneak = this.registerB("SneakColor", "SneakColor",true);
-        rainbowOutline = this.registerB("RainbowOutline", "RainbowOutline",true);
+        scale = this.registerD("Scale", "Scale", 3.6, 0.1, 10.0);
+        gamemode = this.registerB("Gamemode", "Gamemode", true);
+        ping = this.registerB("Ping", "Ping", true);
+        health = this.registerB("Health", "Health", true);
+        sneak = this.registerB("SneakColor", "SneakColor", true);
+        rainbowOutline = this.registerB("RainbowOutline", "RainbowOutline", true);
         totemPops = this.registerB("TotemPops", "TotemPops", true);
     }
 
 
-    public void onWorldRender(RenderEvent event) {
-        for (EntityPlayer p : mc.world.playerEntities) {
-            if ((p != mc.getRenderViewEntity()) && (p.isEntityAlive())) {
+    public void onWorldRender(RenderEvent event)
+    {
+        for (EntityPlayer p : mc.world.playerEntities)
+        {
+            if ((p != mc.getRenderViewEntity()) && (p.isEntityAlive()))
+            {
                 double pX = p.lastTickPosX + (p.posX - p.lastTickPosX) * ((IMinecraft) mc).getTimer().renderPartialTicks
                         - ((IRenderManager) mc.getRenderManager()).getRenderPosX();
                 double pY = p.lastTickPosY + (p.posY - p.lastTickPosY) * ((IMinecraft) mc).getTimer().renderPartialTicks
                         - ((IRenderManager) mc.getRenderManager()).getRenderPosY();
                 double pZ = p.lastTickPosZ + (p.posZ - p.lastTickPosZ) * ((IMinecraft) mc).getTimer().renderPartialTicks
                         - ((IRenderManager) mc.getRenderManager()).getRenderPosZ();
-                if (!p.getName().startsWith("Body #")) {
+                if (!p.getName().startsWith("Body #"))
+                {
                     renderNametag(p, pX, pY, pZ);
                 }
             }
@@ -85,56 +90,70 @@ public class NameTags extends Module {
 
     }
 
-    private void renderNametag(EntityPlayer player, double x, double y, double z) {
+    private void renderNametag(EntityPlayer player, double x, double y, double z)
+    {
         GL11.glPushMatrix();
 
         String nameS;
         String nameColor = "\u00A7f";
-        if (Friends.isFriend(player.getName())) {
+        if (Friends.isFriend(player.getName()))
+        {
             nameColor = "\u00A7b";
         }
 
-        if(Enemies.isEnemy(player.getName())) {
+        if (Enemies.isEnemy(player.getName()))
+        {
             nameColor = "\u00A7c";
         }
 
-        if (sneak.getValue()) {
-            if (player.isSneaking()) {
+        if (sneak.getValue())
+        {
+            if (player.isSneaking())
+            {
                 nameColor = "\u00A75";
             }
         }
 
         nameS = (nameColor) + player.getName();
         String gamemodeS = "";
-        if (gamemode.getValue()) {
+        if (gamemode.getValue())
+        {
             gamemodeS += "" + ChatFormatting.WHITE + getGMText(player) + "\u00A7f";
         }
 
         String pingS = "";
-        if (ping.getValue()) {
+        if (ping.getValue())
+        {
             pingS += " " + ChatFormatting.WHITE + getPing(player) + "ms";
         }
 
         String healthS = " ";
-        if (health.getValue()) {
+        if (health.getValue())
+        {
             final float health = EntityUtil.totalHealth(player);
             String healthColor;
-            if (health > 18.0f) {
+            if (health > 18.0f)
+            {
                 healthColor = "\u00A7a";
             }
-            else if (health > 16.0f) {
+            else if (health > 16.0f)
+            {
                 healthColor = "\u00A72";
             }
-            else if (health > 12.0f) {
+            else if (health > 12.0f)
+            {
                 healthColor = "\u00A7e";
             }
-            else if (health > 8.0f) {
+            else if (health > 8.0f)
+            {
                 healthColor = "\u00A76";
             }
-            else if (health > 5.0f) {
+            else if (health > 5.0f)
+            {
                 healthColor = "\u00A7c";
             }
-            else {
+            else
+            {
                 healthColor = "\u00A74";
             }
             healthS += healthColor + (MathHelper.ceil(player.getHealth() + player.getAbsorptionAmount()));
@@ -153,22 +172,30 @@ public class NameTags extends Module {
 
         customfont = ClickGuiModule.customFont.getValue();
         int width = FontUtils.getStringWidth(customfont, nameS + pingS + gamemodeS + healthS) / 2;
-        if(customfont) {
+        if (customfont)
+        {
             RenderUtil.drawBorderedRect(-width - 3, 8, width + 2.5, 21, 1.2, 0x75000000, rainbowOutline.getValue() ? RainbowUtil.rainbow(0) : new Color(0, 0, 0, 140).getRGB());
-        } else {
+        }
+        else
+        {
             RenderUtil.drawBorderedRect(-width - 3, 8, width + 2, 21, 1.2, 0x75000000, rainbowOutline.getValue() ? RainbowUtil.rainbow(0) : new Color(0, 0, 0, 140).getRGB());
         }
 
-        if (customfont) {
-            Aurora.fontRenderer.drawStringWithShadow(nameS + pingS + gamemodeS + healthS, -width, 11.5, new Color(255,255,255,255).getRGB());
+        if (customfont)
+        {
+            Aurora.fontRenderer.drawStringWithShadow(nameS + pingS + gamemodeS + healthS, -width, 11.5, new Color(255, 255, 255, 255).getRGB());
 
-        } else {
-            Wrapper.getMinecraft().fontRenderer.drawStringWithShadow(nameS + pingS + gamemodeS + healthS, -width, 10, new Color(255,255,255,255).getRGB());
+        }
+        else
+        {
+            Wrapper.getMinecraft().fontRenderer.drawStringWithShadow(nameS + pingS + gamemodeS + healthS, -width, 10, new Color(255, 255, 255, 255).getRGB());
         }
 
         int xOffset = 0;
-        for (ItemStack armourStack : player.inventory.armorInventory) {
-            if (armourStack != null) {
+        for (ItemStack armourStack : player.inventory.armorInventory)
+        {
+            if (armourStack != null)
+            {
                 xOffset -= 8;
             }
         }
@@ -179,7 +206,8 @@ public class NameTags extends Module {
         renderStack = player.getHeldItemMainhand().copy();
         renderItem(renderStack, xOffset, -10);
         xOffset += 16;
-        for (int index = 3; index >= 0; --index) {
+        for (int index = 3; index >= 0; --index)
+        {
             ItemStack armourStack = player.inventory.armorInventory.get(index);
             ItemStack renderStack1 = armourStack.copy();
 
@@ -200,32 +228,37 @@ public class NameTags extends Module {
     }
 
 
-
-    private float getNametagSize(EntityLivingBase player) {
+    private float getNametagSize(EntityLivingBase player)
+    {
         ScaledResolution scaledRes = new ScaledResolution(mc);
         double twoDscale = scaledRes.getScaleFactor() / Math.pow(scaledRes.getScaleFactor(), 0.0D + scale.getValue());
         return (float) ((float) twoDscale + (mc.player.getDistance(player) / (0.8f * scale.getValue())));
     }
 
 
-
-    public String getGMText(final EntityPlayer player) {
-        if (player.isCreative()) {
+    public String getGMText(final EntityPlayer player)
+    {
+        if (player.isCreative())
+        {
             return " [C]";
         }
-        if (player.isSpectator()) {
+        if (player.isSpectator())
+        {
             return " [I]";
         }
-        if (!player.isAllowEdit() && !player.isSpectator()) {
+        if (!player.isAllowEdit() && !player.isSpectator())
+        {
             return " [A]";
         }
-        if (!player.isCreative() && !player.isSpectator() && player.isAllowEdit()) {
+        if (!player.isCreative() && !player.isSpectator() && player.isAllowEdit())
+        {
             return " [S]";
         }
         return "";
     }
 
-    private void renderItem(ItemStack stack, int x, int y) {
+    private void renderItem(ItemStack stack, int x, int y)
+    {
         GL11.glPushMatrix();
         GL11.glDepthMask(true);
         GlStateManager.clear(256);
@@ -250,36 +283,44 @@ public class NameTags extends Module {
         GL11.glPopMatrix();
     }
 
-    public int getPing(final EntityPlayer player) {
+    public int getPing(final EntityPlayer player)
+    {
         int ping = 0;
-        try {
-            ping = (int)MathUtil.clamp((float) Objects.requireNonNull(mc.getConnection()).getPlayerInfo(player.getUniqueID()).getResponseTime(), 1, 300.0f);
+        try
+        {
+            ping = (int) MathUtil.clamp((float) Objects.requireNonNull(mc.getConnection()).getPlayerInfo(player.getUniqueID()).getResponseTime(), 1, 300.0f);
         }
-        catch (NullPointerException ignored) {}
+        catch (NullPointerException ignored)
+        {
+        }
         return ping;
     }
 
 
-    private void renderEnchantText(ItemStack stack, int x, int y) {
+    private void renderEnchantText(ItemStack stack, int x, int y)
+    {
         int encY = y - 24;
         int yCount = encY - -5;
-        if (stack.getItem() instanceof ItemArmor || stack.getItem() instanceof ItemTool) {
+        if (stack.getItem() instanceof ItemArmor || stack.getItem() instanceof ItemTool)
+        {
             float green = ((float) stack.getMaxDamage() - (float) stack.getItemDamage()) / (float) stack.getMaxDamage();
             float red = 1 - green;
             int dmg = 100 - (int) (red * 100);
-            FontUtils.drawStringWithShadow(customfont,dmg + "%", x * 2 + 8, y + 26, new Color((int) (red * 255), (int) (green * 255), 0).getRGB());
+            FontUtils.drawStringWithShadow(customfont, dmg + "%", x * 2 + 8, y + 26, new Color((int) (red * 255), (int) (green * 255), 0).getRGB());
         }
 
         NBTTagList enchants = stack.getEnchantmentTagList();
-        for (int index = 0; index < enchants.tagCount(); ++index) {
+        for (int index = 0; index < enchants.tagCount(); ++index)
+        {
             short id = enchants.getCompoundTagAt(index).getShort("id");
             short level = enchants.getCompoundTagAt(index).getShort("lvl");
             Enchantment enc = Enchantment.getEnchantmentByID(id);
-            if (enc != null) {
+            if (enc != null)
+            {
                 String encName = enc.isCurse()
-                        ? TextFormatting.WHITE
-                        + enc.getTranslatedName(level).substring(11).substring(0, 1).toLowerCase()
-                        : enc.getTranslatedName(level).substring(0, 1).toLowerCase();
+                                 ? TextFormatting.WHITE
+                                         + enc.getTranslatedName(level).substring(11).substring(0, 1).toLowerCase()
+                                 : enc.getTranslatedName(level).substring(0, 1).toLowerCase();
                 encName = encName + level;
                 GL11.glPushMatrix();
                 GL11.glScalef(0.9f, 0.9f, 0);

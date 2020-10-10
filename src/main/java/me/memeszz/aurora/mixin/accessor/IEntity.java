@@ -1,6 +1,7 @@
 package me.memeszz.aurora.mixin.accessor;
 
-public interface IEntity {
+public interface IEntity
+{
 
     boolean getIsInWeb();
 }

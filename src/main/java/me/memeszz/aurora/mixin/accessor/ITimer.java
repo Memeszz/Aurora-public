@@ -1,8 +1,9 @@
 package me.memeszz.aurora.mixin.accessor;
 
-public interface ITimer {
-
-    void setTickLength(float tickLength);
+public interface ITimer
+{
 
     float getTickLength();
+
+    void setTickLength(float tickLength);
 }

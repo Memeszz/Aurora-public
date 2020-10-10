@@ -9,21 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class FakePlayer extends Module {
-    private List<Integer> fakePlayerIdList = null;
-    public FakePlayer() {
-
-        super("FakePlayer", Category.Player);
-    }
-    Setting.mode mode;
-
-    public void setup() {
-        ArrayList<String> modes = new ArrayList<>();
-        modes.add("Single");
-        modes.add("Multi");
-        mode = this.registerMode("Mode","Mode", modes, "Single");
-    }
-
+public class FakePlayer extends Module
+{
     private static final String[][] fakePlayerInfo =
 
             {
@@ -32,11 +19,29 @@ public class FakePlayer extends Module {
                     {"66666666-6666-6666-6666-666666666", "nigga2", "6", "0"},
                     {"66666666-6666-6666-6666-66666660", "nigga3", "9", "0"},
             };
+    Setting.mode mode;
+    private List<Integer> fakePlayerIdList = null;
+
+    public FakePlayer()
+    {
+
+        super("FakePlayer", Category.Player);
+    }
+
+    public void setup()
+    {
+        ArrayList<String> modes = new ArrayList<>();
+        modes.add("Single");
+        modes.add("Multi");
+        mode = this.registerMode("Mode", "Mode", modes, "Single");
+    }
 
     @Override
-    protected void onEnable() {
+    protected void onEnable()
+    {
 
-        if (mc.player == null || mc.world == null) {
+        if (mc.player == null || mc.world == null)
+        {
             this.disable();
             return;
         }
@@ -45,12 +50,15 @@ public class FakePlayer extends Module {
 
         int entityId = -101;
 
-        for (String[] data : fakePlayerInfo) {
+        for (String[] data : fakePlayerInfo)
+        {
 
-            if (mode.getValue().equals("Single")) {
+            if (mode.getValue().equals("Single"))
+            {
                 addFakePlayer(data[0], data[1], entityId, 0, 0);
             }
-            if (mode.getValue().equals("Multi")) {
+            if (mode.getValue().equals("Multi"))
+            {
                 addFakePlayer(data[0], data[1], entityId, Integer.parseInt(data[2]), Integer.parseInt(data[3]));
             }
 
@@ -60,7 +68,8 @@ public class FakePlayer extends Module {
 
     }
 
-    private void addFakePlayer(String uuid, String name, int entityId, int offsetX, int offsetZ) {
+    private void addFakePlayer(String uuid, String name, int entityId, int offsetX, int offsetZ)
+    {
 
         EntityOtherPlayerMP fakePlayer = new EntityOtherPlayerMP(mc.world, new GameProfile(UUID.fromString(uuid), name));
         fakePlayer.copyLocationAndAnglesFrom(mc.player);
@@ -72,23 +81,29 @@ public class FakePlayer extends Module {
     }
 
     @Override
-    public void onUpdate() {
+    public void onUpdate()
+    {
 
-        if (fakePlayerIdList == null || fakePlayerIdList.isEmpty() ) {
+        if (fakePlayerIdList == null || fakePlayerIdList.isEmpty())
+        {
             this.disable();
         }
 
     }
 
     @Override
-    protected void onDisable() {
+    protected void onDisable()
+    {
 
-        if (mc.player == null || mc.world == null) {
+        if (mc.player == null || mc.world == null)
+        {
             return;
         }
 
-        if (fakePlayerIdList != null) {
-            for (int id : fakePlayerIdList) {
+        if (fakePlayerIdList != null)
+        {
+            for (int id : fakePlayerIdList)
+            {
                 mc.world.removeEntityFromWorld(id);
             }
         }

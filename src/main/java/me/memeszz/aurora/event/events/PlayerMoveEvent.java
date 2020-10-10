@@ -2,43 +2,53 @@ package me.memeszz.aurora.event.events;
 
 import net.minecraft.entity.MoverType;
 
-public class PlayerMoveEvent {
-    MoverType type;
+public class PlayerMoveEvent
+{
     public double x;
     public double y;
     public double z;
-    public PlayerMoveEvent(MoverType moverType, double xx, double yy, double zz){
+    MoverType type;
+
+    public PlayerMoveEvent(MoverType moverType, double xx, double yy, double zz)
+    {
         type = moverType;
         x = xx;
         y = yy;
-        z =zz;
+        z = zz;
     }
 
-    public MoverType getType(){
+    public MoverType getType()
+    {
         return type;
     }
 
-    public double getX(){
+    public double getX()
+    {
         return x;
     }
 
-    public double getY(){
-        return y;
-    }
-
-    public double getZ(){
-        return z;
-    }
-
-    public void setX(double xx){
+    public void setX(double xx)
+    {
         x = xx;
     }
 
-    public void setY(double yy){
+    public double getY()
+    {
+        return y;
+    }
+
+    public void setY(double yy)
+    {
         y = yy;
     }
 
-    public void setZ(double zz){
+    public double getZ()
+    {
+        return z;
+    }
+
+    public void setZ(double zz)
+    {
         z = zz;
     }
 }

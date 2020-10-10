@@ -1,21 +1,26 @@
 package me.memeszz.aurora.util.math;
 
-public class StopwatchUtil {
+public class StopwatchUtil
+{
     private static long previousMS;
 
-    public StopwatchUtil() {
+    public StopwatchUtil()
+    {
         reset();
     }
 
-    public static boolean hasCompleted(long milliseconds) {
+    public static boolean hasCompleted(long milliseconds)
+    {
         return (getCurrentMS() - previousMS >= milliseconds);
     }
 
-    public void reset() {
-        previousMS = getCurrentMS();
+    public static long getCurrentMS()
+    {
+        return System.nanoTime() / 1000000L;
     }
 
-    public static long getCurrentMS() {
-        return System.nanoTime() / 1000000L;
+    public void reset()
+    {
+        previousMS = getCurrentMS();
     }
 }

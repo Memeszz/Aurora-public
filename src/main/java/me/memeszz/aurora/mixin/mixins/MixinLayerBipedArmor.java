@@ -11,13 +11,17 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LayerBipedArmor.class)
-public abstract class MixinLayerBipedArmor {
+public abstract class MixinLayerBipedArmor
+{
 
     @Inject(method = "setModelSlotVisible", at = @At(value = "HEAD"), cancellable = true)
-    protected void setModelSlotVisible(ModelBiped model, EntityEquipmentSlot slotIn, CallbackInfo info) {
-        if (ModuleManager.isModuleEnabled("NoRender") && ((NoRender)ModuleManager.getModuleByName("NoRender")).armor.getValue()) {
+    protected void setModelSlotVisible(ModelBiped model, EntityEquipmentSlot slotIn, CallbackInfo info)
+    {
+        if (ModuleManager.isModuleEnabled("NoRender") && ((NoRender) ModuleManager.getModuleByName("NoRender")).armor.getValue())
+        {
             info.cancel();
-            switch (slotIn) {
+            switch (slotIn)
+            {
                 case HEAD:
                     model.bipedHead.showModel = false;
                     model.bipedHeadwear.showModel = false;

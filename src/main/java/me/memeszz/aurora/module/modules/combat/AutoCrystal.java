@@ -36,12 +36,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class AutoCrystal extends Module {
+public class AutoCrystal extends Module
+{
 
-    public AutoCrystal() {
-        super("AutoCrystal", Category.Combat, "Places and breaks crystals on nearby players");
-    }
-
+    public static EntityPlayer target2;
+    static Setting.mode mode;
     Setting.b autoSwitch;
     Setting.d walls;
     Setting.b place;
@@ -61,10 +60,89 @@ public class AutoCrystal extends Module {
     Setting.b rotate;
     Setting.i espA;
     Setting.b slabRender;
-    static Setting.mode mode;
     Setting.mode daThing;
+    BlockPos render;
+    BlockPos pos = null;
+    String damageString;
+    Timah breakTimer = new Timah();
+    boolean mainhand = false;
+    boolean offhand = false;
+    public AutoCrystal()
+    {
+        super("AutoCrystal", Category.Combat, "Places and breaks crystals on nearby players");
+    }
 
-    public void setup() {
+    public static void placeCrystalOnBlock(BlockPos pos, EnumHand hand)
+    {
+        RayTraceResult result = mc.world.rayTraceBlocks(new Vec3d(mc.player.posX, mc.player.posY + (double) mc.player.getEyeHeight(), mc.player.posZ), new Vec3d((double) pos.getX() + 0.5, (double) pos.getY() - 0.5, (double) pos.getZ() + 0.5));
+        EnumFacing facing = result == null || result.sideHit == null ? EnumFacing.UP : result.sideHit;
+        mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, facing, hand, 0.0f, 0.0f, 0.0f));
+    }
+
+    public static BlockPos getPlayerPos()
+    {
+        return new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ));
+    }
+
+    public static List<BlockPos> possiblePlacePositions(float placeRange, boolean specialEntityCheck)
+    {
+        NonNullList<BlockPos> positions = NonNullList.create();
+        positions.addAll(BlockInteractionHelper.getSphere(getPlayerPos(), placeRange, (int) placeRange, false, true, 0).stream().filter(pos -> canPlaceCrystal(pos, specialEntityCheck)).collect(Collectors.toList()));
+        return positions;
+    }
+
+    public static boolean canPlaceCrystal(BlockPos blockPos, boolean specialEntityCheck)
+    {
+        block7:
+        {
+            BlockPos boost = blockPos.add(0, 1, 0);
+            BlockPos boost2 = blockPos.add(0, 2, 0);
+            try
+            {
+                if (mc.world.getBlockState(blockPos).getBlock() != Blocks.BEDROCK && mc.world.getBlockState(blockPos).getBlock() != Blocks.OBSIDIAN)
+                {
+                    return false;
+                }
+                if (!mode.getValue().equalsIgnoreCase("1.13"))
+                {
+                    if (mc.world.getBlockState(boost).getBlock() != Blocks.AIR || mc.world.getBlockState(boost2).getBlock() != Blocks.AIR)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (mc.world.getBlockState(boost).getBlock() != Blocks.AIR)
+                    {
+                        return false;
+                    }
+                }
+                if (specialEntityCheck)
+                {
+                    for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost)))
+                    {
+                        if (entity instanceof EntityEnderCrystal) continue;
+                        return false;
+                    }
+                    for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2)))
+                    {
+                        if (entity instanceof EntityEnderCrystal) continue;
+                        return false;
+                    }
+                    break block7;
+                }
+                return mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost)).isEmpty() && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2)).isEmpty();
+            }
+            catch (Exception ignored)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void setup()
+    {
         ArrayList<String> placeModes = new ArrayList<>();
         placeModes.add("Normal");
         placeModes.add("1.13");
@@ -94,22 +172,20 @@ public class AutoCrystal extends Module {
         renderDamage = registerB("RenderDamage", "RenderDamage", false);
     }
 
-    public static EntityPlayer target2;
-    BlockPos render;
-    BlockPos pos = null;
-    String damageString;
-    Timah breakTimer = new Timah();
-    boolean mainhand = false;
-    boolean offhand = false;
-
     @Listener
-    public void onPacketRecieve(PacketEvent.Receive event) {
-        if (event.getPacket() instanceof SPacketSoundEffect) {
+    public void onPacketRecieve(PacketEvent.Receive event)
+    {
+        if (event.getPacket() instanceof SPacketSoundEffect)
+        {
             final SPacketSoundEffect packet = (SPacketSoundEffect) event.getPacket();
-            if (packet.getCategory() == SoundCategory.BLOCKS && packet.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE) {
-                for (Entity e : mc.world.loadedEntityList) {
-                    if (e instanceof EntityEnderCrystal) {
-                        if (e.getDistance(packet.getX(), packet.getY(), packet.getZ()) <= 6.0f) {
+            if (packet.getCategory() == SoundCategory.BLOCKS && packet.getSound() == SoundEvents.ENTITY_GENERIC_EXPLODE)
+            {
+                for (Entity e : mc.world.loadedEntityList)
+                {
+                    if (e instanceof EntityEnderCrystal)
+                    {
+                        if (e.getDistance(packet.getX(), packet.getY(), packet.getZ()) <= 6.0f)
+                        {
                             e.setDead();
                         }
                     }
@@ -118,27 +194,32 @@ public class AutoCrystal extends Module {
         }
     }
 
-
-    public void onTick() {
+    public void onTick()
+    {
         doDaTHING();
     }
 
-    void doDaTHING() {
-        switch (daThing.getValue()) {
-            case "BREAKPLACE" :
+    void doDaTHING()
+    {
+        switch (daThing.getValue())
+        {
+            case "BREAKPLACE":
                 daThing();
                 gloop();
                 break;
-            case "PLACEBREAK" :
+            case "PLACEBREAK":
                 gloop();
                 daThing();
         }
     }
 
-    void daThing() {
+    void daThing()
+    {
         final EntityEnderCrystal crystal = (EntityEnderCrystal) mc.world.loadedEntityList.stream().filter(entity -> entity instanceof EntityEnderCrystal).min(Comparator.comparing(c -> mc.player.getDistance(c))).orElse(null);
-        if (crystal != null && mc.player.getDistance(crystal) <= range.getValue()) {
-            if (breakTimer.passedMs(hitDelay.getValue())) {
+        if (crystal != null && mc.player.getDistance(crystal) <= range.getValue())
+        {
+            if (breakTimer.passedMs(hitDelay.getValue()))
+            {
                 mc.playerController.attackEntity(mc.player, crystal);
                 mc.player.swingArm(EnumHand.MAIN_HAND);
                 breakTimer.reset();
@@ -146,16 +227,18 @@ public class AutoCrystal extends Module {
         }
     }
 
-
-    void gloop() {
+    void gloop()
+    {
         double dmg = .5;
         mainhand = (mc.player.getHeldItemMainhand().getItem() == Items.END_CRYSTAL);
         offhand = (mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL);
         final List<EntityPlayer> entities = mc.world.playerEntities.stream().filter(entityPlayer -> entityPlayer != mc.player && !Friends.isFriend(entityPlayer.getName())).collect(Collectors.toList());
-        for (EntityPlayer entity2 : entities) {
+        for (EntityPlayer entity2 : entities)
+        {
             if (entity2.getHealth() <= 0.0f || mc.player.getDistance(entity2) > enemyRange.getValue())
                 continue;
-            for (final BlockPos blockPos : possiblePlacePositions((float) placeRange.getValue(), true)) {
+            for (final BlockPos blockPos : possiblePlacePositions((float) placeRange.getValue(), true))
+            {
                 final double d = calcDmg(blockPos, entity2);
                 final double self = calcDmg(blockPos, mc.player);
                 if (d < minDmg.getValue() && entity2.getHealth() + entity2.getAbsorptionAmount() > facePlace.getValue() || maxSelfDmg.getValue() <= self || d <= dmg)
@@ -166,13 +249,16 @@ public class AutoCrystal extends Module {
             }
         }
 
-        if (dmg == .5) {
+        if (dmg == .5)
+        {
             render = null;
             return;
         }
 
-        if (place.getValue()) {
-            if (offhand || mainhand) {
+        if (place.getValue())
+        {
+            if (offhand || mainhand)
+            {
                 render = pos;
                 placeCrystalOnBlock(pos, offhand ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
                 damageString = String.valueOf(dmg);
@@ -180,25 +266,22 @@ public class AutoCrystal extends Module {
         }
     }
 
-    public static void placeCrystalOnBlock(BlockPos pos, EnumHand hand) {
-        RayTraceResult result = mc.world.rayTraceBlocks(new Vec3d(mc.player.posX, mc.player.posY + (double)mc.player.getEyeHeight(), mc.player.posZ), new Vec3d((double)pos.getX() + 0.5, (double)pos.getY() - 0.5, (double)pos.getZ() + 0.5));
-        EnumFacing facing = result == null || result.sideHit == null ? EnumFacing.UP : result.sideHit;
-        mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(pos, facing, hand, 0.0f, 0.0f, 0.0f));
-    }
-
-
-    public void onWorldRender(RenderEvent event) {
-        if (this.render != null && target2 != null) {
+    public void onWorldRender(RenderEvent event)
+    {
+        if (this.render != null && target2 != null)
+        {
             final float[] hue = {(System.currentTimeMillis() % (360 * 7) / (360f * 7))};
             int rgb = Color.HSBtoRGB(hue[0], 1, 1);
             int r = (rgb >> 16) & 0xFF;
             int g = (rgb >> 8) & 0xFF;
             int b = rgb & 0xFF;
             final AxisAlignedBB bb = new AxisAlignedBB(render.getX() - mc.getRenderManager().viewerPosX, render.getY() - mc.getRenderManager().viewerPosY + 1, render.getZ() - mc.getRenderManager().viewerPosZ, render.getX() + 1 - mc.getRenderManager().viewerPosX, render.getY() + (slabRender.getValue() ? 1.1 : 0) - mc.getRenderManager().viewerPosY, render.getZ() + 1 - mc.getRenderManager().viewerPosZ);
-            if (RenderUtil.isInViewFrustrum(new AxisAlignedBB(bb.minX + mc.getRenderManager().viewerPosX, bb.minY + mc.getRenderManager().viewerPosY, bb.minZ + mc.getRenderManager().viewerPosZ, bb.maxX + mc.getRenderManager().viewerPosX, bb.maxY + mc.getRenderManager().viewerPosY, bb.maxZ + mc.getRenderManager().viewerPosZ))) {
+            if (RenderUtil.isInViewFrustrum(new AxisAlignedBB(bb.minX + mc.getRenderManager().viewerPosX, bb.minY + mc.getRenderManager().viewerPosY, bb.minZ + mc.getRenderManager().viewerPosZ, bb.maxX + mc.getRenderManager().viewerPosX, bb.maxY + mc.getRenderManager().viewerPosY, bb.maxZ + mc.getRenderManager().viewerPosZ)))
+            {
                 RenderUtil.drawESP(bb, rainbow.getValue() ? r : espR.getValue(), rainbow.getValue() ? g : espG.getValue(), rainbow.getValue() ? b : espB.getValue(), espA.getValue());
                 RenderUtil.drawESPOutline(bb, rainbow.getValue() ? r : espR.getValue(), rainbow.getValue() ? g : espG.getValue(), rainbow.getValue() ? b : espB.getValue(), 255f, 1f);
-                if (renderDamage.getValue()) {
+                if (renderDamage.getValue())
+                {
                     final double posX = render.getX() - ((IRenderManager) mc.getRenderManager()).getRenderPosX();
                     final double posY = render.getY() - ((IRenderManager) mc.getRenderManager()).getRenderPosY();
                     final double posZ = render.getZ() - ((IRenderManager) mc.getRenderManager()).getRenderPosZ();
@@ -214,70 +297,27 @@ public class AutoCrystal extends Module {
         }
     }
 
-    public float calcDmg(BlockPos b, EntityPlayer target) {
+    public float calcDmg(BlockPos b, EntityPlayer target)
+    {
         return EntityUtil.calculateDamage(b.getX() + .5, b.getY() + 1, b.getZ() + .5, target);
     }
 
-    public static BlockPos getPlayerPos() {
-        return new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ));
-    }
-
-    public static List<BlockPos> possiblePlacePositions(float placeRange, boolean specialEntityCheck) {
-        NonNullList<BlockPos> positions = NonNullList.create();
-        positions.addAll(BlockInteractionHelper.getSphere(getPlayerPos(), placeRange, (int) placeRange, false, true, 0).stream().filter(pos -> canPlaceCrystal(pos, specialEntityCheck)).collect(Collectors.toList()));
-        return positions;
-    }
-
-    public static boolean canPlaceCrystal(BlockPos blockPos, boolean specialEntityCheck) {
-        block7: {
-            BlockPos boost = blockPos.add(0, 1, 0);
-            BlockPos boost2 = blockPos.add(0, 2, 0);
-            try {
-                if (mc.world.getBlockState(blockPos).getBlock() != Blocks.BEDROCK && mc.world.getBlockState(blockPos).getBlock() != Blocks.OBSIDIAN) {
-                    return false;
-                }
-                if (!mode.getValue().equalsIgnoreCase("1.13")) {
-                    if (mc.world.getBlockState(boost).getBlock() != Blocks.AIR || mc.world.getBlockState(boost2).getBlock() != Blocks.AIR) {
-                        return false;
-                    }
-                }
-                else {
-                    if (mc.world.getBlockState(boost).getBlock() != Blocks.AIR) {
-                        return false;
-                    }
-                }
-                if (specialEntityCheck) {
-                    for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost))) {
-                        if (entity instanceof EntityEnderCrystal) continue;
-                        return false;
-                    }
-                    for (Entity entity : mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2))) {
-                        if (entity instanceof EntityEnderCrystal) continue;
-                        return false;
-                    }
-                    break block7;
-                }
-                return mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost)).isEmpty() && mc.world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(boost2)).isEmpty();
-            }
-            catch (Exception ignored) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    public void onDisable() {
+    public void onDisable()
+    {
         render = null;
         target2 = null;
     }
 
 
     @Override
-    public String getHudInfo() {
-        if (target2 != null) {
+    public String getHudInfo()
+    {
+        if (target2 != null)
+        {
             return "\u00A77[\u00A7a" + target2.getName() + "\u00A77]";
-        } else {
+        }
+        else
+        {
             return "\u00A77[\u00A7c" + "No target!" + "\u00A77]";
         }
     }

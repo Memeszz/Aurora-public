@@ -15,17 +15,14 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AutoReplanish extends Module {
-    public AutoReplanish() {
-        super("AutoReplenish", Category.Player, "Replenishes items in your hotbar");
-    }
-
+public class AutoReplanish extends Module
+{
     Setting.i threshold;
     Setting.i tickDelay;
     private int delayStep = 0;
-    public void setup(){
-        tickDelay = this.registerI("TickDelay", "TickDelay",4, 0, 20);
-        threshold = this.registerI("Threshold", "Threshold",4, 0, 20);
+    public AutoReplanish()
+    {
+        super("AutoReplenish", Category.Player, "Replenishes items in your hotbar");
     }
 
     /**
@@ -33,7 +30,8 @@ public class AutoReplanish extends Module {
      *
      * @return Map(Key = Slot Id, Value = Slot ItemStack) Player Inventory
      */
-    private static Map<Integer, ItemStack> getInventory() {
+    private static Map<Integer, ItemStack> getInventory()
+    {
         return getInventorySlots(9, 35);
     }
 
@@ -42,15 +40,18 @@ public class AutoReplanish extends Module {
      *
      * @return Map(Key = Slot Id, Value = Slot ItemStack) Player Hotbar
      */
-    private static Map<Integer, ItemStack> getHotbar() {
+    private static Map<Integer, ItemStack> getHotbar()
+    {
         return getInventorySlots(36, 44);
     }
 
-    private static Map<Integer, ItemStack> getInventorySlots(int current, int last) {
+    private static Map<Integer, ItemStack> getInventorySlots(int current, int last)
+    {
 
         Map<Integer, ItemStack> fullInventorySlots = new HashMap<>();
 
-        while (current <= last) {
+        while (current <= last)
+        {
             fullInventorySlots.put(current, mc.player.inventoryContainer.getInventory().get(current));
             current++;
         }
@@ -59,27 +60,40 @@ public class AutoReplanish extends Module {
 
     }
 
+    public void setup()
+    {
+        tickDelay = this.registerI("TickDelay", "TickDelay", 4, 0, 20);
+        threshold = this.registerI("Threshold", "Threshold", 4, 0, 20);
+    }
+
     @Listener
-    public void onUpdate(UpdateEvent event) {
+    public void onUpdate(UpdateEvent event)
+    {
 
-        if (mc.player == null) {
+        if (mc.player == null)
+        {
             return;
         }
 
-        if (mc.currentScreen instanceof GuiContainer) {
+        if (mc.currentScreen instanceof GuiContainer)
+        {
             return;
         }
 
-        if (delayStep < tickDelay.getValue()) {
+        if (delayStep < tickDelay.getValue())
+        {
             delayStep++;
             return;
-        } else {
+        }
+        else
+        {
             delayStep = 0;
         }
 
         Pair<Integer, Integer> slots = findReplenishableHotbarSlot();
 
-        if (slots == null) {
+        if (slots == null)
+        {
             return;
         }
 
@@ -102,33 +116,40 @@ public class AutoReplanish extends Module {
      *
      * @return mergable pair (key: inventorySlot, value: hotbarSlot) of replenishable inventory slot and hotbar slot, otherwise null
      */
-    private Pair<Integer, Integer> findReplenishableHotbarSlot() {
+    private Pair<Integer, Integer> findReplenishableHotbarSlot()
+    {
 
         Pair<Integer, Integer> returnPair = null;
 
-        for (Map.Entry<Integer, ItemStack> hotbarSlot : getHotbar().entrySet()) {
+        for (Map.Entry<Integer, ItemStack> hotbarSlot : getHotbar().entrySet())
+        {
 
             ItemStack stack = hotbarSlot.getValue();
 
-            if (stack.isEmpty() || stack.getItem() == Items.AIR) {
+            if (stack.isEmpty() || stack.getItem() == Items.AIR)
+            {
                 continue;
             }
 
-            if (!stack.isStackable()) {
+            if (!stack.isStackable())
+            {
                 continue;
             }
 
-            if (stack.getCount() >= stack.getMaxStackSize()) {
+            if (stack.getCount() >= stack.getMaxStackSize())
+            {
                 continue;
             }
 
-            if (stack.getCount() > threshold.getValue()) {
+            if (stack.getCount() > threshold.getValue())
+            {
                 continue;
             }
 
             int inventorySlot = findCompatibleInventorySlot(stack);
 
-            if (inventorySlot == -1) {
+            if (inventorySlot == -1)
+            {
                 continue;
             }
 
@@ -146,26 +167,31 @@ public class AutoReplanish extends Module {
      * @param hotbarStack the hotbar slot id that a inventory slot with compatible stack is searched for
      * @return inventory slot id holding compatible stack, otherwise -1
      */
-    private int findCompatibleInventorySlot(ItemStack hotbarStack) {
+    private int findCompatibleInventorySlot(ItemStack hotbarStack)
+    {
 
         int inventorySlot = -1;
         int smallestStackSize = 999;
 
-        for (Map.Entry<Integer, ItemStack> entry : getInventory().entrySet()) {
+        for (Map.Entry<Integer, ItemStack> entry : getInventory().entrySet())
+        {
 
             ItemStack inventoryStack = entry.getValue();
 
-            if (inventoryStack.isEmpty() || inventoryStack.getItem() == Items.AIR) {
+            if (inventoryStack.isEmpty() || inventoryStack.getItem() == Items.AIR)
+            {
                 continue;
             }
 
-            if (!isCompatibleStacks(hotbarStack, inventoryStack)) {
+            if (!isCompatibleStacks(hotbarStack, inventoryStack))
+            {
                 continue;
             }
 
             int currentStackSize = mc.player.inventoryContainer.getInventory().get(entry.getKey()).getCount();
 
-            if (smallestStackSize > currentStackSize) {
+            if (smallestStackSize > currentStackSize)
+            {
                 smallestStackSize = currentStackSize;
                 inventorySlot = entry.getKey();
             }
@@ -184,29 +210,34 @@ public class AutoReplanish extends Module {
      * @param stack2 Stack 2
      * @return true if stacks can be merged, otherwise false.
      */
-    private boolean isCompatibleStacks(ItemStack stack1, ItemStack stack2) {
+    private boolean isCompatibleStacks(ItemStack stack1, ItemStack stack2)
+    {
 
         // check if not same item
-        if (!stack1.getItem().equals(stack2.getItem())) {
+        if (!stack1.getItem().equals(stack2.getItem()))
+        {
             return false;
         }
 
         // check if not same block
-        if ((stack1.getItem() instanceof ItemBlock) && (stack2.getItem() instanceof ItemBlock)) {
+        if ((stack1.getItem() instanceof ItemBlock) && (stack2.getItem() instanceof ItemBlock))
+        {
             Block block1 = ((ItemBlock) stack1.getItem()).getBlock();
             Block block2 = ((ItemBlock) stack2.getItem()).getBlock();
 
-            }
+        }
 
 
         // check if not same names
-        if (!stack1.getDisplayName().equals(stack2.getDisplayName())) {
+        if (!stack1.getDisplayName().equals(stack2.getDisplayName()))
+        {
             return false;
         }
 
         // check if not same damage (e.g. skulls)
         //noinspection RedundantIfStatement
-        if (stack1.getItemDamage() != stack2.getItemDamage()) {
+        if (stack1.getItemDamage() != stack2.getItemDamage())
+        {
             return false;
         }
 

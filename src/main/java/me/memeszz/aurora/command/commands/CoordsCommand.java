@@ -10,19 +10,23 @@ import java.awt.datatransfer.StringSelection;
 import java.text.DecimalFormat;
 
 
-public class CoordsCommand extends Command {
+public class CoordsCommand extends Command
+{
     @Override
-    public String[] getAlias() {
+    public String[] getAlias()
+    {
         return new String[]{"Coord", "Coordinate", "Coords", "Coordinates"};
     }
 
     @Override
-    public String getSyntax() {
+    public String getSyntax()
+    {
         return "coords";
     }
 
     @Override
-    public void onCommand(String command, String[] args) throws Exception {
+    public void onCommand(String command, String[] args) throws Exception
+    {
         final DecimalFormat format = new DecimalFormat("#");
         final StringSelection contents = new StringSelection(format.format(Minecraft.getMinecraft().player.posX) + ", " + format.format(Minecraft.getMinecraft().player.posY) + ", " + format.format(Minecraft.getMinecraft().player.posZ));
         final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();

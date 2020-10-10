@@ -17,7 +17,8 @@ import java.util.List;
 /**
  * Created by Gebruiker on 27/02/2017.
  */
-public class TrajectoryCalculator {
+public class TrajectoryCalculator
+{
 
     /**
      * Check if the thePlayer is holding an item that can be thrown/shot.
@@ -25,25 +26,35 @@ public class TrajectoryCalculator {
      * @param entity an entity
      * @return true if can shoot/throw, false otherwise
      */
-    public static ThrowingType getThrowType(EntityLivingBase entity) {
+    public static ThrowingType getThrowType(EntityLivingBase entity)
+    {
         // Check if we're holding an item first
-        if (entity.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
+        if (entity.getHeldItem(EnumHand.MAIN_HAND).isEmpty())
+        {
             return ThrowingType.NONE;
         }
 
         ItemStack itemStack = entity.getHeldItem(EnumHand.MAIN_HAND);
         Item item = itemStack.getItem();
         // The potion is kind of special so we do it's own check
-        if (item instanceof ItemPotion) {
+        if (item instanceof ItemPotion)
+        {
             // Check if it's a splashable potion
-            if (itemStack.getItem() instanceof ItemSplashPotion){
+            if (itemStack.getItem() instanceof ItemSplashPotion)
+            {
                 return ThrowingType.POTION;
             }
-        } else if (item instanceof ItemBow && entity.isHandActive()) {
+        }
+        else if (item instanceof ItemBow && entity.isHandActive())
+        {
             return ThrowingType.BOW;
-        } else if (item instanceof ItemExpBottle) {
+        }
+        else if (item instanceof ItemExpBottle)
+        {
             return ThrowingType.EXPERIENCE;
-        } else if (item instanceof ItemSnowball || item instanceof ItemEgg || item instanceof ItemEnderPearl) {
+        }
+        else if (item instanceof ItemSnowball || item instanceof ItemEgg || item instanceof ItemEnderPearl)
+        {
             return ThrowingType.NORMAL;
         }
 
@@ -51,7 +62,31 @@ public class TrajectoryCalculator {
         return ThrowingType.NONE;
     }
 
-    public enum ThrowingType {
+    public static double[] interpolate(Entity entity)
+    {
+        double posX = interpolate(entity.posX, entity.lastTickPosX) - ((IRenderManager) Wrapper.getMinecraft().getRenderManager()).getRenderPosX();
+        double posY = interpolate(entity.posY, entity.lastTickPosY) - ((IRenderManager) Wrapper.getMinecraft().getRenderManager()).getRenderPosY();
+        double posZ = interpolate(entity.posZ, entity.lastTickPosZ) - ((IRenderManager) Wrapper.getMinecraft().getRenderManager()).getRenderPosZ();
+        return new double[]{posX, posY, posZ};
+    }
+
+    public static double interpolate(double now, double then)
+    {
+        return then + (now - then) * Wrapper.getMinecraft().getRenderPartialTicks();
+    }
+
+    public static Vec3d mult(Vec3d factor, float multiplier)
+    {
+        return new Vec3d(factor.x * multiplier, factor.y * multiplier, factor.z * multiplier);
+    }
+
+    public static Vec3d div(Vec3d factor, float divisor)
+    {
+        return new Vec3d(factor.x / divisor, factor.y / divisor, factor.z / divisor);
+    }
+
+    public enum ThrowingType
+    {
         NONE, BOW, EXPERIENCE, POTION, NORMAL
     }
 
@@ -60,8 +95,10 @@ public class TrajectoryCalculator {
      * implementation resides in multiple classes but the parent of all
      * of them is {@link net.minecraft.entity.projectile.EntityThrowable}
      */
-    public static final class FlightPath {
+    public static final class FlightPath
+    {
         private final EntityLivingBase shooter;
+        private final ThrowingType throwingType;
         public Vec3d position;
         private Vec3d motion;
         private float yaw;
@@ -69,9 +106,9 @@ public class TrajectoryCalculator {
         private AxisAlignedBB boundingBox;
         private boolean collided;
         private RayTraceResult target;
-        private final ThrowingType throwingType;
 
-        public FlightPath(EntityLivingBase entityLivingBase, ThrowingType throwingType) {
+        public FlightPath(EntityLivingBase entityLivingBase, ThrowingType throwingType)
+        {
             this.shooter = entityLivingBase;
             this.throwingType = throwingType;
 
@@ -96,13 +133,15 @@ public class TrajectoryCalculator {
         /**
          * Update the entity's data in the world.
          */
-        public void onUpdate() {
+        public void onUpdate()
+        {
             // Get the predicted positions in the world
             Vec3d prediction = this.position.add(this.motion);
             // Check if we've collided with a block in the same time
             RayTraceResult blockCollision = this.shooter.getEntityWorld().rayTraceBlocks(this.position, prediction, false, true, false);
             // Check if we got a block collision
-            if (blockCollision != null) {
+            if (blockCollision != null)
+            {
                 prediction = blockCollision.hitVec;
             }
 
@@ -110,7 +149,8 @@ public class TrajectoryCalculator {
             this.onCollideWithEntity(prediction, blockCollision);
 
             // Check if we had a collision
-            if (this.target != null) {
+            if (this.target != null)
+            {
                 this.collided = true;
                 // Update position
                 this.setPosition(this.target.hitVec);
@@ -118,7 +158,8 @@ public class TrajectoryCalculator {
             }
 
             // Sanity check to see if we've gone below the world (if we have we will never collide)
-            if (this.position.y <= 0.0d) {
+            if (this.position.y <= 0.0d)
+            {
                 // Force this to true even though we haven't collided with anything
                 this.collided = true;
                 return;
@@ -128,7 +169,8 @@ public class TrajectoryCalculator {
             this.position = this.position.add(this.motion);
             float motionModifier = 0.99F;
             // Check if our path will collide with water
-            if (this.shooter.getEntityWorld().isMaterialInBB(this.boundingBox, Material.WATER)) {
+            if (this.shooter.getEntityWorld().isMaterialInBB(this.boundingBox, Material.WATER))
+            {
                 motionModifier = this.throwingType == ThrowingType.BOW ? 0.6F : 0.8F;
             }
 
@@ -143,19 +185,22 @@ public class TrajectoryCalculator {
         /**
          * Check if our path collides with an entity.
          *
-         * @param prediction the predicted position
+         * @param prediction     the predicted position
          * @param blockCollision block collision if we had one
          */
-        private void onCollideWithEntity(Vec3d prediction, RayTraceResult blockCollision) {
+        private void onCollideWithEntity(Vec3d prediction, RayTraceResult blockCollision)
+        {
             Entity collidingEntity = null;
             double currentDistance = 0.0d;
             // Get all possible collision entities disregarding the local thePlayer
             List<Entity> collisionEntities = this.shooter.world.getEntitiesWithinAABBExcludingEntity(this.shooter, this.boundingBox.expand(this.motion.x, this.motion.y, this.motion.z).expand(1.0D, 1.0D, 1.0D));
 
             // Loop through every loaded entity in the world
-            for (Entity entity : collisionEntities) {
+            for (Entity entity : collisionEntities)
+            {
                 // Check if we can collide with the entity or it's ourself
-                if (!entity.canBeCollidedWith() && entity != this.shooter) {
+                if (!entity.canBeCollidedWith() && entity != this.shooter)
+                {
                     continue;
                 }
 
@@ -165,11 +210,13 @@ public class TrajectoryCalculator {
                 RayTraceResult objectPosition = expandedBox.calculateIntercept(this.position, prediction);
                 // Check if we have a collision
 
-                if (objectPosition != null) {
+                if (objectPosition != null)
+                {
                     double distanceTo = this.position.distanceTo(objectPosition.hitVec);
 
                     // Check if we've gotten a closer entity
-                    if (distanceTo < currentDistance || currentDistance == 0.0D) {
+                    if (distanceTo < currentDistance || currentDistance == 0.0D)
+                    {
                         collidingEntity = entity;
                         currentDistance = distanceTo;
                     }
@@ -177,10 +224,13 @@ public class TrajectoryCalculator {
             }
 
             // Check if we had an entity
-            if (collidingEntity != null) {
+            if (collidingEntity != null)
+            {
                 // Set our target to the result
                 this.target = new RayTraceResult(collidingEntity);
-            } else {
+            }
+            else
+            {
                 // Fallback to the block collision
                 this.target = blockCollision;
             }
@@ -192,9 +242,11 @@ public class TrajectoryCalculator {
          *
          * @return entity velocity in flight
          */
-        private float getInitialVelocity() {
+        private float getInitialVelocity()
+        {
             Item item = this.shooter.getHeldItem(EnumHand.MAIN_HAND).getItem();
-            switch (this.throwingType) {
+            switch (this.throwingType)
+            {
                 case BOW:
                     // A local instance of the bow we are holding
                     ItemBow bow = (ItemBow) item;
@@ -202,7 +254,8 @@ public class TrajectoryCalculator {
                     int useDuration = bow.getMaxItemUseDuration(this.shooter.getHeldItem(EnumHand.MAIN_HAND)) - this.shooter.getItemInUseCount();
                     float velocity = (float) useDuration / 20.0F;
                     velocity = (velocity * velocity + velocity * 2.0F) / 3.0F;
-                    if (velocity > 1.0F) {
+                    if (velocity > 1.0F)
+                    {
                         velocity = 1.0F;
                     }
 
@@ -224,8 +277,10 @@ public class TrajectoryCalculator {
          *
          * @return gravity relating to item
          */
-        private float getGravityVelocity() {
-            switch (this.throwingType) {
+        private float getGravityVelocity()
+        {
+            switch (this.throwingType)
+            {
                 case BOW:
                 case POTION:
                     return 0.05f;
@@ -242,13 +297,14 @@ public class TrajectoryCalculator {
         /**
          * Set the position and rotation of the entity in the world.
          *
-         * @param x x position in world
-         * @param y y position in world
-         * @param z z position in world
-         * @param yaw yaw rotation axis
+         * @param x     x position in world
+         * @param y     y position in world
+         * @param z     z position in world
+         * @param yaw   yaw rotation axis
          * @param pitch pitch rotation axis
          */
-        private void setLocationAndAngles(double x, double y, double z, float yaw, float pitch) {
+        private void setLocationAndAngles(double x, double y, double z, float yaw, float pitch)
+        {
             this.position = new Vec3d(x, y, z);
             this.yaw = yaw;
             this.pitch = pitch;
@@ -260,7 +316,8 @@ public class TrajectoryCalculator {
          *
          * @param position position in world
          */
-        private void setPosition(Vec3d position) {
+        private void setPosition(Vec3d position)
+        {
             this.position = new Vec3d(position.x, position.y, position.z);
             // Usually this is this.width / 2.0f but throwables change
             double entitySize = (this.throwingType == ThrowingType.BOW ? 0.5d : 0.25d) / 2.0d;
@@ -276,10 +333,11 @@ public class TrajectoryCalculator {
         /**
          * Set the entity's velocity and position in the world.
          *
-         * @param motion velocity in world
+         * @param motion   velocity in world
          * @param velocity starting velocity
          */
-        private void setThrowableHeading(Vec3d motion, float velocity) {
+        private void setThrowableHeading(Vec3d motion, float velocity)
+        {
             // Divide the current motion by the length of the vector
             this.motion = div(motion, (float) motion.length());
             // Multiply by the velocity
@@ -291,7 +349,8 @@ public class TrajectoryCalculator {
          *
          * @return path collides with ground
          */
-        public boolean isCollided() {
+        public boolean isCollided()
+        {
             return collided;
         }
 
@@ -300,27 +359,9 @@ public class TrajectoryCalculator {
          *
          * @return moving object target
          */
-        public RayTraceResult getCollidingTarget() {
+        public RayTraceResult getCollidingTarget()
+        {
             return target;
         }
-    }
-
-    public static double[] interpolate(Entity entity) {
-        double posX = interpolate(entity.posX, entity.lastTickPosX) - ((IRenderManager) Wrapper.getMinecraft().getRenderManager()).getRenderPosX();
-        double posY = interpolate(entity.posY, entity.lastTickPosY) - ((IRenderManager) Wrapper.getMinecraft().getRenderManager()).getRenderPosY();
-        double posZ = interpolate(entity.posZ, entity.lastTickPosZ) - ((IRenderManager) Wrapper.getMinecraft().getRenderManager()).getRenderPosZ();
-        return new double[] { posX, posY, posZ };
-    }
-
-    public static double interpolate(double now, double then) {
-        return then + (now - then) * Wrapper.getMinecraft().getRenderPartialTicks();
-    }
-
-    public static Vec3d mult(Vec3d factor, float multiplier) {
-        return new Vec3d(factor.x * multiplier, factor.y * multiplier, factor.z * multiplier);
-    }
-
-    public static Vec3d div(Vec3d factor, float divisor) {
-        return new Vec3d(factor.x / divisor, factor.y / divisor, factor.z / divisor);
     }
 }

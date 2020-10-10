@@ -7,15 +7,20 @@ import net.minecraft.network.play.server.SPacketEffect;
 import net.minecraft.network.play.server.SPacketParticles;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-public class NoLag extends Module {
-    public NoLag() {
-        super ("NoLag", Category.Misc);
+public class NoLag extends Module
+{
+    public NoLag()
+    {
+        super("NoLag", Category.Misc);
     }
 
     @Listener
-    public void onPacketRec(PacketEvent.Receive event) {
-        if (event.getStage() == EventStageable.EventStage.PRE) {
-            if (event.getPacket() instanceof SPacketParticles || event.getPacket() instanceof SPacketEffect) {
+    public void onPacketRec(PacketEvent.Receive event)
+    {
+        if (event.getStage() == EventStageable.EventStage.PRE)
+        {
+            if (event.getPacket() instanceof SPacketParticles || event.getPacket() instanceof SPacketEffect)
+            {
                 event.setCanceled(true);
             }
 

@@ -13,11 +13,15 @@ import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.*;
 
 @Mixin(value = MovementInputFromOptions.class, priority = 10000)
-public abstract class MixinMovementInputFromOptions extends MovementInput {
+public abstract class MixinMovementInputFromOptions extends MovementInput
+{
     @Mutable
-    @Shadow @Final private final GameSettings gameSettings;
+    @Shadow
+    @Final
+    private final GameSettings gameSettings;
 
-    protected MixinMovementInputFromOptions(GameSettings gameSettings) {
+    protected MixinMovementInputFromOptions(GameSettings gameSettings)
+    {
         this.gameSettings = gameSettings;
     }
 
@@ -25,48 +29,69 @@ public abstract class MixinMovementInputFromOptions extends MovementInput {
      * @author b
      */
     @Overwrite
-    public void updatePlayerMoveState() {
+    public void updatePlayerMoveState()
+    {
         this.moveStrafe = 0.0F;
         this.moveForward = 0.0F;
-        if (isKeyHeld(this.gameSettings.keyBindForward)) {
+        if (isKeyHeld(this.gameSettings.keyBindForward))
+        {
             ++this.moveForward;
             this.forwardKeyDown = true;
-        } else {
+        }
+        else
+        {
             this.forwardKeyDown = false;
         }
-        if (isKeyHeld(this.gameSettings.keyBindBack)) {
+        if (isKeyHeld(this.gameSettings.keyBindBack))
+        {
             --this.moveForward;
             this.backKeyDown = true;
-        } else {
+        }
+        else
+        {
             this.backKeyDown = false;
         }
-        if (isKeyHeld(this.gameSettings.keyBindLeft)) {
+        if (isKeyHeld(this.gameSettings.keyBindLeft))
+        {
             ++this.moveStrafe;
             this.leftKeyDown = true;
-        } else {
+        }
+        else
+        {
             this.leftKeyDown = false;
         }
-        if (isKeyHeld(this.gameSettings.keyBindRight)) {
+        if (isKeyHeld(this.gameSettings.keyBindRight))
+        {
             --this.moveStrafe;
             this.rightKeyDown = true;
-        } else {
+        }
+        else
+        {
             this.rightKeyDown = false;
         }
         this.jump = isKeyHeld(this.gameSettings.keyBindJump);
         this.sneak = isKeyHeld(this.gameSettings.keyBindSneak);
-        if (this.sneak) {
+        if (this.sneak)
+        {
             this.moveStrafe = (float) ((double) this.moveStrafe * 0.3D);
             this.moveForward = (float) ((double) this.moveForward * 0.3D);
         }
     }
 
-    public boolean isKeyHeld(KeyBinding keyBinding) {
-        if (ModuleManager.isModuleEnabled("GuiMove") && Wrapper.getMinecraft().currentScreen != null) {
-            if (Wrapper.getMinecraft().currentScreen instanceof InventoryEffectRenderer) {
+    public boolean isKeyHeld(KeyBinding keyBinding)
+    {
+        if (ModuleManager.isModuleEnabled("GuiMove") && Wrapper.getMinecraft().currentScreen != null)
+        {
+            if (Wrapper.getMinecraft().currentScreen instanceof InventoryEffectRenderer)
+            {
                 return Keyboard.isKeyDown(keyBinding.getKeyCode());
-            } else if (Wrapper.getMinecraft().world.isRemote && Wrapper.getMinecraft().currentScreen instanceof GuiIngameMenu) {
+            }
+            else if (Wrapper.getMinecraft().world.isRemote && Wrapper.getMinecraft().currentScreen instanceof GuiIngameMenu)
+            {
                 return Keyboard.isKeyDown(keyBinding.getKeyCode());
-            } else if (Wrapper.getMinecraft().currentScreen instanceof ClickGUI) {
+            }
+            else if (Wrapper.getMinecraft().currentScreen instanceof ClickGUI)
+            {
                 return Keyboard.isKeyDown(keyBinding.getKeyCode());
             } //sex
         }

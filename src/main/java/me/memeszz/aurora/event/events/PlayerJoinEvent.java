@@ -1,13 +1,16 @@
 package me.memeszz.aurora.event.events;
 
-public class PlayerJoinEvent {
+public class PlayerJoinEvent
+{
     private final String name;
 
-    public PlayerJoinEvent(String n){
+    public PlayerJoinEvent(String n)
+    {
         name = n;
     }
 
-    public String getName(){
+    public String getName()
+    {
         return name;
     }
 }

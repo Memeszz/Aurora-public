@@ -23,11 +23,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-public class AutoEchest extends Module {
-    public AutoEchest() {
-        super("AutoEChest", Category.Combat, "Places echest around you");
-    }
-
+public class AutoEchest extends Module
+{
     private int playerHotbarSlot = -1;
     private int lastHotbarSlot = -1;
     private int offsetStep = 0;
@@ -37,27 +34,36 @@ public class AutoEchest extends Module {
     private Setting.i tickDelay2;
     private Setting.i blocksPerTick2;
     private Setting.b rotate2;
+    public AutoEchest()
+    {
+        super("AutoEChest", Category.Combat, "Places echest around you");
+    }
 
-    public void setup() {
-        tickDelay2 = this.registerI("Delay", "Delay",0, 0, 10);
+    public void setup()
+    {
+        tickDelay2 = this.registerI("Delay", "Delay", 0, 0, 10);
         blocksPerTick2 = this.registerI("Bpt", "Bpt", 4, 0, 10);
-        rotate2 = this.registerB("Rotate", "Rotate",true);
+        rotate2 = this.registerB("Rotate", "Rotate", true);
 
     }
 
     @Override
-    protected void onDisable() {
+    protected void onDisable()
+    {
 
-        if (mc.player == null) {
+        if (mc.player == null)
+        {
             return;
         }
 
         // load initial player hand
-        if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1) {
+        if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1)
+        {
             mc.player.inventory.currentItem = playerHotbarSlot;
         }
 
-        if (isSneaking) {
+        if (isSneaking)
+        {
             mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
             isSneaking = false;
         }
@@ -67,31 +73,39 @@ public class AutoEchest extends Module {
     }
 
     @Listener
-    public void onUpdate(UpdateEvent event) {
-        if (!firstRun) {
-            if (delayStep < tickDelay2.getValue()) {
+    public void onUpdate(UpdateEvent event)
+    {
+        if (!firstRun)
+        {
+            if (delayStep < tickDelay2.getValue())
+            {
                 delayStep++;
                 return;
-            } else {
+            }
+            else
+            {
                 delayStep = 0;
             }
         }
 
-        if (firstRun) {
+        if (firstRun)
+        {
             firstRun = false;
         }
 
         int blocksPlaced = 0;
 
-        while (blocksPlaced < blocksPerTick2.getValue()) {
+        while (blocksPlaced < blocksPerTick2.getValue())
+        {
             Vec3d[] offsetPattern;
             int maxSteps;
-             {
+            {
                 offsetPattern = Offsets.SURROUND;
                 maxSteps = Offsets.SURROUND.length;
             }
 
-            if (offsetStep >= maxSteps) {
+            if (offsetStep >= maxSteps)
+            {
                 offsetStep = 0;
                 break;
             }
@@ -99,21 +113,25 @@ public class AutoEchest extends Module {
             BlockPos offsetPos = new BlockPos(offsetPattern[offsetStep]);
             BlockPos targetPos = new BlockPos(mc.player.getPositionVector()).add(offsetPos.getX(), offsetPos.getY(), offsetPos.getZ());
 
-            if (placeBlock(targetPos)) {
+            if (placeBlock(targetPos))
+            {
                 blocksPlaced++;
             }
 
             offsetStep++;
         }
 
-        if (blocksPlaced > 0) {
+        if (blocksPlaced > 0)
+        {
 
-            if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1) {
+            if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1)
+            {
                 mc.player.inventory.currentItem = playerHotbarSlot;
                 lastHotbarSlot = playerHotbarSlot;
             }
 
-            if (isSneaking) {
+            if (isSneaking)
+            {
                 mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
                 isSneaking = false;
             }
@@ -122,17 +140,21 @@ public class AutoEchest extends Module {
 
     }
 
-    private boolean placeBlock(BlockPos pos) {
+    private boolean placeBlock(BlockPos pos)
+    {
 
         // check if block is already placed
         Block block = mc.world.getBlockState(pos).getBlock();
-        if (!(block instanceof BlockAir) && !(block instanceof BlockLiquid)) {
+        if (!(block instanceof BlockAir) && !(block instanceof BlockLiquid))
+        {
             return false;
         }
 
         // check if entity blocks placing
-        for (Entity entity : mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos))) {
-            if (!(entity instanceof EntityItem) && !(entity instanceof EntityXPOrb)) {
+        for (Entity entity : mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)))
+        {
+            if (!(entity instanceof EntityItem) && !(entity instanceof EntityXPOrb))
+            {
                 return false;
             }
         }
@@ -140,7 +162,8 @@ public class AutoEchest extends Module {
         EnumFacing side = BlockInteractionHelper.getPlaceableSide(pos);
 
         // check if we have a block adjacent to blockpos to click at
-        if (side == null) {
+        if (side == null)
+        {
             return false;
         }
 
@@ -148,7 +171,8 @@ public class AutoEchest extends Module {
         EnumFacing opposite = side.getOpposite();
 
         // check if neighbor can be right clicked
-        if (BlockInteractionHelper.canBeClicked(neighbour)) {
+        if (BlockInteractionHelper.canBeClicked(neighbour))
+        {
             return false;
         }
 
@@ -157,21 +181,25 @@ public class AutoEchest extends Module {
 
         int obiSlot = findObiInHotbar();
 
-        if (obiSlot == -1) {
+        if (obiSlot == -1)
+        {
             this.disable();
         }
 
-        if (lastHotbarSlot != obiSlot) {
+        if (lastHotbarSlot != obiSlot)
+        {
             mc.player.inventory.currentItem = obiSlot;
             lastHotbarSlot = obiSlot;
         }
 
-        if (!isSneaking && BlockInteractionHelper.blackList.contains(neighbourBlock) || BlockInteractionHelper.shulkerList.contains(neighbourBlock)) {
+        if (!isSneaking && BlockInteractionHelper.blackList.contains(neighbourBlock) || BlockInteractionHelper.shulkerList.contains(neighbourBlock))
+        {
             mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
             isSneaking = true;
         }
 
-        if (rotate2.getValue()) {
+        if (rotate2.getValue())
+        {
             BlockInteractionHelper.faceVectorPacketInstant(hitVec);
         }
 
@@ -182,26 +210,29 @@ public class AutoEchest extends Module {
         mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, neighbour, opposite));
 
 
-
         return true;
 
     }
 
-    private int findObiInHotbar() {
+    private int findObiInHotbar()
+    {
 
         // search blocks in hotbar
         int slot = -1;
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++)
+        {
 
             // filter out non-block items
             ItemStack stack = mc.player.inventory.getStackInSlot(i);
 
-            if (stack == ItemStack.EMPTY || !(stack.getItem() instanceof ItemBlock)) {
+            if (stack == ItemStack.EMPTY || !(stack.getItem() instanceof ItemBlock))
+            {
                 continue;
             }
 
             Block block = ((ItemBlock) stack.getItem()).getBlock();
-            if (block instanceof BlockEnderChest) {
+            if (block instanceof BlockEnderChest)
+            {
                 slot = i;
                 break;
             }
@@ -212,7 +243,8 @@ public class AutoEchest extends Module {
 
     }
 
-    private static class Offsets {
+    private static class Offsets
+    {
 
         private static final Vec3d[] SURROUND = {
                 new Vec3d(1, 0, 0),

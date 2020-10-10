@@ -5,13 +5,16 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class AntiFog extends Module {
-    public AntiFog() {
+public class AntiFog extends Module
+{
+    public AntiFog()
+    {
         super("AntiFog", Category.Render);
     }
 
     @SubscribeEvent
-    public void fogDensity(EntityViewRenderEvent.FogDensity event) {
+    public void fogDensity(EntityViewRenderEvent.FogDensity event)
+    {
 
         event.setDensity(0);
         event.setCanceled(true);
@@ -19,13 +22,15 @@ public class AntiFog extends Module {
 
 
     @Override
-    public void onEnable() {
+    public void onEnable()
+    {
         MinecraftForge.EVENT_BUS.register(this);
 
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable()
+    {
         MinecraftForge.EVENT_BUS.unregister(this);
 
     }

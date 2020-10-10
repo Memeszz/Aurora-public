@@ -6,7 +6,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(CPacketPlayer.class)
-public abstract class MixinCPacketPlayer implements ICPacketPlayer {
+public abstract class MixinCPacketPlayer implements ICPacketPlayer
+{
 
     @Shadow
     protected double x;
@@ -25,32 +26,38 @@ public abstract class MixinCPacketPlayer implements ICPacketPlayer {
     protected boolean onGround;
 
     @Override
-    public void setX(double x) {
+    public void setX(double x)
+    {
         this.x = x;
     }
 
     @Override
-    public void setY(double y) {
+    public void setY(double y)
+    {
         this.y = y;
     }
 
     @Override
-    public void setZ(double z) {
+    public void setZ(double z)
+    {
         this.z = z;
     }
 
     @Override
-    public void setYaw(float yaw) {
+    public void setYaw(float yaw)
+    {
         this.yaw = yaw;
     }
 
     @Override
-    public void setPitch(float pitch) {
+    public void setPitch(float pitch)
+    {
         this.pitch = pitch;
     }
 
     @Override
-    public void setOnGround(boolean onGround) {
+    public void setOnGround(boolean onGround)
+    {
         this.onGround = onGround;
     }
 

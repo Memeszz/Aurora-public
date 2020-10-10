@@ -2,7 +2,8 @@ package me.memeszz.aurora.mixin.accessor;
 
 import net.minecraft.item.ItemStack;
 
-public interface IItemRenderer {
+public interface IItemRenderer
+{
 
     float getPrevEquippedProgressMainHand();
 

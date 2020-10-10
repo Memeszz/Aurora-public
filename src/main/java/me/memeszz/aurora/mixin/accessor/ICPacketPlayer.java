@@ -1,6 +1,7 @@
 package me.memeszz.aurora.mixin.accessor;
 
-public interface ICPacketPlayer {
+public interface ICPacketPlayer
+{
 
     void setOnGround(boolean onGround);
 

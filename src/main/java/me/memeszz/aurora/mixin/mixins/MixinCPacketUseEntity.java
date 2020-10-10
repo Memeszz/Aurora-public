@@ -6,7 +6,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(CPacketUseEntity.class)
-public abstract class MixinCPacketUseEntity implements ICPacketUseEntity {
+public abstract class MixinCPacketUseEntity implements ICPacketUseEntity
+{
 
     @Shadow
     protected CPacketUseEntity.Action action;

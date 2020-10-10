@@ -1,12 +1,16 @@
 package me.memeszz.aurora.util.friends;
 
-public class Friend {
+public class Friend
+{
     String name;
-    public Friend(String n){
+
+    public Friend(String n)
+    {
         name = n;
     }
 
-    public String getName(){
+    public String getName()
+    {
         return name;
     }
 }

@@ -6,7 +6,8 @@ import net.minecraft.item.ItemStack;
 /**
  * created by noil on 11/4/19 at 1:49 PM
  */
-public class EventRenderTooltip extends EventCancellable {
+public class EventRenderTooltip extends EventCancellable
+{
 
     private ItemStack itemStack;
 
@@ -14,33 +15,40 @@ public class EventRenderTooltip extends EventCancellable {
 
     private int y;
 
-    public EventRenderTooltip(ItemStack itemStack, int x, int y) {
+    public EventRenderTooltip(ItemStack itemStack, int x, int y)
+    {
         this.itemStack = itemStack;
         this.x = x;
         this.y = y;
     }
 
-    public ItemStack getItemStack() {
+    public ItemStack getItemStack()
+    {
         return itemStack;
     }
 
-    public void setItemStack(ItemStack itemStack) {
+    public void setItemStack(ItemStack itemStack)
+    {
         this.itemStack = itemStack;
     }
 
-    public int getX() {
+    public int getX()
+    {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(int x)
+    {
         this.x = x;
     }
 
-    public int getY() {
+    public int getY()
+    {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(int y)
+    {
         this.y = y;
     }
 }

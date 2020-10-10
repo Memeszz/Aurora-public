@@ -30,10 +30,10 @@ import java.util.List;
 
 import static me.memeszz.aurora.util.block.BlockInteractionHelper.canBeClicked;
 import static me.memeszz.aurora.util.block.BlockInteractionHelper.faceVectorPacketInstant;
-public class AutoTrap extends Module {
-    public AutoTrap() {
-        super("AutoTrap", Category.Combat, "Traps Players In Obsidian");
-    }
+
+public class AutoTrap extends Module
+{
+    Setting.mode mode;
     private Setting.i range;
     private Setting.i blocksPerTick;
     private Setting.i tickDelay;
@@ -47,30 +47,35 @@ public class AutoTrap extends Module {
     private int offsetStep = 0;
     private boolean firstRun;
     private int delayTimeout;
-    Setting.mode mode;
     private Setting.b triggerable;
     private Setting.i timeoutTicks;
+    public AutoTrap()
+    {
+        super("AutoTrap", Category.Combat, "Traps Players In Obsidian");
+    }
 
-
-    public void setup() {
+    public void setup()
+    {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Trap");
         modes.add("TrapFullRoof");
-        mode = this.registerMode("Mode","AutoTrapMode", modes, "TrapFullRoof");
-        rotate = this.registerB("Rotate","Rotate", true);
-        range = this.registerI("Range","Range", 5, 0, 6);
-        blocksPerTick = this.registerI("BlockPerTick", "BlockPerTick",5, 0, 10);
+        mode = this.registerMode("Mode", "AutoTrapMode", modes, "TrapFullRoof");
+        rotate = this.registerB("Rotate", "Rotate", true);
+        range = this.registerI("Range", "Range", 5, 0, 6);
+        blocksPerTick = this.registerI("BlockPerTick", "BlockPerTick", 5, 0, 10);
         tickDelay = this.registerI("Delay", "Delay", 0, 0, 10);
         timeoutTicks = this.registerI("TimeoutTicks", "TimeoutTicks", 7, 0, 20);
-        triggerable = this.registerB("Triggerable", "Triggerable",true);
+        triggerable = this.registerB("Triggerable", "Triggerable", true);
 
 
     }
 
-    protected void onEnable() {
+    protected void onEnable()
+    {
         delayTimeout = 0;
 
-        if (mc.player == null) {
+        if (mc.player == null)
+        {
             this.disable();
             return;
         }
@@ -84,18 +89,22 @@ public class AutoTrap extends Module {
     }
 
     @Override
-    protected void onDisable() {
+    protected void onDisable()
+    {
         delayTimeout = 0;
 
-        if (mc.player == null) {
+        if (mc.player == null)
+        {
             return;
         }
 
-        if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1) {
+        if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1)
+        {
             mc.player.inventory.currentItem = playerHotbarSlot;
         }
 
-        if (isSneaking) {
+        if (isSneaking)
+        {
             mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
             isSneaking = false;
         }
@@ -105,39 +114,51 @@ public class AutoTrap extends Module {
 
 
     @Listener
-    public void onUpdate(UpdateEvent event) {
+    public void onUpdate(UpdateEvent event)
+    {
         delayTimeout++;
 
-        if (mc.player == null) {
+        if (mc.player == null)
+        {
             return;
         }
-        if (triggerable.getValue() && delayTimeout >= timeoutTicks.getValue()) {
+        if (triggerable.getValue() && delayTimeout >= timeoutTicks.getValue())
+        {
             this.disable();
         }
-        if (!firstRun) {
-            if (delayStep < tickDelay.getValue()) {
+        if (!firstRun)
+        {
+            if (delayStep < tickDelay.getValue())
+            {
                 delayStep++;
                 return;
-            } else {
+            }
+            else
+            {
                 delayStep = 0;
             }
         }
 
         findClosestTarget();
 
-        if (closestTarget == null) {
-            if (firstRun) {
+        if (closestTarget == null)
+        {
+            if (firstRun)
+            {
                 firstRun = false;
 
             }
             return;
         }
 
-        if (firstRun) {
+        if (firstRun)
+        {
             firstRun = false;
             lastTickTargetName = closestTarget.getName();
 
-        } else if (!lastTickTargetName.equals(closestTarget.getName())) {
+        }
+        else if (!lastTickTargetName.equals(closestTarget.getName()))
+        {
             lastTickTargetName = closestTarget.getName();
             offsetStep = 0;
 
@@ -145,11 +166,13 @@ public class AutoTrap extends Module {
 
         List<Vec3d> placeTargets = new ArrayList<>();
 
-        if(mode.getValue().equalsIgnoreCase("Trap")) {
+        if (mode.getValue().equalsIgnoreCase("Trap"))
+        {
             Collections.addAll(placeTargets, Offsets.TRAP);
         }
 //antistep
-        if(mode.getValue().equalsIgnoreCase("TrapFullRoof")) {
+        if (mode.getValue().equalsIgnoreCase("TrapFullRoof"))
+        {
             Collections.addAll(placeTargets, Offsets.TRAPFULLROOF);
         }
 
@@ -163,9 +186,11 @@ public class AutoTrap extends Module {
 
         int blocksPlaced = 0;
 
-        while (blocksPlaced < blocksPerTick.getValue()) {
+        while (blocksPlaced < blocksPerTick.getValue())
+        {
 
-            if (offsetStep >= placeTargets.size()) {
+            if (offsetStep >= placeTargets.size())
+            {
                 offsetStep = 0;
                 break;
             }
@@ -173,7 +198,8 @@ public class AutoTrap extends Module {
             BlockPos offsetPos = new BlockPos(placeTargets.get(offsetStep));
             BlockPos targetPos = new BlockPos(closestTarget.getPositionVector()).down().add(offsetPos.getX(), offsetPos.getY(), offsetPos.getZ());
 
-            if (placeBlockInRange(targetPos, range.getValue())) {
+            if (placeBlockInRange(targetPos, range.getValue()))
+            {
                 blocksPlaced++;
             }
 
@@ -182,14 +208,17 @@ public class AutoTrap extends Module {
         }
 
 
-        if (blocksPlaced > 0) {
+        if (blocksPlaced > 0)
+        {
 
-            if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1) {
+            if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1)
+            {
                 mc.player.inventory.currentItem = playerHotbarSlot;
                 lastHotbarSlot = playerHotbarSlot;
             }
 
-            if (isSneaking) {
+            if (isSneaking)
+            {
                 mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
                 isSneaking = false;
             }
@@ -198,17 +227,21 @@ public class AutoTrap extends Module {
 
     }
 
-    private boolean placeBlockInRange(BlockPos pos, double range) {
+    private boolean placeBlockInRange(BlockPos pos, double range)
+    {
 
         // check if block is already placed
         Block block = mc.world.getBlockState(pos).getBlock();
-        if (!(block instanceof BlockAir) && !(block instanceof BlockLiquid)) {
+        if (!(block instanceof BlockAir) && !(block instanceof BlockLiquid))
+        {
             return false;
         }
 
         // check if entity blocks placing
-        for (Entity entity : mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos))) {
-            if (!(entity instanceof EntityItem) && !(entity instanceof EntityXPOrb)) {
+        for (Entity entity : mc.world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos)))
+        {
+            if (!(entity instanceof EntityItem) && !(entity instanceof EntityXPOrb))
+            {
                 return false;
             }
         }
@@ -216,7 +249,8 @@ public class AutoTrap extends Module {
         EnumFacing side = BlockInteractionHelper.getPlaceableSide(pos);
 
         // check if we have a block adjacent to blockpos to click at
-        if (side == null) {
+        if (side == null)
+        {
             return false;
         }
 
@@ -224,34 +258,40 @@ public class AutoTrap extends Module {
         EnumFacing opposite = side.getOpposite();
 
         // check if neighbor can be right clicked
-        if (canBeClicked(neighbour)) {
+        if (canBeClicked(neighbour))
+        {
             return false;
         }
 
         Vec3d hitVec = new Vec3d(neighbour).add(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
         Block neighbourBlock = mc.world.getBlockState(neighbour).getBlock();
 
-        if (mc.player.getPositionVector().distanceTo(hitVec) > range) {
+        if (mc.player.getPositionVector().distanceTo(hitVec) > range)
+        {
             return false;
         }
 
         int obiSlot = findObiInHotbar();
 
-        if (obiSlot == -1) {
+        if (obiSlot == -1)
+        {
             this.disable();
         }
 
-        if (lastHotbarSlot != obiSlot) {
+        if (lastHotbarSlot != obiSlot)
+        {
             mc.player.inventory.currentItem = obiSlot;
             lastHotbarSlot = obiSlot;
         }
 
-        if (!isSneaking && BlockInteractionHelper.blackList.contains(neighbourBlock) || BlockInteractionHelper.shulkerList.contains(neighbourBlock)) {
+        if (!isSneaking && BlockInteractionHelper.blackList.contains(neighbourBlock) || BlockInteractionHelper.shulkerList.contains(neighbourBlock))
+        {
             mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
             isSneaking = true;
         }
 
-        if (rotate.getValue()) {
+        if (rotate.getValue())
+        {
             faceVectorPacketInstant(hitVec);
         }
 
@@ -261,21 +301,25 @@ public class AutoTrap extends Module {
 
     }
 
-    private int findObiInHotbar() {
+    private int findObiInHotbar()
+    {
 
         // search blocks in hotbar
         int slot = -1;
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++)
+        {
 
             // filter out non-block items
             ItemStack stack = mc.player.inventory.getStackInSlot(i);
 
-            if (stack == ItemStack.EMPTY || !(stack.getItem() instanceof ItemBlock)) {
+            if (stack == ItemStack.EMPTY || !(stack.getItem() instanceof ItemBlock))
+            {
                 continue;
             }
 
             Block block = ((ItemBlock) stack.getItem()).getBlock();
-            if (block instanceof BlockObsidian) {
+            if (block instanceof BlockObsidian)
+            {
                 slot = i;
                 break;
             }
@@ -286,36 +330,44 @@ public class AutoTrap extends Module {
 
     }
 
-    private void findClosestTarget() {
+    private void findClosestTarget()
+    {
 
         List<EntityPlayer> playerList = mc.world.playerEntities;
 
         closestTarget = null;
 
-        for (EntityPlayer target : playerList) {
+        for (EntityPlayer target : playerList)
+        {
 
-            if (target == mc.player) {
+            if (target == mc.player)
+            {
                 continue;
             }
 
-            if (Friends.isFriend(target.getName())) {
+            if (Friends.isFriend(target.getName()))
+            {
                 continue;
             }
 
-            if (EntityUtil.isLiving(target)) {
+            if (EntityUtil.isLiving(target))
+            {
                 continue;
             }
 
-            if ((target).getHealth() <= 0) {
+            if ((target).getHealth() <= 0)
+            {
                 continue;
             }
 
-            if (closestTarget == null) {
+            if (closestTarget == null)
+            {
                 closestTarget = target;
                 continue;
             }
 
-            if (mc.player.getDistance(target) < mc.player.getDistance(closestTarget)) {
+            if (mc.player.getDistance(target) < mc.player.getDistance(closestTarget))
+            {
                 closestTarget = target;
             }
 
@@ -324,11 +376,13 @@ public class AutoTrap extends Module {
     }
 
     @Override
-    public String getHudInfo() {
+    public String getHudInfo()
+    {
         return "\u00A77[\u00A7f" + mode.getValue() + "\u00A77]";
     }
 
-    private static class Offsets {
+    private static class Offsets
+    {
 
         private static final Vec3d[] TRAP = {
                 new Vec3d(0, 0, -1),

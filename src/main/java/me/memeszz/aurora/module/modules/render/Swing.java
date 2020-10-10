@@ -6,17 +6,20 @@ import me.memeszz.aurora.module.Module;
 import net.minecraft.util.EnumHand;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
-public class Swing extends Module {
-    public Swing() {
+public class Swing extends Module
+{
+    public Swing()
+    {
         super("Swing", Category.Render, "Swing With Your OffHand");
     }
 
     @Listener
-    public void onUpdate(UpdateEvent event) {
+    public void onUpdate(UpdateEvent event)
+    {
         if (mc.world == null)
             return;
 
-            mc.player.swingingHand = EnumHand.OFF_HAND;
+        mc.player.swingingHand = EnumHand.OFF_HAND;
 
     }
 }

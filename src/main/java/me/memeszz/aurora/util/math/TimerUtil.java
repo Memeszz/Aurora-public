@@ -1,18 +1,22 @@
 package me.memeszz.aurora.util.math;
 
-public final class TimerUtil {
+public final class TimerUtil
+{
 
     private long time;
 
-    public TimerUtil() {
+    public TimerUtil()
+    {
         time = -1;
     }
 
-    public boolean passed(double ms) {
+    public boolean passed(double ms)
+    {
         return System.currentTimeMillis() - this.time >= ms;
     }
 
-    public void reset() {
+    public void reset()
+    {
         this.time = System.currentTimeMillis();
     }
 

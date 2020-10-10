@@ -20,25 +20,28 @@ import java.awt.*;
 
 
 @Mixin(RenderLivingBase.class)
-public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> extends Render<T> {
+public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> extends Render<T>
+{
 
     @Shadow
     protected ModelBase mainModel;
 
-    protected MixinRendererLivingEntity() {
+    protected MixinRendererLivingEntity()
+    {
         super(null);
     }
-
 
 
     /**
      * @author
      */
     @Overwrite
-    protected void renderModel(T entitylivingbaseIn, float p_77036_2_, float p_77036_3_, float p_77036_4_, float p_77036_5_, float p_77036_6_, float scaleFactor) {
+    protected void renderModel(T entitylivingbaseIn, float p_77036_2_, float p_77036_3_, float p_77036_4_, float p_77036_5_, float p_77036_6_, float scaleFactor)
+    {
         boolean isPlayer = entitylivingbaseIn instanceof EntityPlayer;
 
-        if (!bindEntityTexture(entitylivingbaseIn)) {
+        if (!bindEntityTexture(entitylivingbaseIn))
+        {
             return;
         }
 
@@ -49,10 +52,13 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> exte
 
         float gamma = mc.gameSettings.gammaSetting;
         mc.gameSettings.gammaSetting = 100000F;
-        if (ModuleManager.isModuleEnabled("ESP")) {
-            switch (ESP.mode.getValue()) {
+        if (ModuleManager.isModuleEnabled("ESP"))
+        {
+            switch (ESP.mode.getValue())
+            {
                 case "WireFrame":
-                    if (isPlayer) {
+                    if (isPlayer)
+                    {
                         GL11.glPushMatrix();
                         GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
                         GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
@@ -63,7 +69,8 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> exte
                         GL11.glEnable(GL11.GL_BLEND);
                         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                         Color n = new Color(255, 0, 0);
-                        if (Friends.isFriend(entitylivingbaseIn.getName())) {
+                        if (Friends.isFriend(entitylivingbaseIn.getName()))
+                        {
                             n = new Color(5, 218, 255, 255);
                         }
                         RenderUtil.color(n.getRGB());
@@ -76,9 +83,11 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> exte
 
                 case "OutLine":
                     boolean player = entitylivingbaseIn instanceof EntityPlayer && entitylivingbaseIn != Minecraft.getMinecraft().player;
-                    if (player) {
+                    if (player)
+                    {
                         Color n = new Color(255, 0, 0);
-                        if (Friends.isFriend(entitylivingbaseIn.getName())) {
+                        if (Friends.isFriend(entitylivingbaseIn.getName()))
+                        {
                             n = new Color(5, 218, 255, 255);
                         }
                         OutlineUtils.setColor(n);
@@ -104,7 +113,8 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> exte
         mc.gameSettings.gammaSetting = gamma;
 
 
-        if (!ESP.mode.getValue().equalsIgnoreCase("Wireframe") || !ModuleManager.isModuleEnabled("ESP") || !isPlayer) {
+        if (!ESP.mode.getValue().equalsIgnoreCase("Wireframe") || !ModuleManager.isModuleEnabled("ESP") || !isPlayer)
+        {
             this.mainModel.render(entitylivingbaseIn, p_77036_2_, p_77036_3_, p_77036_4_, p_77036_5_, p_77036_6_, scaleFactor);
         }
 
@@ -114,10 +124,10 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> exte
 
 
 
-    /*/**
-     * @author auto / pharmacies
-     * auto made these for hummingbird
-     */
+/*/**
+ * @author auto / pharmacies
+ * auto made these for hummingbird
+ */
 
 
     /*

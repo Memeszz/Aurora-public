@@ -27,28 +27,13 @@ import java.util.List;
 import static me.memeszz.aurora.module.modules.combat.Surround.canBeClicked;
 import static me.memeszz.aurora.module.modules.combat.Surround.faceVectorPacketInstant;
 
-public class AutoWeb extends Module {
-    public AutoWeb() {
-        super("AutoWeb", Category.Combat, "Webs Players");
-    }
-
+public class AutoWeb extends Module
+{
+    Setting.mode mode;
     private Setting.d range;
     private Setting.b rotate;
     private Setting.i tickDelay;
     private Setting.i blocksPerTick;
-    Setting.mode mode;
-
-    public void setup() {
-        ArrayList<String> modes = new ArrayList<>();
-        modes.add("Full");
-        modes.add("Feet");
-        modes.add("Body");
-        mode = this.registerMode("Mode", "Mode", modes, "Feet");
-        range = this.registerD("Range", "Range",4.5, 0.0, 6.0);
-        blocksPerTick = this.registerI("BPT", "BPT",4, 0, 10);
-        tickDelay = this.registerI("TimeoutTicks", "TimeoutTicks", 1, 0, 10);
-        rotate = this.registerB("Rotate", "Rotate", true);
-    }
     private EntityPlayer closestTarget;
     private String lastTickTargetName;
     private int playerHotbarSlot = -1;
@@ -57,11 +42,30 @@ public class AutoWeb extends Module {
     private boolean isSneaking = false;
     private int offsetStep = 0;
     private boolean firstRun;
+    public AutoWeb()
+    {
+        super("AutoWeb", Category.Combat, "Webs Players");
+    }
+
+    public void setup()
+    {
+        ArrayList<String> modes = new ArrayList<>();
+        modes.add("Full");
+        modes.add("Feet");
+        modes.add("Body");
+        mode = this.registerMode("Mode", "Mode", modes, "Feet");
+        range = this.registerD("Range", "Range", 4.5, 0.0, 6.0);
+        blocksPerTick = this.registerI("BPT", "BPT", 4, 0, 10);
+        tickDelay = this.registerI("TimeoutTicks", "TimeoutTicks", 1, 0, 10);
+        rotate = this.registerB("Rotate", "Rotate", true);
+    }
 
     @Override
-    protected void onEnable() {
+    protected void onEnable()
+    {
 
-        if (mc.player == null) {
+        if (mc.player == null)
+        {
             this.disable();
             return;
         }
@@ -74,17 +78,21 @@ public class AutoWeb extends Module {
     }
 
     @Override
-    protected void onDisable() {
+    protected void onDisable()
+    {
 
-        if (mc.player == null) {
+        if (mc.player == null)
+        {
             return;
         }
 
-        if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1) {
+        if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1)
+        {
             mc.player.inventory.currentItem = playerHotbarSlot;
         }
 
-        if (isSneaking) {
+        if (isSneaking)
+        {
             mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
             isSneaking = false;
         }
@@ -96,51 +104,65 @@ public class AutoWeb extends Module {
     }
 
     @Listener
-    public void onUpdate(UpdateEvent event) {
+    public void onUpdate(UpdateEvent event)
+    {
 
-        if (mc.player == null) {
+        if (mc.player == null)
+        {
             return;
         }
 
 
-        if (!firstRun) {
-            if (delayStep < tickDelay.getValue()) {
+        if (!firstRun)
+        {
+            if (delayStep < tickDelay.getValue())
+            {
                 delayStep++;
                 return;
-            } else {
+            }
+            else
+            {
                 delayStep = 0;
             }
         }
 
         findClosestTarget();
 
-        if (closestTarget == null) {
-            if (firstRun) {
+        if (closestTarget == null)
+        {
+            if (firstRun)
+            {
                 firstRun = false;
 
             }
             return;
         }
-        if (firstRun) {
+        if (firstRun)
+        {
             firstRun = false;
             lastTickTargetName = closestTarget.getName();
 
-        } else if (!lastTickTargetName.equals(closestTarget.getName())) {
+        }
+        else if (!lastTickTargetName.equals(closestTarget.getName()))
+        {
             lastTickTargetName = closestTarget.getName();
             offsetStep = 0;
         }
 
         List<Vec3d> placeTargets = new ArrayList<>();
 
-        if(mode.getValue().equalsIgnoreCase("Full")) {
+        if (mode.getValue().equalsIgnoreCase("Full"))
+        {
             Collections.addAll(placeTargets, Offsets.FULL);
         }
 
-        if(mode.getValue().equalsIgnoreCase("Feet")) {
+        if (mode.getValue().equalsIgnoreCase("Feet"))
+        {
             Collections.addAll(placeTargets, Offsets.FEET);
         }
 
-        if(mode.getValue().equalsIgnoreCase("Body")) {
+        if (mode.getValue().equalsIgnoreCase("Body"))
+        {
             Collections.addAll(placeTargets, Offsets.BODY);
         }
 
@@ -153,9 +175,11 @@ public class AutoWeb extends Module {
 
         int blocksPlaced = 0;
 
-        while (blocksPlaced < blocksPerTick.getValue()) {
+        while (blocksPlaced < blocksPerTick.getValue())
+        {
 
-            if (offsetStep >= placeTargets.size()) {
+            if (offsetStep >= placeTargets.size())
+            {
                 offsetStep = 0;
                 break;
             }
@@ -163,7 +187,8 @@ public class AutoWeb extends Module {
             BlockPos offsetPos = new BlockPos(placeTargets.get(offsetStep));
             BlockPos targetPos = new BlockPos(closestTarget.getPositionVector()).down().add(offsetPos.getX(), offsetPos.getY(), offsetPos.getZ());
 
-            if (placeBlockInRange(targetPos, range.getValue())) {
+            if (placeBlockInRange(targetPos, range.getValue()))
+            {
                 blocksPlaced++;
             }
 
@@ -171,14 +196,17 @@ public class AutoWeb extends Module {
 
         }
 
-        if (blocksPlaced > 0) {
+        if (blocksPlaced > 0)
+        {
 
-            if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1) {
+            if (lastHotbarSlot != playerHotbarSlot && playerHotbarSlot != -1)
+            {
                 mc.player.inventory.currentItem = playerHotbarSlot;
                 lastHotbarSlot = playerHotbarSlot;
             }
 
-            if (isSneaking) {
+            if (isSneaking)
+            {
                 mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.STOP_SNEAKING));
                 isSneaking = false;
             }
@@ -187,18 +215,21 @@ public class AutoWeb extends Module {
 
     }
 
-    private boolean placeBlockInRange(BlockPos pos, double range) {
+    private boolean placeBlockInRange(BlockPos pos, double range)
+    {
 
         // check if block is already placed
         Block block = mc.world.getBlockState(pos).getBlock();
-        if (!(block instanceof BlockAir) && !(block instanceof BlockLiquid)) {
+        if (!(block instanceof BlockAir) && !(block instanceof BlockLiquid))
+        {
             return false;
         }
 
         EnumFacing side = BlockInteractionHelper.getPlaceableSide(pos);
 
         // check if we have a block adjacent to blockpos to click at
-        if (side == null) {
+        if (side == null)
+        {
             return false;
         }
 
@@ -206,34 +237,40 @@ public class AutoWeb extends Module {
         EnumFacing opposite = side.getOpposite();
 
         // check if neighbor can be right clicked
-        if (!canBeClicked(neighbour)) {
+        if (!canBeClicked(neighbour))
+        {
             return false;
         }
 
         Vec3d hitVec = new Vec3d(neighbour).add(0.5, 0.5, 0.5).add(new Vec3d(opposite.getDirectionVec()).scale(0.5));
         Block neighbourBlock = mc.world.getBlockState(neighbour).getBlock();
 
-        if (mc.player.getPositionVector().distanceTo(hitVec) > range) {
+        if (mc.player.getPositionVector().distanceTo(hitVec) > range)
+        {
             return false;
         }
 
         int obiSlot = findObiInHotbar();
 
-        if (obiSlot == -1) {
+        if (obiSlot == -1)
+        {
             this.disable();
         }
 
-        if (lastHotbarSlot != obiSlot) {
+        if (lastHotbarSlot != obiSlot)
+        {
             mc.player.inventory.currentItem = obiSlot;
             lastHotbarSlot = obiSlot;
         }
 
-        if (!isSneaking && BlockInteractionHelper.blackList.contains(neighbourBlock) || BlockInteractionHelper.shulkerList.contains(neighbourBlock)) {
+        if (!isSneaking && BlockInteractionHelper.blackList.contains(neighbourBlock) || BlockInteractionHelper.shulkerList.contains(neighbourBlock))
+        {
             mc.player.connection.sendPacket(new CPacketEntityAction(mc.player, CPacketEntityAction.Action.START_SNEAKING));
             isSneaking = true;
         }
 
-        if (rotate.getValue()) {
+        if (rotate.getValue())
+        {
             faceVectorPacketInstant(hitVec);
         }
 
@@ -244,21 +281,25 @@ public class AutoWeb extends Module {
 
     }
 
-    private int findObiInHotbar() {
+    private int findObiInHotbar()
+    {
 
         // search blocks in hotbar
         int slot = -1;
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++)
+        {
 
             // filter out non-block items
             ItemStack stack = mc.player.inventory.getStackInSlot(i);
 
-            if (stack == ItemStack.EMPTY || !(stack.getItem() instanceof ItemBlock)) {
+            if (stack == ItemStack.EMPTY || !(stack.getItem() instanceof ItemBlock))
+            {
                 continue;
             }
 
             Block block = ((ItemBlock) stack.getItem()).getBlock();
-            if (block instanceof BlockWeb) {
+            if (block instanceof BlockWeb)
+            {
                 slot = i;
                 break;
             }
@@ -269,36 +310,44 @@ public class AutoWeb extends Module {
 
     }
 
-    private void findClosestTarget() {
+    private void findClosestTarget()
+    {
 
         List<EntityPlayer> playerList = mc.world.playerEntities;
 
         closestTarget = null;
 
-        for (EntityPlayer target : playerList) {
+        for (EntityPlayer target : playerList)
+        {
 
-            if (target == mc.player) {
+            if (target == mc.player)
+            {
                 continue;
             }
 
-            if (Friends.isFriend(target.getName())) {
+            if (Friends.isFriend(target.getName()))
+            {
                 continue;
             }
 
-            if (EntityUtil.isLiving(target)) {
+            if (EntityUtil.isLiving(target))
+            {
                 continue;
             }
 
-            if ((target).getHealth() <= 0) {
+            if ((target).getHealth() <= 0)
+            {
                 continue;
             }
 
-            if (closestTarget == null) {
+            if (closestTarget == null)
+            {
                 closestTarget = target;
                 continue;
             }
 
-            if (mc.player.getDistance(target) < mc.player.getDistance(closestTarget)) {
+            if (mc.player.getDistance(target) < mc.player.getDistance(closestTarget))
+            {
                 closestTarget = target;
             }
 
@@ -307,13 +356,15 @@ public class AutoWeb extends Module {
     }
 
     @Override
-    public String getHudInfo() {
+    public String getHudInfo()
+    {
         return "\u00A77[\u00A7f" + mode.getValue() + "\u00A77]";
 
     }
 
 
-    private static class Offsets {
+    private static class Offsets
+    {
 
         private static final Vec3d[] FULL = {
                 new Vec3d(0, 2, 0),
