@@ -14,7 +14,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: rewrite
+
 public class HoleESP extends Module
 {
     public final List<Hole> holes = new ArrayList<>();
