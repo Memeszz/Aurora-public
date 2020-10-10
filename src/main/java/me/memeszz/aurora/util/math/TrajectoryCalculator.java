@@ -267,6 +267,8 @@ public class TrajectoryCalculator
                     return 0.7F;
                 case NORMAL:
                     return 1.5f;
+                default:
+                    break;
             }
             // The standard gravity
             return 1.5f;
@@ -288,6 +290,8 @@ public class TrajectoryCalculator
                     return 0.07f;
                 case NORMAL:
                     return 0.03f;
+                default:
+                    break;
             }
 
             // The standard gravity
