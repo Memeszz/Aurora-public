@@ -4,9 +4,8 @@ import me.memeszz.aurora.module.Module;
 
 public class AutoCrash extends Module {
     public AutoCrash() {
-        super ("AutoCrash", Category.Misc);
+        super("AutoCrash", Category.Misc);
     }
-
 
 
     public void onEnable() {

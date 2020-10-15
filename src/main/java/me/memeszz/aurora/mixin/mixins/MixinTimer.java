@@ -8,6 +8,11 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(Timer.class)
 public abstract class MixinTimer implements ITimer {
 
-    @Accessor @Override public abstract void setTickLength(float tickLength);
-    @Accessor @Override public abstract float getTickLength();
+    @Accessor
+    @Override
+    public abstract float getTickLength();
+
+    @Accessor
+    @Override
+    public abstract void setTickLength(float tickLength);
 }

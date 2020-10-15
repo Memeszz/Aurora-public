@@ -23,29 +23,33 @@ import java.awt.*;
 @Mod(modid = Aurora.MODID, name = Aurora.FORGENAME, version = Aurora.MODVER, clientSideOnly = true)
 public class Aurora {
     public static final String MODID = "aurora";
-    public static String MODNAME = "Aurora";
     public static final String MODVER = "4.2";
     public static final String FORGENAME = "Aurora";
+    public static String MODNAME = "Aurora";
     public static final Logger log = LogManager.getLogger(MODNAME);
+    public static CFontRenderer fontRenderer;
+    public static CFontRenderer fontRendererBIG;
+    public static Enemies enemies;
+    @Mod.Instance
+    public static Aurora INSTANCE;
     public ClickGUI clickGui;
     public SettingManager settingsManager;
     public Friends friends;
     public ModuleManager moduleManager;
     public SaveModules saveModules;
     public MacroManager macroManager;
-    EventProcessor eventProcessor;
     public LoadConfiguration loadConfiguration;
-    public static CFontRenderer fontRenderer;
-    public static CFontRenderer fontRendererBIG;
-    public static Enemies enemies;
-    private EventManager eventManager;
     public SaveConfiguration saveConfiguration;
     public LoadModules loadModules;
-    @Mod.Instance
-    public static Aurora INSTANCE;
+    EventProcessor eventProcessor;
+    private EventManager eventManager;
 
     public Aurora() {
         INSTANCE = this;
+    }
+
+    public static Aurora getInstance() {
+        return INSTANCE;
     }
 
     @Mod.EventHandler
@@ -93,18 +97,12 @@ public class Aurora {
         log.info("Initialization complete!\n");
     }
 
-
     public EventManager getEventManager() {
         if (this.eventManager == null) {
             this.eventManager = new AnnotatedEventManager();
         }
 
         return this.eventManager;
-    }
-
-
-    public static Aurora getInstance() {
-        return INSTANCE;
     }
 
 }

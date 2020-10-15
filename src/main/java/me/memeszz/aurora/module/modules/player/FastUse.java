@@ -12,20 +12,21 @@ import net.minecraft.util.math.BlockPos;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class FastUse extends Module {
-    public FastUse() {
-        super("FastUse", Category.Player, "Sets right click / block break delay to 0");
-    }
-
     Setting.b xp;
     Setting.b crystals;
     Setting.b all;
     Setting.b breakS;
     Setting.b fastBow;
-//ez
-    public void setup(){
-        xp = this.registerB( "EXP", "EXP",true);
-        crystals = this.registerB("Crystals", "Crystals",false);
-        all = this.registerB("Everything", "Everything",false);
+
+    public FastUse() {
+        super("FastUse", Category.Player, "Sets right click / block break delay to 0");
+    }
+
+    //ez
+    public void setup() {
+        xp = this.registerB("EXP", "EXP", true);
+        crystals = this.registerB("Crystals", "Crystals", false);
+        all = this.registerB("Everything", "Everything", false);
         breakS = this.registerB("FastBreak", "FastBreak", true);
         fastBow = this.registerB("FastBow", "FastBow", false);
     }
@@ -49,7 +50,7 @@ public class FastUse extends Module {
             ((IMinecraft) mc).setRightClickDelayTimer(0);
         }
 
-        if (breakS.getValue()){
+        if (breakS.getValue()) {
             ((IPlayerControllerMP) mc.playerController).setBlockHitDelay(0);
         }
 

@@ -25,17 +25,34 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = Minecraft.class)
 public abstract class MixinMinecraft implements IMinecraft {
 
-    @Accessor @Override public abstract Timer getTimer();
-    @Accessor @Override public abstract void setSession(Session session);
-    @Accessor @Override public abstract void setRightClickDelayTimer(int delay);
-    @Accessor @Override public abstract Session getSession();
-  //  @Accessor @Override public abstract void clickMouse();
-    @Accessor @Override public abstract ServerData getCurrentServerData();
+    @Shadow
+    @Final
+    private static Logger LOGGER;
+    @Shadow
+    public EntityPlayerSP player;
+    @Shadow
+    public PlayerControllerMP playerController;
 
-    @Shadow public EntityPlayerSP player;
-    @Shadow public PlayerControllerMP playerController;
+    @Accessor
+    @Override
+    public abstract Timer getTimer();
 
-    @Shadow @Final private static Logger LOGGER;
+    @Accessor
+    @Override
+    public abstract void setRightClickDelayTimer(int delay);
+
+    @Accessor
+    @Override
+    public abstract Session getSession();
+
+    @Accessor
+    @Override
+    public abstract void setSession(Session session);
+
+    //  @Accessor @Override public abstract void clickMouse();
+    @Accessor
+    @Override
+    public abstract ServerData getCurrentServerData();
 
     @Inject(method = "shutdown()V", at = @At("HEAD")) // saves the config when the game shuts down
     public void saveSettingsOnShutdown(CallbackInfo ci) {
@@ -45,19 +62,19 @@ public abstract class MixinMinecraft implements IMinecraft {
 
     @Inject(method = "displayGuiScreen", at = @At("HEAD"))
     private void displayGuiScreen(GuiScreen guiScreenIn, CallbackInfo info) {
-            GuiScreenDisplayedEvent screenEvent = new GuiScreenDisplayedEvent(guiScreenIn);
-            Aurora.getInstance().getEventManager().dispatchEvent(screenEvent);
+        GuiScreenDisplayedEvent screenEvent = new GuiScreenDisplayedEvent(guiScreenIn);
+        Aurora.getInstance().getEventManager().dispatchEvent(screenEvent);
     }
 
     @Redirect(method = "sendClickBlockToController", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;isHandActive()Z"))
-    private boolean isHandActive(EntityPlayerSP player){
-        if(ModuleManager.isModuleEnabled("MultiTask")) return false;
+    private boolean isHandActive(EntityPlayerSP player) {
+        if (ModuleManager.isModuleEnabled("MultiTask")) return false;
         return this.player.isHandActive();
     }
 
     @Redirect(method = "rightClickMouse", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/PlayerControllerMP;getIsHittingBlock()Z"))
-    private boolean isHittingBlock(PlayerControllerMP playerControllerMP){
-        if(ModuleManager.isModuleEnabled("MultiTask")) return false;
+    private boolean isHittingBlock(PlayerControllerMP playerControllerMP) {
+        if (ModuleManager.isModuleEnabled("MultiTask")) return false;
         return this.playerController.getIsHittingBlock();
     }
 

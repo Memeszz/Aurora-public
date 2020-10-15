@@ -13,12 +13,12 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.ArrayList;
 
 public class KillAura extends Module {
+    public static EntityPlayer target;
     Setting.d range;
     Setting.b criticals;
     Setting.b rotate;
     Setting.mode aimMode;
     boolean rotating;
-    public static EntityPlayer target;
 
     public KillAura() {
         super("KillAura", Category.Combat, "Attacks nearby players");
@@ -28,13 +28,13 @@ public class KillAura extends Module {
     public void setup() {
         ArrayList<String> aimModes = new ArrayList<>();
         aimModes.add("Leg");
-        aimMode = registerMode("Mode","Mode",  aimModes, "Leg");
+        aimMode = registerMode("Mode", "Mode", aimModes, "Leg");
         boolean swordOnly = true;
         boolean caCheck = true;
         boolean tpsSync = false;
         boolean isAttacking = false;
-        this.range = this.registerD("Range", "Range",4.5, 0.0, 10.0);
-        this.criticals = this.registerB("Criticals", "Criticals",true);
+        this.range = this.registerD("Range", "Range", 4.5, 0.0, 10.0);
+        this.criticals = this.registerB("Criticals", "Criticals", true);
         this.rotate = this.registerB("Rotate", "Rotate", true);
     }
 
@@ -54,16 +54,15 @@ public class KillAura extends Module {
                             if (rotating && rotate.getValue()) {
                                 float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), player.getPositionVector());
                                 mc.player.rotationYaw = angle[0];
-                                switch (aimMode.getValue()) {
-                                    case "Leg":
-                                        mc.player.rotationPitch = angle[1];
-                                        break;
+                                if ("Leg".equals(aimMode.getValue())) {
+                                    mc.player.rotationPitch = angle[1];
                                 }
                             }
                             attackPlayer(player);
                         }
                         target = player;
-                    } else {
+                    }
+                    else {
                         rotating = false;
                     }
 

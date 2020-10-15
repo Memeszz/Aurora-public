@@ -11,17 +11,17 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.ArrayList;
 
 public class Criticals extends Module {
+    Setting.mode mode;
+
     public Criticals() {
         super("Criticals", Category.Combat, "Increases chance for a critical hit");
     }
-
-    Setting.mode mode;
 
     public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Packet");
         modes.add("Jump");
-        mode = this.registerMode("Mode","Mode", modes, "Packet");
+        mode = this.registerMode("Mode", "Mode", modes, "Packet");
     }
 
     @Listener
@@ -44,6 +44,6 @@ public class Criticals extends Module {
 
     @Override
     public String getHudInfo() {
-        return "\u00A77[\u00A7f" + mode.getValue() + "\u00A77]";
+        return "§7[§f" + mode.getValue() + "§7]";
     }
 }

@@ -22,12 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(value = EntityRenderer.class, priority = 2147483647)
-public abstract class  MixinEntityRenderer implements IEntityRenderer {
-
-
-
-
-
+public abstract class MixinEntityRenderer implements IEntityRenderer {
 
 
     @Redirect(method = "orientCamera", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/WorldClient;rayTraceBlocks(Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;)Lnet/minecraft/util/math/RayTraceResult;"))
@@ -42,14 +37,15 @@ public abstract class  MixinEntityRenderer implements IEntityRenderer {
     public List getEntitiesInAABBexcluding(WorldClient worldClient, Entity entityIn, AxisAlignedBB boundingBox, Predicate predicate) {
         if (ModuleManager.isModuleEnabled("NoEntityTrace") && Wrapper.getMinecraft().player.getHeldItemMainhand().getItem() instanceof ItemPickaxe) {
             return new ArrayList<>();
-        } else {
+        }
+        else {
             return worldClient.getEntitiesInAABBexcluding(entityIn, boundingBox, predicate);
         }
     }
 
     @Inject(method = "hurtCameraEffect", at = @At("HEAD"), cancellable = true)
     public void hurtCameraEffect(float ticks, CallbackInfo info) {
-        if (ModuleManager.isModuleEnabled("NoRender") && ((NoRender)ModuleManager.getModuleByName("NoRender")).hurtCam.getValue())
+        if (ModuleManager.isModuleEnabled("NoRender") && ((NoRender) ModuleManager.getModuleByName("NoRender")).hurtCam.getValue())
             info.cancel();
     }
 

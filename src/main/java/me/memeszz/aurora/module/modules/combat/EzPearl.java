@@ -10,16 +10,19 @@ import net.minecraft.item.ItemStack;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class EzPearl extends Module {
-    public EzPearl() {
-        super("EasyPearl", Category.Combat, "Throws a pearl");
-    }
     private int playerHotbarSlot = -1;
     private int lastHotbarSlot = -1;
     private int delay;
+
+    public EzPearl() {
+        super("EasyPearl", Category.Combat, "Throws a pearl");
+    }
+
     public void onEnable() {
         this.playerHotbarSlot = EzPearl.mc.player.inventory.currentItem;
         this.lastHotbarSlot = -1;
     }
+
     public void onDisable() {
         if (this.lastHotbarSlot != this.playerHotbarSlot && this.playerHotbarSlot != -1) {
             AutoTrap.mc.player.inventory.currentItem = this.playerHotbarSlot;
@@ -42,7 +45,7 @@ public class EzPearl extends Module {
             this.lastHotbarSlot = pearlSlot;
         }
         if (delay > 1) {
-           ((IMinecraft) mc).clickMouse();
+            ((IMinecraft) mc).clickMouse();
             delay = 0;
             this.toggle();
         }

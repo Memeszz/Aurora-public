@@ -11,11 +11,12 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Blink extends Module {
+    private final Queue<Packet> packets = new ConcurrentLinkedQueue<>();
+    EntityOtherPlayerMP entity;
+
     public Blink() {
         super("Blink", Category.Player, "Cancels most packets");
     }
-    EntityOtherPlayerMP entity;
-    private final Queue<Packet> packets = new ConcurrentLinkedQueue<>();
 
     @Listener
     public void onUpdate(PacketEvent.Send event) {
@@ -47,7 +48,7 @@ public class Blink extends Module {
         }
     }
 
-    public String getHudInfo(){
-        return "\u00A77[\u00A7f" + packets.size() + "\u00A77]";
+    public String getHudInfo() {
+        return "§7[§f" + packets.size() + "§7]";
     }
 }

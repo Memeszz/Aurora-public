@@ -11,17 +11,16 @@ import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class DoubleSlider extends Component
-{
-    private boolean hovered;
+public class DoubleSlider extends Component {
     private final Setting.d set;
     private final Button parent;
+    private boolean hovered;
     private int offset;
     private int x;
     private int y;
     private boolean dragging;
     private double renderWidth;
-    
+
     public DoubleSlider(final Setting.d value, final Button button, final int offset) {
         this.dragging = false;
         this.set = value;
@@ -30,21 +29,30 @@ public class DoubleSlider extends Component
         this.y = button.parent.getY() + button.offset;
         this.offset = offset;
     }
-    
+
+    private static double roundToPlace(final double value, final int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
     @Override
     public void renderComponent() {
         Gui.drawRect(this.parent.parent.getX(), this.parent.parent.getY() + this.offset + 1, this.parent.parent.getX() + this.parent.parent.getWidth(), this.parent.parent.getY() + this.offset + 16, this.hovered ? new Color(0, 0, 0, 150).darker().darker().getRGB() : new Color(0, 0, 0, 150).getRGB());
-        final int drag = (int)(this.set.getValue() / this.set.getMax() * this.parent.parent.getWidth());
-        Gui.drawRect(this.parent.parent.getX(), this.parent.parent.getY() + this.offset + 1, this.parent.parent.getX() + (int)this.renderWidth, this.parent.parent.getY() + this.offset + 16, this.hovered ?new Color(ClickGuiModule.red.getValue(), ClickGuiModule.green.getValue(),ClickGuiModule.blue.getValue(), ClickGuiModule.alpha.getValue()).getRGB() : new Color(ClickGuiModule.red.getValue(), ClickGuiModule.green.getValue(),ClickGuiModule.blue.getValue(), ClickGuiModule.alpha.getValue()).getRGB());
+        final int drag = (int) (this.set.getValue() / this.set.getMax() * this.parent.parent.getWidth());
+        Gui.drawRect(this.parent.parent.getX(), this.parent.parent.getY() + this.offset + 1, this.parent.parent.getX() + (int) this.renderWidth, this.parent.parent.getY() + this.offset + 16, this.hovered ? new Color(ClickGuiModule.red.getValue(), ClickGuiModule.green.getValue(), ClickGuiModule.blue.getValue(), ClickGuiModule.alpha.getValue()).getRGB() : new Color(ClickGuiModule.red.getValue(), ClickGuiModule.green.getValue(), ClickGuiModule.blue.getValue(), ClickGuiModule.alpha.getValue()).getRGB());
         Gui.drawRect(this.parent.parent.getX(), this.parent.parent.getY() + this.offset, this.parent.parent.getX() + this.parent.parent.getWidth(), this.parent.parent.getY() + this.offset + 1, new Color(0, 0, 0, 150).getRGB());
         FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), this.set.getName() + " " + ChatFormatting.GRAY + this.set.getValue(), this.parent.parent.getX() + 2, this.parent.parent.getY() + this.offset + 4, -1);
     }
-    
+
     @Override
     public void setOff(final int newOff) {
         this.offset = newOff;
     }
-    
+
     @Override
     public void updateComponent(final int mouseX, final int mouseY) {
         this.hovered = (this.isMouseOnButtonD(mouseX, mouseY) || this.isMouseOnButtonI(mouseX, mouseY));
@@ -64,16 +72,7 @@ public class DoubleSlider extends Component
             }
         }
     }
-    
-    private static double roundToPlace(final double value, final int places) {
-        if (places < 0) {
-            throw new IllegalArgumentException();
-        }
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
-    }
-    
+
     @Override
     public void mouseClicked(final int mouseX, final int mouseY, final int button) {
         if (this.isMouseOnButtonD(mouseX, mouseY) && button == 0 && this.parent.open) {
@@ -83,16 +82,16 @@ public class DoubleSlider extends Component
             this.dragging = true;
         }
     }
-    
+
     @Override
     public void mouseReleased(final int mouseX, final int mouseY, final int mouseButton) {
         this.dragging = false;
     }
-    
+
     public boolean isMouseOnButtonD(final int x, final int y) {
         return x > this.x && x < this.x + (this.parent.parent.getWidth() / 2 + 1) && y > this.y && y < this.y + 16;
     }
-    
+
     public boolean isMouseOnButtonI(final int x, final int y) {
         return x > this.x + this.parent.parent.getWidth() / 2 && x < this.x + this.parent.parent.getWidth() && y > this.y && y < this.y + 16;
     }

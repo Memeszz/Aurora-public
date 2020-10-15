@@ -10,11 +10,11 @@ import net.minecraft.item.ItemStack;
 public class InvPreview extends Module {
     Setting.i xSetting;
     Setting.i ySetting;
-    
+
     public InvPreview() {
         super("InventoryPreview", Category.Gui);
-        xSetting = this.registerI("X","X",  784, 0, 1000);
-        ySetting = this.registerI("Y", "Y",46, 0,1000);
+        xSetting = this.registerI("X", "X", 784, 0, 1000);
+        ySetting = this.registerI("Y", "Y", 46, 0, 1000);
     }
 
     public void onRender() {

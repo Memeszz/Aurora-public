@@ -15,7 +15,9 @@ import org.spongepowered.asm.mixin.*;
 @Mixin(value = MovementInputFromOptions.class, priority = 10000)
 public abstract class MixinMovementInputFromOptions extends MovementInput {
     @Mutable
-    @Shadow @Final private final GameSettings gameSettings;
+    @Shadow
+    @Final
+    private final GameSettings gameSettings;
 
     protected MixinMovementInputFromOptions(GameSettings gameSettings) {
         this.gameSettings = gameSettings;
@@ -31,25 +33,29 @@ public abstract class MixinMovementInputFromOptions extends MovementInput {
         if (isKeyHeld(this.gameSettings.keyBindForward)) {
             ++this.moveForward;
             this.forwardKeyDown = true;
-        } else {
+        }
+        else {
             this.forwardKeyDown = false;
         }
         if (isKeyHeld(this.gameSettings.keyBindBack)) {
             --this.moveForward;
             this.backKeyDown = true;
-        } else {
+        }
+        else {
             this.backKeyDown = false;
         }
         if (isKeyHeld(this.gameSettings.keyBindLeft)) {
             ++this.moveStrafe;
             this.leftKeyDown = true;
-        } else {
+        }
+        else {
             this.leftKeyDown = false;
         }
         if (isKeyHeld(this.gameSettings.keyBindRight)) {
             --this.moveStrafe;
             this.rightKeyDown = true;
-        } else {
+        }
+        else {
             this.rightKeyDown = false;
         }
         this.jump = isKeyHeld(this.gameSettings.keyBindJump);
@@ -64,9 +70,11 @@ public abstract class MixinMovementInputFromOptions extends MovementInput {
         if (ModuleManager.isModuleEnabled("GuiMove") && Wrapper.getMinecraft().currentScreen != null) {
             if (Wrapper.getMinecraft().currentScreen instanceof InventoryEffectRenderer) {
                 return Keyboard.isKeyDown(keyBinding.getKeyCode());
-            } else if (Wrapper.getMinecraft().world.isRemote && Wrapper.getMinecraft().currentScreen instanceof GuiIngameMenu) {
+            }
+            else if (Wrapper.getMinecraft().world.isRemote && Wrapper.getMinecraft().currentScreen instanceof GuiIngameMenu) {
                 return Keyboard.isKeyDown(keyBinding.getKeyCode());
-            } else if (Wrapper.getMinecraft().currentScreen instanceof ClickGUI) {
+            }
+            else if (Wrapper.getMinecraft().currentScreen instanceof ClickGUI) {
                 return Keyboard.isKeyDown(keyBinding.getKeyCode());
             } //sex
         }

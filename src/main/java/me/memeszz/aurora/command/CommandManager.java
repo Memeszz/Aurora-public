@@ -10,7 +10,7 @@ public class CommandManager {
     private static ArrayList<Command> commands;
     boolean b;
 
-    public static void initCommands(){
+    public static void initCommands() {
         commands = new ArrayList<>();
         addCommand(new CoordsCommand());
         addCommand(new BindCommand());
@@ -29,32 +29,33 @@ public class CommandManager {
         addCommand(new ClientnameCommand());
     }
 
-    public static void addCommand(Command c){
+    public static void addCommand(Command c) {
         commands.add(c);
     }
 
-    public static ArrayList<Command> getCommands(){
+    public static ArrayList<Command> getCommands() {
         return commands;
     }
 
-    public void callCommand(String input){
-        String[] split = input.split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); 
+    public void callCommand(String input) {
+        String[] split = input.split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
         String command = split[0];
         String args = input.substring(command.length()).trim();
         b = false;
-        commands.forEach(c ->{
-            for(String s : c.getAlias()) {
+        commands.forEach(c -> {
+            for (String s : c.getAlias()) {
                 if (s.equalsIgnoreCase(command)) {
                     b = true;
                     try {
                         c.onCommand(args, args.split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"));
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
                         Wrapper.sendClientMessage(ChatFormatting.RED + c.getSyntax());
                     }
                 }
             }
         });
-        if(!b) Wrapper.sendClientMessage(ChatFormatting.RED + "Unknown command!");
+        if (!b) Wrapper.sendClientMessage(ChatFormatting.RED + "Unknown command!");
     }
 
 }

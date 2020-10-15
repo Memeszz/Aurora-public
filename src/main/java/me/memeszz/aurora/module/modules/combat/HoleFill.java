@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 import static me.memeszz.aurora.util.entity.EntityUtil.calculateLookAt;
 
 public class HoleFill extends Module {
-    public HoleFill() {
-        super("HoleFiller", Category.Combat, "Attacks nearby players");
-    }
+    private static boolean isSpoofingAngles;
+    private static double yaw;
+    private static double pitch;
     private Setting.d range;
     private Setting.i smartRange;
     private Setting.b smart;
@@ -40,18 +40,43 @@ public class HoleFill extends Module {
     private BlockPos render;
     private Entity closestTarget;
     private int delay = 0;
+
+    public HoleFill() {
+        super("HoleFiller", Category.Combat, "Attacks nearby players");
+    }
+
+    // this modifies packets being sent so no extra ones are made. NCP used to flag
+    // with "too many packets"
+    private static void setYawAndPitch(float yaw1, float pitch1) {
+        yaw = yaw1;
+        pitch = pitch1;
+        isSpoofingAngles = true;
+    }
+
+    public static BlockPos getPlayerPos() {
+        return new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ));
+    }
+
+    private static void resetRotation() {
+        if (isSpoofingAngles) {
+            yaw = mc.player.rotationYaw;
+            pitch = mc.player.rotationPitch;
+            isSpoofingAngles = false;
+        }
+    }
+
     public void setup() {
-        range = this.registerD("Range", "Range",3, 0.0, 6);
+        range = this.registerD("Range", "Range", 3, 0.0, 6);
         smartRange = this.registerI("SmartRange", "SmartRange", 3, 0, 6);
-        smart = this.registerB("SmartFill", "SmartFill",false);
-        toggleOff = this.registerB("ToggleOff","ToggleOff", true);
-        webs = this.registerB("Webs", "Webs",true);
+        smart = this.registerB("SmartFill", "SmartFill", false);
+        toggleOff = this.registerB("ToggleOff", "ToggleOff", true);
+        webs = this.registerB("Webs", "Webs", true);
 
     }
+
     public void onEnable() {
         delay = 0;
     }
-
 
     @Listener
     public void onUpdate(UpdateEvent event) {
@@ -68,16 +93,15 @@ public class HoleFill extends Module {
         List<BlockPos> blocks = findCrystalBlocks();
         BlockPos q = null;
         int obsidianSlot = mc.player.getHeldItemMainhand().getItem() == Item.getItemFromBlock(Blocks.OBSIDIAN)
-                ? mc.player.inventory.currentItem
-                : -1;
+                           ? mc.player.inventory.currentItem
+                           : -1;
         if (obsidianSlot == -1) {
             for (int l = 0; l < 9; ++l) {
                 if (webs.getValue()) {
-                    if (mc.player.inventory.getStackInSlot(l).getItem() == Item.getItemFromBlock(Blocks.WEB)) {
-                        } else {
-                    if (mc.player.inventory.getStackInSlot(l).getItem() == Item.getItemFromBlock(Blocks.OBSIDIAN)) {
-                        obsidianSlot = l;
-                        break;
+                    if (mc.player.inventory.getStackInSlot(l).getItem() != Item.getItemFromBlock(Blocks.WEB)) {
+                        if (mc.player.inventory.getStackInSlot(l).getItem() == Item.getItemFromBlock(Blocks.OBSIDIAN)) {
+                            obsidianSlot = l;
+                            break;
                         }
                     }
                 }
@@ -117,7 +141,6 @@ public class HoleFill extends Module {
         }
     }
 
-
     private void lookAtPacket(double px, double py, double pz, EntityPlayer me) {
         double[] v = calculateLookAt(px, py, pz, me);
         setYawAndPitch((float) v[0], (float) v[1]);
@@ -144,14 +167,12 @@ public class HoleFill extends Module {
                 && ((mc.world.getBlockState(boost9).getBlock() == Blocks.OBSIDIAN) || (mc.world.getBlockState(boost9).getBlock() == Blocks.BEDROCK));
     }
 
-    public static BlockPos getPlayerPos() {
-        return new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ));
-    }
-
+    // Better Rotation Spoofing System:
     public BlockPos getClosestTargetPos() {
         if (closestTarget != null) {
             return new BlockPos(Math.floor(closestTarget.posX), Math.floor(closestTarget.posY), Math.floor(closestTarget.posZ));
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -196,7 +217,7 @@ public class HoleFill extends Module {
     private boolean isInRange(BlockPos blockPos) {
         NonNullList<BlockPos> positions = NonNullList.create();
         positions.addAll(
-                getSphere(getPlayerPos(), (float)range.getValue(), (int)range.getValue(), false, true, 0)
+                getSphere(getPlayerPos(), (float) range.getValue(), (int) range.getValue(), false, true, 0)
                         .stream().filter(this::IsHole).collect(Collectors.toList()));
         return positions.contains(blockPos);
     }
@@ -205,11 +226,11 @@ public class HoleFill extends Module {
         NonNullList<BlockPos> positions = NonNullList.create();
         if (smart.getValue() && closestTarget != null)
             positions.addAll(
-                    getSphere(getClosestTargetPos(), (float)smartRange.getValue(),(int) range.getValue(), false, true, 0)
+                    getSphere(getClosestTargetPos(), (float) smartRange.getValue(), (int) range.getValue(), false, true, 0)
                             .stream().filter(this::IsHole).filter(this::isInRange).collect(Collectors.toList()));
-        else if(!smart.getValue())
+        else if (!smart.getValue())
             positions.addAll(
-                    getSphere(getPlayerPos(), (float)range.getValue(), (int)range.getValue(), false, true, 0)
+                    getSphere(getPlayerPos(), (float) range.getValue(), (int) range.getValue(), false, true, 0)
                             .stream().filter(this::IsHole).collect(Collectors.toList()));
         return positions;
     }
@@ -231,28 +252,6 @@ public class HoleFill extends Module {
             }
         }
         return circleblocks;
-    }
-
-    // Better Rotation Spoofing System:
-
-    private static boolean isSpoofingAngles;
-    private static double yaw;
-    private static double pitch;
-
-    // this modifies packets being sent so no extra ones are made. NCP used to flag
-    // with "too many packets"
-    private static void setYawAndPitch(float yaw1, float pitch1) {
-        yaw = yaw1;
-        pitch = pitch1;
-        isSpoofingAngles = true;
-    }
-
-    private static void resetRotation() {
-        if (isSpoofingAngles) {
-            yaw = mc.player.rotationYaw;
-            pitch = mc.player.rotationPitch;
-            isSpoofingAngles = false;
-        }
     }
 
     @Listener

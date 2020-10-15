@@ -36,19 +36,41 @@ public class TrajectoryCalculator {
         // The potion is kind of special so we do it's own check
         if (item instanceof ItemPotion) {
             // Check if it's a splashable potion
-            if (itemStack.getItem() instanceof ItemSplashPotion){
+            if (itemStack.getItem() instanceof ItemSplashPotion) {
                 return ThrowingType.POTION;
             }
-        } else if (item instanceof ItemBow && entity.isHandActive()) {
+        }
+        else if (item instanceof ItemBow && entity.isHandActive()) {
             return ThrowingType.BOW;
-        } else if (item instanceof ItemExpBottle) {
+        }
+        else if (item instanceof ItemExpBottle) {
             return ThrowingType.EXPERIENCE;
-        } else if (item instanceof ItemSnowball || item instanceof ItemEgg || item instanceof ItemEnderPearl) {
+        }
+        else if (item instanceof ItemSnowball || item instanceof ItemEgg || item instanceof ItemEnderPearl) {
             return ThrowingType.NORMAL;
         }
 
         // Unknown type
         return ThrowingType.NONE;
+    }
+
+    public static double[] interpolate(Entity entity) {
+        double posX = interpolate(entity.posX, entity.lastTickPosX) - ((IRenderManager) Wrapper.getMinecraft().getRenderManager()).getRenderPosX();
+        double posY = interpolate(entity.posY, entity.lastTickPosY) - ((IRenderManager) Wrapper.getMinecraft().getRenderManager()).getRenderPosY();
+        double posZ = interpolate(entity.posZ, entity.lastTickPosZ) - ((IRenderManager) Wrapper.getMinecraft().getRenderManager()).getRenderPosZ();
+        return new double[]{posX, posY, posZ};
+    }
+
+    public static double interpolate(double now, double then) {
+        return then + (now - then) * Wrapper.getMinecraft().getRenderPartialTicks();
+    }
+
+    public static Vec3d mult(Vec3d factor, float multiplier) {
+        return new Vec3d(factor.x * multiplier, factor.y * multiplier, factor.z * multiplier);
+    }
+
+    public static Vec3d div(Vec3d factor, float divisor) {
+        return new Vec3d(factor.x / divisor, factor.y / divisor, factor.z / divisor);
     }
 
     public enum ThrowingType {
@@ -62,6 +84,7 @@ public class TrajectoryCalculator {
      */
     public static final class FlightPath {
         private final EntityLivingBase shooter;
+        private final ThrowingType throwingType;
         public Vec3d position;
         private Vec3d motion;
         private float yaw;
@@ -69,7 +92,6 @@ public class TrajectoryCalculator {
         private AxisAlignedBB boundingBox;
         private boolean collided;
         private RayTraceResult target;
-        private final ThrowingType throwingType;
 
         public FlightPath(EntityLivingBase entityLivingBase, ThrowingType throwingType) {
             this.shooter = entityLivingBase;
@@ -143,7 +165,7 @@ public class TrajectoryCalculator {
         /**
          * Check if our path collides with an entity.
          *
-         * @param prediction the predicted position
+         * @param prediction     the predicted position
          * @param blockCollision block collision if we had one
          */
         private void onCollideWithEntity(Vec3d prediction, RayTraceResult blockCollision) {
@@ -180,7 +202,8 @@ public class TrajectoryCalculator {
             if (collidingEntity != null) {
                 // Set our target to the result
                 this.target = new RayTraceResult(collidingEntity);
-            } else {
+            }
+            else {
                 // Fallback to the block collision
                 this.target = blockCollision;
             }
@@ -214,6 +237,8 @@ public class TrajectoryCalculator {
                     return 0.7F;
                 case NORMAL:
                     return 1.5f;
+                default:
+                    break;
             }
             // The standard gravity
             return 1.5f;
@@ -233,6 +258,8 @@ public class TrajectoryCalculator {
                     return 0.07f;
                 case NORMAL:
                     return 0.03f;
+                default:
+                    break;
             }
 
             // The standard gravity
@@ -242,10 +269,10 @@ public class TrajectoryCalculator {
         /**
          * Set the position and rotation of the entity in the world.
          *
-         * @param x x position in world
-         * @param y y position in world
-         * @param z z position in world
-         * @param yaw yaw rotation axis
+         * @param x     x position in world
+         * @param y     y position in world
+         * @param z     z position in world
+         * @param yaw   yaw rotation axis
          * @param pitch pitch rotation axis
          */
         private void setLocationAndAngles(double x, double y, double z, float yaw, float pitch) {
@@ -276,7 +303,7 @@ public class TrajectoryCalculator {
         /**
          * Set the entity's velocity and position in the world.
          *
-         * @param motion velocity in world
+         * @param motion   velocity in world
          * @param velocity starting velocity
          */
         private void setThrowableHeading(Vec3d motion, float velocity) {
@@ -303,24 +330,5 @@ public class TrajectoryCalculator {
         public RayTraceResult getCollidingTarget() {
             return target;
         }
-    }
-
-    public static double[] interpolate(Entity entity) {
-        double posX = interpolate(entity.posX, entity.lastTickPosX) - ((IRenderManager) Wrapper.getMinecraft().getRenderManager()).getRenderPosX();
-        double posY = interpolate(entity.posY, entity.lastTickPosY) - ((IRenderManager) Wrapper.getMinecraft().getRenderManager()).getRenderPosY();
-        double posZ = interpolate(entity.posZ, entity.lastTickPosZ) - ((IRenderManager) Wrapper.getMinecraft().getRenderManager()).getRenderPosZ();
-        return new double[] { posX, posY, posZ };
-    }
-
-    public static double interpolate(double now, double then) {
-        return then + (now - then) * Wrapper.getMinecraft().getRenderPartialTicks();
-    }
-
-    public static Vec3d mult(Vec3d factor, float multiplier) {
-        return new Vec3d(factor.x * multiplier, factor.y * multiplier, factor.z * multiplier);
-    }
-
-    public static Vec3d div(Vec3d factor, float divisor) {
-        return new Vec3d(factor.x / divisor, factor.y / divisor, factor.z / divisor);
     }
 }

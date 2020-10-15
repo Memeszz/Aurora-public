@@ -1,6 +1,6 @@
 /*
  * Decompiled with CFR 0.145.
- * 
+ *
  * Could not load the following classes:
  *  org.lwjgl.opengl.GL11
  */
@@ -28,21 +28,6 @@ public class ColourHolder {
         this.a = a;
     }
 
-
-
-    public ColourHolder darker() {
-        return new ColourHolder(Math.max(this.r - 10, 0), Math.max(this.g - 10, 0), Math.max(this.b - 10, 0), this.getA());
-    }
-
-
-
-    public void becomeHex(int hex) {
-        this.setR((hex & 16711680) >> 16);
-        this.setG((hex & 65280) >> 8);
-        this.setB(hex & 255);
-        this.setA(255);
-    }
-
     public static ColourHolder fromHex(int hex) {
         ColourHolder n = new ColourHolder(0, 0, 0);
         n.becomeHex(hex);
@@ -53,6 +38,17 @@ public class ColourHolder {
         return -16777216 | (r & 255) << 16 | (g & 255) << 8 | b & 255;
     }
 
+    public ColourHolder darker() {
+        return new ColourHolder(Math.max(this.r - 10, 0), Math.max(this.g - 10, 0), Math.max(this.b - 10, 0), this.getA());
+    }
+
+    public void becomeHex(int hex) {
+        this.setR((hex & 16711680) >> 16);
+        this.setG((hex & 65280) >> 8);
+        this.setB(hex & 255);
+        this.setA(255);
+    }
+
     public int toHex() {
         return toHex(this.r, this.g, this.b);
     }
@@ -61,16 +57,22 @@ public class ColourHolder {
         return this.b;
     }
 
+    public ColourHolder setB(int b) {
+        this.b = b;
+        return this;
+    }
+
     public int getG() {
         return this.g;
     }
 
-    public int getR() {
-        return this.r;
+    public ColourHolder setG(int g) {
+        this.g = g;
+        return this;
     }
 
-    public int getA() {
-        return this.a;
+    public int getR() {
+        return this.r;
     }
 
     public ColourHolder setR(int r) {
@@ -78,14 +80,8 @@ public class ColourHolder {
         return this;
     }
 
-    public ColourHolder setB(int b) {
-        this.b = b;
-        return this;
-    }
-
-    public ColourHolder setG(int g) {
-        this.g = g;
-        return this;
+    public int getA() {
+        return this.a;
     }
 
     public ColourHolder setA(int a) {

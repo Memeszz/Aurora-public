@@ -13,20 +13,20 @@ import java.awt.*;
 import java.util.ArrayList;
 
 
-public class  Frame
-{
+public class Frame {
+    private final int width;
+    private final int barHeight;
     public ArrayList<Component> components;
     public Module.Category category;
+    public int dragX;
+    public int dragY;
     private boolean open;
-    private final int width;
     private int y;
     private int x;
     private float hue;
-    private final int barHeight;
     private boolean isDragging;
-    public int dragX;
-    public int dragY;
     private int height;
+
     public Frame(final Module.Category cat) {
         this.components = new ArrayList<>();
         this.category = cat;
@@ -51,14 +51,6 @@ public class  Frame
         return this.components;
     }
 
-    public void setX(final int newX) {
-        this.x = newX;
-    }
-
-    public void setY(final int newY) {
-        this.y = newY;
-    }
-
     public void setDrag(final boolean drag) {
         this.isDragging = drag;
     }
@@ -71,9 +63,8 @@ public class  Frame
         this.open = open;
     }
 
-
     public void renderFrame() {
-        Gui.drawRect(this.x, this.y, this.x + this.width, this.y + this.barHeight, new Color(ClickGuiModule.red.getValue(), ClickGuiModule.green.getValue(), ClickGuiModule.blue.getValue(),244).getRGB());
+        Gui.drawRect(this.x, this.y, this.x + this.width, this.y + this.barHeight, new Color(ClickGuiModule.red.getValue(), ClickGuiModule.green.getValue(), ClickGuiModule.blue.getValue(), 244).getRGB());
         RenderUtil.drawGradientSideways(this.x, this.y, this.x + this.width, this.y + this.barHeight - 3.0f, this.dragY + this.y + 4, Colors.getColor(55, 177, 218));
         RenderUtil.drawGradientSideways(this.x, this.y, this.x + this.width, this.y + this.barHeight - 3.0f, this.dragY + this.y + 4, Colors.getColor(204, 77, 198));
         if (this.hue > 255.0f) {
@@ -91,16 +82,16 @@ public class  Frame
         if (h3 > 255.0f) {
             h3 -= 255.0f;
         }
-        final Color color33 = Color.getHSBColor(h / 255.0f, (float)ClickGuiModule.rainbowSat.getValue(), (float)ClickGuiModule.rainbowBri.getValue());
-        final Color color34 = Color.getHSBColor(h2 / 255.0f, (float)ClickGuiModule.rainbowSat.getValue(), (float)ClickGuiModule.rainbowBri.getValue());
-        final Color color35 = Color.getHSBColor(h3 / 255.0f, (float)ClickGuiModule.rainbowSat.getValue(), (float)ClickGuiModule.rainbowBri.getValue());
+        final Color color33 = Color.getHSBColor(h / 255.0f, (float) ClickGuiModule.rainbowSat.getValue(), (float) ClickGuiModule.rainbowBri.getValue());
+        final Color color34 = Color.getHSBColor(h2 / 255.0f, (float) ClickGuiModule.rainbowSat.getValue(), (float) ClickGuiModule.rainbowBri.getValue());
+        final Color color35 = Color.getHSBColor(h3 / 255.0f, (float) ClickGuiModule.rainbowSat.getValue(), (float) ClickGuiModule.rainbowBri.getValue());
         final int color36 = color33.getRGB();
         final int color37 = color34.getRGB();
         final int color38 = color35.getRGB();
         this.hue += 0.1;
         RenderUtil.rectangleBordered(this.x, y, this.x + this.width, this.y + this.barHeight, 0.5, Colors.getColor(90), Colors.getColor(0));
         RenderUtil.rectangleBordered(this.x, y, this.x + this.width, this.y + this.barHeight, 1.0, Colors.getColor(90), Colors.getColor(61));
-        RenderUtil.drawGradientSideways(this.x, this.y - 3, this.x + this.width, this.y , color36, color37);
+        RenderUtil.drawGradientSideways(this.x, this.y - 3, this.x + this.width, this.y, color36, color37);
         RenderUtil.drawGradientSideways(this.x, this.y - 3, this.x + this.width, this.y, color37, color38);
         drawCentredString(this.category.name(), x + this.width / 2, -1);
         if (this.open && !this.components.isEmpty()) {
@@ -110,7 +101,7 @@ public class  Frame
         }
 
     }
-    
+
     public void refresh() {
         int off = this.barHeight;
         for (final Component comp : this.components) {
@@ -121,28 +112,36 @@ public class  Frame
     }
 
     private void drawCentredString(String text, int x, int color) {
-        FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), text, x - FontUtils.getStringWidth(ClickGuiModule.customFont.getValue(), text) / 2, this.y +3, color);
+        FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), text, x - FontUtils.getStringWidth(ClickGuiModule.customFont.getValue(), text) / 2, this.y + 3, color);
     }
-    
+
     public int getX() {
         return this.x;
     }
-    
+
+    public void setX(final int newX) {
+        this.x = newX;
+    }
+
     public int getY() {
         return this.y;
     }
-    
+
+    public void setY(final int newY) {
+        this.y = newY;
+    }
+
     public int getWidth() {
         return this.width;
     }
-    
+
     public void updatePosition(final int mouseX, final int mouseY) {
         if (this.isDragging) {
             this.setX(mouseX - this.dragX);
             this.setY(mouseY - this.dragY);
         }
     }
-    
+
     public boolean isWithinHeader(final int x, final int y) {
         return x >= this.x && x <= this.x + this.width && y >= this.y && y <= this.y + this.barHeight;
     }

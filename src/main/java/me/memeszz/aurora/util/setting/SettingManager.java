@@ -34,17 +34,17 @@ public class SettingManager {
         return this.settings.stream().filter(s -> s.getParent().equals(parent)).collect(Collectors.toList());
     }
 
-    public List<Setting> getSettingsByCategory(final Module.Category category){
+    public List<Setting> getSettingsByCategory(final Module.Category category) {
         return this.settings.stream().filter(s -> s.getCategory().equals(category)).collect(Collectors.toList());
     }
 
-    public Setting getSettingByName(String name){
-        for(Setting set : getSettings()){
-            if(set.getName().equalsIgnoreCase(name)){
+    public Setting getSettingByName(String name) {
+        for (Setting set : getSettings()) {
+            if (set.getName().equalsIgnoreCase(name)) {
                 return set;
             }
         }
-        System.err.println("[Aurora] Error Setting NOT found: '" + name +"'!");
+        System.err.println("[Aurora] Error Setting NOT found: '" + name + "'!");
         return null;
     }
 }

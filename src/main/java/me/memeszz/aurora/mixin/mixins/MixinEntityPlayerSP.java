@@ -45,19 +45,12 @@ public abstract class MixinEntityPlayerSP extends AbstractClientPlayer {
     }
 
 
-    @Inject(method = "onUpdate()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;onUpdateWalkingPlayer()V", ordinal = 0, shift = At.Shift.AFTER)) //death by sex
+    @Inject(method = "onUpdate()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;onUpdateWalkingPlayer()V", ordinal = 0, shift = At.Shift.AFTER))
+    //death by sex
     public void onUpdateElse(CallbackInfo ci) {
         UpdateEvent event = new UpdateEvent(EventStageable.EventStage.POST, this.rotationYaw, this.rotationPitch, this.posX, this.getEntityBoundingBox().minY, this.posZ, this.onGround);
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
-
-
-
-
-
-
-
-
 
 
 }

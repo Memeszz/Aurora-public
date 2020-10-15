@@ -4,11 +4,11 @@ public class PlayerLeaveEvent {
 
     private final String name;
 
-    public PlayerLeaveEvent(String n){
+    public PlayerLeaveEvent(String n) {
         name = n;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 

@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 @Mixin(CPacketPlayerTryUseItemOnBlock.class)
 public abstract class MixinCPacketPlayerTryUseItemOnBlock implements ICPacketPlayerTryUseItemOnBlock {
 
-    @Accessor @Override public abstract void setPlacedBlockDirection(EnumFacing facing);
+    @Accessor
+    @Override
+    public abstract void setPlacedBlockDirection(EnumFacing facing);
 
 }

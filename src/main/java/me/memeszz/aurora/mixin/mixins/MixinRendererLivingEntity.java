@@ -30,7 +30,6 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> exte
     }
 
 
-
     /**
      * @author
      */
@@ -96,6 +95,8 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> exte
                         break;
 
                     }
+                default:
+                    break;
             }
         }
 
@@ -114,10 +115,10 @@ public abstract class MixinRendererLivingEntity<T extends EntityLivingBase> exte
 
 
 
-    /*/**
-     * @author auto / pharmacies
-     * auto made these for hummingbird
-     */
+/*/**
+ * @author auto / pharmacies
+ * auto made these for hummingbird
+ */
 
 
     /*

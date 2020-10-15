@@ -9,7 +9,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class NoLag extends Module {
     public NoLag() {
-        super ("NoLag", Category.Misc);
+        super("NoLag", Category.Misc);
     }
 
     @Listener

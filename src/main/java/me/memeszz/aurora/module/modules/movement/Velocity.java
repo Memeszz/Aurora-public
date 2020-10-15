@@ -13,11 +13,11 @@ public class Velocity extends Module {
 
     @Listener
     public void listener(PacketEvent.Receive event) {
-        if(event.getPacket() instanceof SPacketEntityVelocity){
-            if(((SPacketEntityVelocity) event.getPacket()).getEntityID() == mc.player.getEntityId())
+        if (event.getPacket() instanceof SPacketEntityVelocity) {
+            if (((SPacketEntityVelocity) event.getPacket()).getEntityID() == mc.player.getEntityId())
                 event.setCanceled(true);
         }
-        if(event.getPacket() instanceof SPacketExplosion)
+        if (event.getPacket() instanceof SPacketExplosion)
             event.setCanceled(true);
     }
 }

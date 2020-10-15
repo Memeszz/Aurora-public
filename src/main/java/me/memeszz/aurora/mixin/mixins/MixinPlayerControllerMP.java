@@ -20,10 +20,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerControllerMP.class)
 public abstract class MixinPlayerControllerMP implements IPlayerControllerMP {
 
-    @Accessor @Override public abstract void setBlockHitDelay(int delay);
-    @Accessor @Override public abstract void setIsHittingBlock(boolean hittingBlock);
-    @Accessor @Override public abstract float getCurBlockDamageMP();
-    @Accessor @Override public abstract void setCurBlockDamageMP(float blockDamageMP);
+    @Accessor
+    @Override
+    public abstract void setBlockHitDelay(int delay);
+
+    @Accessor
+    @Override
+    public abstract void setIsHittingBlock(boolean hittingBlock);
+
+    @Accessor
+    @Override
+    public abstract float getCurBlockDamageMP();
+
+    @Accessor
+    @Override
+    public abstract void setCurBlockDamageMP(float blockDamageMP);
 
     @Inject(method = "onPlayerDestroyBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;playEvent(ILnet/minecraft/util/math/BlockPos;I)V"), cancellable = true)
     private void onPlayerDestroyBlock(BlockPos pos, CallbackInfoReturnable<Boolean> info) {

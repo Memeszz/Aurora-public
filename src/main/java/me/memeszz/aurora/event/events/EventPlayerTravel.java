@@ -1,7 +1,8 @@
 package me.memeszz.aurora.event.events;
+
 import me.memeszz.aurora.event.EventCancellable;
 
-public class EventPlayerTravel extends EventCancellable{
+public class EventPlayerTravel extends EventCancellable {
     public float Strafe;
     public float Vertical;
     public float Forward;

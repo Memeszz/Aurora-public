@@ -8,17 +8,17 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.ArrayList;
 
 public class Sprint extends Module {
+    Setting.mode mode;
+
     public Sprint() {
         super("Sprint", Category.Movement, "Automatically sprint");
     }
-
-    Setting.mode mode;
 
     public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Legit");
         modes.add("Rage");
-        mode = this.registerMode("Mode","Mode", modes, "Rage");
+        mode = this.registerMode("Mode", "Mode", modes, "Rage");
     }
 
     @Override
@@ -31,9 +31,9 @@ public class Sprint extends Module {
     }
 
     @Override
-        public String getHudInfo() {
-            return "\u00A77[\u00A7f" + mode.getValue() + "\u00A77]";
-        }
+    public String getHudInfo() {
+        return "§7[§f" + mode.getValue() + "§7]";
+    }
 
 
     @Listener
@@ -50,6 +50,8 @@ public class Sprint extends Module {
                         && !(mc.player.getFoodStats().getFoodLevel() <= 6f)) {
                     mc.player.setSprinting(true);
                 }
+                break;
+            default:
                 break;
         }
     }

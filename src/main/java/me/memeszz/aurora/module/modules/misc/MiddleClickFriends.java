@@ -22,7 +22,8 @@ public class MiddleClickFriends extends Module {
             if (!mc.player.isOnLadder() && Friends.isFriend(mc.objectMouseOver.entityHit.getName())) {
                 Aurora.getInstance().friends.delFriend(mc.objectMouseOver.entityHit.getName());
                 Wrapper.sendClientMessage(ChatFormatting.RED + "Removed " + mc.objectMouseOver.entityHit.getName() + " from friends list");
-            } else {
+            }
+            else {
                 Aurora.getInstance().friends.addFriend(mc.objectMouseOver.entityHit.getName());
                 Wrapper.sendClientMessage(ChatFormatting.AQUA + "Added " + mc.objectMouseOver.entityHit.getName() + " to friends list");
             }

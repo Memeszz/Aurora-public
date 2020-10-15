@@ -8,12 +8,12 @@ import me.memeszz.aurora.util.setting.Setting;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class Welcomer extends Module {
+    Setting.b publicChat;
+
     public Welcomer() {
         super("Welcomer", Category.World, "Sends a message when someone joins the server");
         publicChat = this.registerB("Public", "Public", false);
     }
-
-    Setting.b publicChat;
 
     @Listener
     public void join(PlayerJoinEvent event) {

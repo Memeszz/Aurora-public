@@ -11,24 +11,26 @@ import java.util.ArrayList;
 
 public class AntiVoid extends Module {
 
+    Setting.mode mode;
+
     public AntiVoid() {
         super("AntiVoid", Category.Player, "Attacks nearby players");
     }
-    Setting.mode mode;
-//ez
+
+    //ez
     public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Bounce");
         modes.add("Mini");
         modes.add("Dolphin");
-        mode = this.registerMode("Mode", "Mode",modes, "Bounce");
+        mode = this.registerMode("Mode", "Mode", modes, "Bounce");
     }
 
     @Listener
     public void onUpdate(UpdateEvent event) {
         double yLevel = mc.player.posY;
         if (yLevel <= .5) {
-            Wrapper.sendClientMessage(("\u00A7aAttempting To Get ") + ChatFormatting.RED + mc.player.getName() + ChatFormatting.GREEN + " Out Of The void!");
+            Wrapper.sendClientMessage(("§aAttempting To Get ") + ChatFormatting.RED + mc.player.getName() + ChatFormatting.GREEN + " Out Of The void!");
             if (mode.getValue().equals("Bounce")) {
                 mc.player.moveVertical = 10;
                 mc.player.jump();
@@ -55,6 +57,6 @@ public class AntiVoid extends Module {
 
     @Override
     public String getHudInfo() {
-        return "\u00A77[\u00A7f" + mode.getValue() + "\u00A77]";
+        return "§7[§f" + mode.getValue() + "§7]";
     }
 }

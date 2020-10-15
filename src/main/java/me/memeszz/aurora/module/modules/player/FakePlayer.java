@@ -10,20 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class FakePlayer extends Module {
-    private List<Integer> fakePlayerIdList = null;
-    public FakePlayer() {
-
-        super("FakePlayer", Category.Player);
-    }
-    Setting.mode mode;
-
-    public void setup() {
-        ArrayList<String> modes = new ArrayList<>();
-        modes.add("Single");
-        modes.add("Multi");
-        mode = this.registerMode("Mode","Mode", modes, "Single");
-    }
-
     private static final String[][] fakePlayerInfo =
 
             {
@@ -32,6 +18,20 @@ public class FakePlayer extends Module {
                     {"66666666-6666-6666-6666-666666666", "nigga2", "6", "0"},
                     {"66666666-6666-6666-6666-66666660", "nigga3", "9", "0"},
             };
+    Setting.mode mode;
+    private List<Integer> fakePlayerIdList = null;
+
+    public FakePlayer() {
+
+        super("FakePlayer", Category.Player);
+    }
+
+    public void setup() {
+        ArrayList<String> modes = new ArrayList<>();
+        modes.add("Single");
+        modes.add("Multi");
+        mode = this.registerMode("Mode", "Mode", modes, "Single");
+    }
 
     @Override
     protected void onEnable() {
@@ -74,7 +74,7 @@ public class FakePlayer extends Module {
     @Override
     public void onUpdate() {
 
-        if (fakePlayerIdList == null || fakePlayerIdList.isEmpty() ) {
+        if (fakePlayerIdList == null || fakePlayerIdList.isEmpty()) {
             this.disable();
         }
 

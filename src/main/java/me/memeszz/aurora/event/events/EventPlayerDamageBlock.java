@@ -13,24 +13,21 @@ public class EventPlayerDamageBlock extends EventCancellable {
         setDirection(directionFacing);
     }
 
-    public BlockPos getPos()
-    {
+    public BlockPos getPos() {
         return BlockPos;
     }
 
     /**
      * @return the direction
      */
-    public EnumFacing getDirection()
-    {
+    public EnumFacing getDirection() {
         return Direction;
     }
 
     /**
      * @param direction the direction to set
      */
-    public void setDirection(EnumFacing direction)
-    {
+    public void setDirection(EnumFacing direction) {
         Direction = direction;
     }
 

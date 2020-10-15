@@ -9,29 +9,28 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class SkyColor extends Module {
-    public SkyColor() {
-        super("SkyColor", Category.Render, "Changes skycolor");
-        r = this.registerI("Red","Red",  255, 0, 255);
-        g = this.registerI("Green", "Green",0, 0, 255);
-        b = this.registerI("Blue", "Blue",255, 0, 255);
-        rainbow = registerB("Rainbow", "Rainbow",true);
-    }
     Setting.i r;
     Setting.i g;
     Setting.i b;
     Setting.b rainbow;
 
+    public SkyColor() {
+        super("SkyColor", Category.Render, "Changes skycolor");
+        r = this.registerI("Red", "Red", 255, 0, 255);
+        g = this.registerI("Green", "Green", 0, 0, 255);
+        b = this.registerI("Blue", "Blue", 255, 0, 255);
+        rainbow = registerB("Rainbow", "Rainbow", true);
+    }
 
     @Listener
     public void onUpdate(UpdateEvent event) {
         if (this.isEnabled()) {
-        MinecraftForge.EVENT_BUS.register(this);
-    } else {
-        MinecraftForge.EVENT_BUS.unregister(this);
+            MinecraftForge.EVENT_BUS.register(this);
+        }
+        else {
+            MinecraftForge.EVENT_BUS.unregister(this);
         }
     }
-
-
 
 
     @SubscribeEvent

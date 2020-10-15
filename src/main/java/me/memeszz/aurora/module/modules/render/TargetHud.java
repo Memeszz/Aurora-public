@@ -18,16 +18,16 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class TargetHud extends Module {
-    public TargetHud() {
-        super ("TargetHud", Category.Render);
-    }
-
     Setting.i x_;
     Setting.i y_;
 
+    public TargetHud() {
+        super("TargetHud", Category.Render);
+    }
+
     public void setup() {
-        x_ = registerI("X", "X",2, 0, 500);
-        y_ = registerI("Y","Y", 2, 0, 500);
+        x_ = registerI("X", "X", 2, 0, 500);
+        y_ = registerI("Y", "Y", 2, 0, 500);
     }
 
                 /*mc.renderEngine.bindTexture(new ResourceLocation("minecraft", "textures/items/diamond_sword.png"));
@@ -50,20 +50,21 @@ public class TargetHud extends Module {
                 Minecraft.getMinecraft().getTextureManager().bindTexture(AbstractClientPlayer.getLocationSkin(playerName));
                 GL11.glColor4f(1F, 1F, 1F, 1F);
                 Gui.drawScaledCustomSizeModalRect(x + 4, y + 4, 8, 8, 8, 8, 28, 28, 64, 64);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
 
-
     public int getPing(EntityPlayer player) {
         int ping = 0;
         try {
-            ping = (int)MathUtil.clamp((float) Objects.requireNonNull(mc.getConnection()).getPlayerInfo(player.getUniqueID()).getResponseTime(), 1, 300.0f);
+            ping = (int) MathUtil.clamp((float) Objects.requireNonNull(mc.getConnection()).getPlayerInfo(player.getUniqueID()).getResponseTime(), 1, 300.0f);
         }
-        catch (NullPointerException ignored) {}
+        catch (NullPointerException ignored) {
+        }
         return ping;
     }
 

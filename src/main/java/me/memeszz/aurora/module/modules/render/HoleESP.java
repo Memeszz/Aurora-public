@@ -14,14 +14,14 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: rewrite
+
 public class HoleESP extends Module {
+    public final List<Hole> holes = new ArrayList<>();
+    public int radius = 8;
+
     public HoleESP() {
         super("HoleESP", Category.Render, "Shows holes nigga");
     }
-
-    public int radius = 8;
-    public final List<Hole> holes = new ArrayList<>();
 
     @Listener
     public void onUpdate(UpdateEvent event) {
@@ -51,7 +51,8 @@ public class HoleESP extends Module {
                 if (isBedrockHole(new BlockPos(hole.getX(), hole.getY(), hole.getZ()))) {
                     RenderUtil.drawESP(bb, 0f, 255, 0f, 35F);
                     RenderUtil.drawESPOutline(bb, 0f, 255, 0f, 255f, 1f);
-                } else if (isObbyHole(new BlockPos(hole.getX(), hole.getY(), hole.getZ())) || isBothHole(new BlockPos(hole.getX(), hole.getY(), hole.getZ()))) {
+                }
+                else if (isObbyHole(new BlockPos(hole.getX(), hole.getY(), hole.getZ())) || isBothHole(new BlockPos(hole.getX(), hole.getY(), hole.getZ()))) {
                     RenderUtil.drawESP(bb, 255f, 160f, 0f, 35F);
                     RenderUtil.drawESPOutline(bb, 255f, 160f, 0f, 255f, 1f);
                 }
@@ -107,7 +108,6 @@ public class HoleESP extends Module {
         }
         return true;
     }
-
 
 
     private class Hole extends Vec3i {

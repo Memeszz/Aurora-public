@@ -28,27 +28,11 @@ import static me.memeszz.aurora.module.modules.combat.Surround.canBeClicked;
 import static me.memeszz.aurora.module.modules.combat.Surround.faceVectorPacketInstant;
 
 public class AutoWeb extends Module {
-    public AutoWeb() {
-        super("AutoWeb", Category.Combat, "Webs Players");
-    }
-
+    Setting.mode mode;
     private Setting.d range;
     private Setting.b rotate;
     private Setting.i tickDelay;
     private Setting.i blocksPerTick;
-    Setting.mode mode;
-
-    public void setup() {
-        ArrayList<String> modes = new ArrayList<>();
-        modes.add("Full");
-        modes.add("Feet");
-        modes.add("Body");
-        mode = this.registerMode("Mode", "Mode", modes, "Feet");
-        range = this.registerD("Range", "Range",4.5, 0.0, 6.0);
-        blocksPerTick = this.registerI("BPT", "BPT",4, 0, 10);
-        tickDelay = this.registerI("TimeoutTicks", "TimeoutTicks", 1, 0, 10);
-        rotate = this.registerB("Rotate", "Rotate", true);
-    }
     private EntityPlayer closestTarget;
     private String lastTickTargetName;
     private int playerHotbarSlot = -1;
@@ -57,6 +41,22 @@ public class AutoWeb extends Module {
     private boolean isSneaking = false;
     private int offsetStep = 0;
     private boolean firstRun;
+
+    public AutoWeb() {
+        super("AutoWeb", Category.Combat, "Webs Players");
+    }
+
+    public void setup() {
+        ArrayList<String> modes = new ArrayList<>();
+        modes.add("Full");
+        modes.add("Feet");
+        modes.add("Body");
+        mode = this.registerMode("Mode", "Mode", modes, "Feet");
+        range = this.registerD("Range", "Range", 4.5, 0.0, 6.0);
+        blocksPerTick = this.registerI("BPT", "BPT", 4, 0, 10);
+        tickDelay = this.registerI("TimeoutTicks", "TimeoutTicks", 1, 0, 10);
+        rotate = this.registerB("Rotate", "Rotate", true);
+    }
 
     @Override
     protected void onEnable() {
@@ -107,7 +107,8 @@ public class AutoWeb extends Module {
             if (delayStep < tickDelay.getValue()) {
                 delayStep++;
                 return;
-            } else {
+            }
+            else {
                 delayStep = 0;
             }
         }
@@ -125,30 +126,31 @@ public class AutoWeb extends Module {
             firstRun = false;
             lastTickTargetName = closestTarget.getName();
 
-        } else if (!lastTickTargetName.equals(closestTarget.getName())) {
+        }
+        else if (!lastTickTargetName.equals(closestTarget.getName())) {
             lastTickTargetName = closestTarget.getName();
             offsetStep = 0;
         }
 
         List<Vec3d> placeTargets = new ArrayList<>();
 
-        if(mode.getValue().equalsIgnoreCase("Full")) {
+        if (mode.getValue().equalsIgnoreCase("Full")) {
             Collections.addAll(placeTargets, Offsets.FULL);
         }
 
-        if(mode.getValue().equalsIgnoreCase("Feet")) {
+        if (mode.getValue().equalsIgnoreCase("Feet")) {
             Collections.addAll(placeTargets, Offsets.FEET);
         }
 
-        if(mode.getValue().equalsIgnoreCase("Body")) {
+        if (mode.getValue().equalsIgnoreCase("Body")) {
             Collections.addAll(placeTargets, Offsets.BODY);
         }
 
-        // TODO: dont use static bridging in offset but calculate them on the fly
-        //  based on view direction (or relative direction of target to player)
-        //  (add full/half n/e/s/w patterns to append dynamically)
+        ä
+                //  based on view direction (or relative direction of target to player)
+                //  (add full/half n/e/s/w patterns to append dynamically)
 
-        // TODO: sort offsetList by optimal caging success factor ->
+                ä
         // sort them by pos y up AND start building behind target
 
         int blocksPlaced = 0;
@@ -308,7 +310,7 @@ public class AutoWeb extends Module {
 
     @Override
     public String getHudInfo() {
-        return "\u00A77[\u00A7f" + mode.getValue() + "\u00A77]";
+        return "§7[§f" + mode.getValue() + "§7]";
 
     }
 

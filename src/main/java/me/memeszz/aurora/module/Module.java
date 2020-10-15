@@ -9,14 +9,15 @@ import net.minecraft.client.Minecraft;
 import org.lwjgl.input.Keyboard;
 
 import java.util.List;
+
 //ez
 public class Module {
     protected static final Minecraft mc = Minecraft.getMinecraft();
+    public float animPos = -1;
     String name, description;
     Category category;
     int bind;
     boolean enabled, drawn;
-    public float animPos = -1;
 
     public Module(String n, Category c) {
         name = n;
@@ -38,66 +39,78 @@ public class Module {
         setup();
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setName(String n){
+    public void setName(String n) {
         name = n;
     }
 
-    public Category getCategory(){
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(Category c){
+    public void setCategory(Category c) {
         category = c;
     }
 
-    public int getBind(){
+    public int getBind() {
         return bind;
     }
 
-    public void setBind(int b){
+    public void setBind(int b) {
         bind = b;
     }
 
-    protected void onEnable(){
+    protected void onEnable() {
     }
-    protected void onDisable(){
-    }
-    public void onRender(){}
-    public void onUpdate(){}
-    public void onTick(){}
-    public void onWorldRender(RenderEvent event) {}
 
-    public boolean isEnabled(){
+    protected void onDisable() {
+    }
+
+    public void onRender() {
+    }
+
+    public void onUpdate() {
+    }
+
+    public void onTick() {
+    }
+
+    public void onWorldRender(RenderEvent event) {
+    }
+
+    public boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(boolean e){
+    public void setEnabled(boolean e) {
         enabled = e;
     }
 
-    public void enable(){
+    public void enable() {
         Aurora.getInstance().getEventManager().addEventListener(this);
         setEnabled(true);
         animPos = -1;
-        if(ModuleManager.isModuleEnabled("ToggleMsgs") && !getName().equalsIgnoreCase("ClickGUI")) Wrapper.sendClientMessage(ChatFormatting.YELLOW + getName() + ChatFormatting.GREEN + " Enabled.");
+        if (ModuleManager.isModuleEnabled("ToggleMsgs") && !getName().equalsIgnoreCase("ClickGUI"))
+            Wrapper.sendClientMessage(ChatFormatting.YELLOW + getName() + ChatFormatting.GREEN + " Enabled.");
         onEnable();
     }
 
-    public void disable(){
+    public void disable() {
         Aurora.getInstance().getEventManager().removeEventListener(this);
         setEnabled(false);
-        if(ModuleManager.isModuleEnabled("ToggleMsgs") && !getName().equalsIgnoreCase("ClickGUI")) Wrapper.sendClientMessage(ChatFormatting.YELLOW + getName() + ChatFormatting.RED + " Disabled.");
+        if (ModuleManager.isModuleEnabled("ToggleMsgs") && !getName().equalsIgnoreCase("ClickGUI"))
+            Wrapper.sendClientMessage(ChatFormatting.YELLOW + getName() + ChatFormatting.RED + " Disabled.");
         onDisable();
     }
 
-    public void toggle(){
-        if(isEnabled()) {
+    public void toggle() {
+        if (isEnabled()) {
             disable();
-        } else if(!isEnabled()){
+        }
+        else if (!isEnabled()) {
             enable();
         }
     }
@@ -127,21 +140,22 @@ public class Module {
         return s;
     }
 
-    public String getHudInfo(){
+    public String getHudInfo() {
         return "";
     }
 
-    public void setup(){}
+    public void setup() {
+    }
 
-    public boolean isDrawn(){
+    public boolean isDrawn() {
         return drawn;
     }
 
-    public void setDrawn(boolean d){
+    public void setDrawn(boolean d) {
         drawn = d;
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return description;
     }
 

@@ -21,6 +21,7 @@ import java.util.Comparator;
 
 public class AutoBedCraft extends Module {
 
+    Item woolForCrafting = Item.getItemFromBlock(Blocks.WOOL);
     private BlockPos tablePostition = null;
     private int delay;
     private boolean hasCrafted;
@@ -31,7 +32,6 @@ public class AutoBedCraft extends Module {
     private boolean fifthSlot;
     private boolean sixthSlot;
     private boolean openCTable;
-    Item woolForCrafting = Item.getItemFromBlock(Blocks.WOOL);
 
     public AutoBedCraft() {
         super("AutoBedCraft", Category.Player, "Crafts Beds Automatically perfect for 1.13 and up servers");
@@ -51,26 +51,24 @@ public class AutoBedCraft extends Module {
         //wasInTable = false;
 
 
-            int tableSlot = getTableSlot();
+        int tableSlot = getTableSlot();
 
-            //why not hopefully stops a kick error if ctable not in hotbar too lazy to add another filter thing
-            if (tableSlot == -1) {
-
-            } else
+        //why not hopefully stops a kick error if ctable not in hotbar too lazy to add another filter thing
+        if (tableSlot != -1) {
             tablePostition = BlockInteractionHelper.getSphere(BlockInteractionHelper.GetLocalPlayerPosFloored(), 4.0f, 4, false, true, 0).stream()
                     .filter(this::IsValidBlockPos)
                     .min(Comparator.comparing(p_Pos -> EntityUtil.getDistanceOfEntityToBlock(mc.player, p_Pos)))
                     .orElse(null);
-
-
-
-            if (tablePostition == null)
-                return;
-
-            mc.player.inventory.currentItem = tableSlot;
-            mc.playerController.updateController();
-            BlockInteractionHelper.placeBlockScaffold(tablePostition);
         }
+
+
+        if (tablePostition == null)
+            return;
+
+        mc.player.inventory.currentItem = tableSlot;
+        mc.playerController.updateController();
+        BlockInteractionHelper.placeBlockScaffold(tablePostition);
+    }
 
 
     @Listener
@@ -84,7 +82,7 @@ public class AutoBedCraft extends Module {
             openCTable = true;
         }
         // we're checking to see if we have started to craft before and if were in a crafting table
-        if ( mc.currentScreen instanceof GuiCrafting && !hasCrafted) {
+        if (mc.currentScreen instanceof GuiCrafting && !hasCrafted) {
             // this is getting all of our slots for our inventory 1-9 is reserved for droppeds ctabes etc while its either 9-46 or 10-46 is our inv
             for (int i = 9; i < 46; i++) {
                 ItemStack stacks = mc.player.openContainer.getSlot(i).getStack();
@@ -152,16 +150,16 @@ public class AutoBedCraft extends Module {
 
             }
         }
-            if (firstSlot && secondSlot && thirdSlot && fourthSlot && fifthSlot && sixthSlot && hasCrafted && !(mc.currentScreen instanceof GuiCrafting)) {
-                // gotta wait for bullet to fix this. this will toggle the module off once the auto crafting is complete
-                this.disable();
-                // this.disable is broken With Alpine
+        if (firstSlot && secondSlot && thirdSlot && fourthSlot && fifthSlot && sixthSlot && hasCrafted && !(mc.currentScreen instanceof GuiCrafting)) {
+            // gotta wait for bullet to fix this. this will toggle the module off once the auto crafting is complete
+            this.disable();
+            // this.disable is broken With Alpine
 
         }
 
     }
 
-// finds valid places to place the CTable
+    // finds valid places to place the CTable
     private boolean IsValidBlockPos(final BlockPos p_Pos) {
         IBlockState state = mc.world.getBlockState(p_Pos);
 
@@ -173,16 +171,16 @@ public class AutoBedCraft extends Module {
 
         return false;
     }
-// gets the hotbar slot the CTable is in
-    private int getTableSlot()
-    {
+
+    // gets the hotbar slot the CTable is in
+    private int getTableSlot() {
         for (int I = 0; I < 9; ++I) {
             ItemStack stack = mc.player.inventory.getStackInSlot(I);
             if (stack != ItemStack.EMPTY) {
                 if (Item.getIdFromItem(stack.getItem()) == 58)
                     return I;
-                }
             }
+        }
         return -1;
 
     }

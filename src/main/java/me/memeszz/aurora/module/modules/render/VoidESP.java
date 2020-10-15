@@ -20,10 +20,6 @@ import java.util.List;
 //skidded will rewrite later
 
 public class VoidESP extends Module {
-    public VoidESP() {
-        super("VoidESP", Category.Render);
-    }
-
     Setting.b rainbow;
     Setting.i radius;
     Setting.i activeYValue;
@@ -31,8 +27,16 @@ public class VoidESP extends Module {
     Setting.i green;
     Setting.i blue;
     Setting.i alpha;
-
     Setting.mode renderType;
+    private ConcurrentSet<BlockPos> voidHoles;
+
+    public VoidESP() {
+        super("VoidESP", Category.Render);
+    }
+
+    public static BlockPos getPlayerPos() {
+        return new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ));
+    }
 
     public void setup() {
         ArrayList<String> render = new ArrayList<>();
@@ -40,16 +44,14 @@ public class VoidESP extends Module {
         render.add("Fill");
         render.add("Both");
 
-        radius = registerI("Radius", "Radius",10, 1, 40);
-        activeYValue = registerI("Activate Y","Activate Y", 20, 0, 256);
-        red = this.registerI("Red", "Red",255, 0, 255);
-        green = this.registerI("Green", "Green",255, 0, 255);
-        blue = this.registerI("Blue","Blue",  255, 0, 255);
-        alpha = this.registerI("Alpha", "Alpha",50, 0, 255);
-        renderType = registerMode("Render", "Render",render, "Outline");
+        radius = registerI("Radius", "Radius", 10, 1, 40);
+        activeYValue = registerI("Activate Y", "Activate Y", 20, 0, 256);
+        red = this.registerI("Red", "Red", 255, 0, 255);
+        green = this.registerI("Green", "Green", 255, 0, 255);
+        blue = this.registerI("Blue", "Blue", 255, 0, 255);
+        alpha = this.registerI("Alpha", "Alpha", 50, 0, 255);
+        renderType = registerMode("Render", "Render", render, "Outline");
     }
-
-    private ConcurrentSet<BlockPos> voidHoles;
 
     @Listener
     public void onUpdate(UpdateEvent event) {
@@ -61,7 +63,8 @@ public class VoidESP extends Module {
         }
         if (voidHoles == null) {
             voidHoles = new ConcurrentSet<>();
-        } else {
+        }
+        else {
             voidHoles.clear();
         }
 
@@ -99,10 +102,6 @@ public class VoidESP extends Module {
         }
     }
 
-    public static BlockPos getPlayerPos() {
-        return new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ));
-    }
-
     private boolean isAnyBedrock(BlockPos origin, BlockPos[] offset) {
         for (BlockPos pos : offset) {
             if (mc.world.getBlockState(origin.add(pos)).getBlock().equals(Blocks.BEDROCK)) {
@@ -111,15 +110,6 @@ public class VoidESP extends Module {
         }
         return false;
     }
-
-    private static class Offsets {
-        static final BlockPos[] center = {
-                new BlockPos(0, 0, 0),
-                new BlockPos(0, 1, 0),
-                new BlockPos(0, 2, 0)
-        };
-    }
-
 
     private void drawBox(BlockPos blockPos, int value, int r, int g, int b) {
         if (renderType.getValue().equalsIgnoreCase("Fill") || renderType.getValue().equalsIgnoreCase("Both")) {
@@ -134,6 +124,14 @@ public class VoidESP extends Module {
             final float[] hue = {(System.currentTimeMillis() % (360 * 32)) / (360f * 32)};
             hue[0] += .02f;
             RenderUtil.drawBoundingBoxBlockPos(blockPos, width, r, g, b, 255);
-            }
         }
     }
+
+    private static class Offsets {
+        static final BlockPos[] center = {
+                new BlockPos(0, 0, 0),
+                new BlockPos(0, 1, 0),
+                new BlockPos(0, 2, 0)
+        };
+    }
+}

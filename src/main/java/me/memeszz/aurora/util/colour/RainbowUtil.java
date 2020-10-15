@@ -5,9 +5,10 @@ import java.awt.*;
 public class RainbowUtil {
 
     public static int y;
+
     /**
-     *@author superblaubeere27
-     *https://www.youtube.com/watch?v=fkYmNfvNtvgy
+     * @author superblaubeere27
+     * https://www.youtube.com/watch?v=fkYmNfvNtvgy
      */
 
 

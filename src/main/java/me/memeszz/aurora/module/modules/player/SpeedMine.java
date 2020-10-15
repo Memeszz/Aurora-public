@@ -19,31 +19,30 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.ArrayList;
 
 public class SpeedMine extends Module {
-    public SpeedMine() {
-        super("SpeedMine", Category.Player, "Mine blocks faster");
-    }
-
     Setting.mode mode;
-
-    @Override
-    public String getHudInfo() {
-        return "\u00A77[\u00A7f" + mode.getValue() + "\u00A77]";
-    }
-
     Setting.b reset;
     Setting.b FastFall;
     Setting.b doubleBreak;
 
+    public SpeedMine() {
+        super("SpeedMine", Category.Player, "Mine blocks faster");
+    }
+
+    @Override
+    public String getHudInfo() {
+        return "§7[§f" + mode.getValue() + "§7]";
+    }
+
     public void setup() {
-        reset = this.registerB("Reset", "Reset",false);
-        FastFall = this.registerB("FastFall", "FastFall",false);
-        doubleBreak = this.registerB("DoubleBreak", "DoubleBreak",false);
+        reset = this.registerB("Reset", "Reset", false);
+        FastFall = this.registerB("FastFall", "FastFall", false);
+        doubleBreak = this.registerB("DoubleBreak", "DoubleBreak", false);
 
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Packet");
         modes.add("Damage");
         modes.add("Instant");
-        mode = this.registerMode("Mode","Mode", modes, "Packet");
+        mode = this.registerMode("Mode", "Mode", modes, "Packet");
 
     }
 
@@ -51,14 +50,14 @@ public class SpeedMine extends Module {
     @Listener
     public void onUpdate(UpdateEvent event) {
         ((IPlayerControllerMP) mc.playerController).setBlockHitDelay(0);
-            if (this.reset.getValue() && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
-                ((IPlayerControllerMP) mc.playerController).setIsHittingBlock(false);
-            }
-            if (FastFall.getValue()) {
-                if (mc.player.onGround)
-                    --mc.player.motionY;
-            }
+        if (this.reset.getValue() && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
+            ((IPlayerControllerMP) mc.playerController).setIsHittingBlock(false);
         }
+        if (FastFall.getValue()) {
+            if (mc.player.onGround)
+                --mc.player.motionY;
+        }
+    }
 
 
     @Listener
@@ -71,31 +70,31 @@ public class SpeedMine extends Module {
 
     @Listener
     public void clickBlock(EventPlayerClickBlock event) {
-             if (this.reset.getValue()) {
-                if (((IPlayerControllerMP) mc.playerController).getCurBlockDamageMP() > 0.1f) {
-                    ((IPlayerControllerMP) mc.playerController).setIsHittingBlock(true);
-                }
+        if (this.reset.getValue()) {
+            if (((IPlayerControllerMP) mc.playerController).getCurBlockDamageMP() > 0.1f) {
+                ((IPlayerControllerMP) mc.playerController).setIsHittingBlock(true);
             }
         }
+    }
 
 
     @Listener
     public void damageBlock(EventPlayerDamageBlock event) {
-            if (canBreak(event.getPos())) {
-                if (this.reset.getValue()) {
-                    ((IPlayerControllerMP) mc.playerController).setIsHittingBlock(false);
-                }
+        if (canBreak(event.getPos())) {
+            if (this.reset.getValue()) {
+                ((IPlayerControllerMP) mc.playerController).setIsHittingBlock(false);
+            }
 
-                if (mode.getValue().equalsIgnoreCase("Instant")) {
-                    mc.player.swingArm(EnumHand.MAIN_HAND);
-                    mc.player.connection.sendPacket(new CPacketPlayerDigging(
-                            CPacketPlayerDigging.Action.START_DESTROY_BLOCK, event.getPos(), event.getDirection()));
-                    mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK,
-                            event.getPos(), event.getDirection()));
-                    mc.playerController.onPlayerDestroyBlock(event.getPos());
-                    mc.world.setBlockToAir(event.getPos());
-                }
-                if ((mc.player.getHeldItemMainhand().getItem() instanceof ItemPickaxe)) {
+            if (mode.getValue().equalsIgnoreCase("Instant")) {
+                mc.player.swingArm(EnumHand.MAIN_HAND);
+                mc.player.connection.sendPacket(new CPacketPlayerDigging(
+                        CPacketPlayerDigging.Action.START_DESTROY_BLOCK, event.getPos(), event.getDirection()));
+                mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK,
+                        event.getPos(), event.getDirection()));
+                mc.playerController.onPlayerDestroyBlock(event.getPos());
+                mc.world.setBlockToAir(event.getPos());
+            }
+            if ((mc.player.getHeldItemMainhand().getItem() instanceof ItemPickaxe)) {
 
                 if (mode.getValue().equalsIgnoreCase("Packet")) {
                     mc.player.swingArm(EnumHand.MAIN_HAND);

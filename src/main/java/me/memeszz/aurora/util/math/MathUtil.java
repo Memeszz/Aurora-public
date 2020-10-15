@@ -1,4 +1,3 @@
-
 package me.memeszz.aurora.util.math;
 
 import net.minecraft.util.math.MathHelper;
@@ -48,7 +47,7 @@ public final class MathUtil {
         final double difY = (to.y - from.y) * -1.0;
         final double difZ = to.z - from.z;
         final double dist = MathHelper.sqrt(difX * difX + difZ * difZ);
-        return new float[] { (float)MathHelper.wrapDegrees(Math.toDegrees(Math.atan2(difZ, difX)) - 90.0), (float)MathHelper.wrapDegrees(Math.toDegrees(Math.atan2(difY, dist))) };
+        return new float[]{(float) MathHelper.wrapDegrees(Math.toDegrees(Math.atan2(difZ, difX)) - 90.0), (float) MathHelper.wrapDegrees(Math.toDegrees(Math.atan2(difY, dist)))};
     }
 }
 

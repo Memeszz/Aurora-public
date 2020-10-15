@@ -16,12 +16,25 @@ public class LogoutCoords extends Module {
     }
 
     @SubscribeEvent
-    public void onPlayerLeaveEvent(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) { if (!mc.isSingleplayer()) { if (!mc.getCurrentServerData().serverIP.equalsIgnoreCase("2b2tpvp.net") && mc.player.dimension != 1) { int x = (int) mc.player.posX;int y = (int) mc.player.posY;int z = (int) mc.player.posZ;String coords = "Logout Coords: X:" + x + " Y:" + y + " Z:" + z;StringSelection data = new StringSelection(coords);Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();cb.setContents(data, data); } } }
+    public void onPlayerLeaveEvent(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+        if (!mc.isSingleplayer()) {
+            if (!mc.getCurrentServerData().serverIP.equalsIgnoreCase("2b2tpvp.net") && mc.player.dimension != 1) {
+                int x = (int) mc.player.posX;
+                int y = (int) mc.player.posY;
+                int z = (int) mc.player.posZ;
+                String coords = "Logout Coords: X:" + x + " Y:" + y + " Z:" + z;
+                StringSelection data = new StringSelection(coords);
+                Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+                cb.setContents(data, data);
+            }
+        }
+    }
 
     @Override
     public void onEnable() {
         MinecraftForge.EVENT_BUS.register(this);
     }
+
     @Override
     public void onDisable() {
         MinecraftForge.EVENT_BUS.unregister(this);

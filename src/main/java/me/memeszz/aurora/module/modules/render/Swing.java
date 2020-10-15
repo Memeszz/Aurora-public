@@ -16,7 +16,7 @@ public class Swing extends Module {
         if (mc.world == null)
             return;
 
-            mc.player.swingingHand = EnumHand.OFF_HAND;
+        mc.player.swingingHand = EnumHand.OFF_HAND;
 
     }
 }

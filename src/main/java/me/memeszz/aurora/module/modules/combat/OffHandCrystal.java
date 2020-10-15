@@ -12,22 +12,25 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class OffHandCrystal extends Module {
-    public OffHandCrystal() {
-        super("OffHandCrystal", Category.Combat, "Attacks nearby players");
-    }
-
-
+    public int crystals;
     Setting.b crystalCheck;
     Setting.b totemdisable;
     Setting.d health;
     Setting.b announceUsage2;
-    public int crystals;
+
+    public OffHandCrystal() {
+        super("OffHandCrystal", Category.Combat, "Attacks nearby players");
+    }
+
+    public static int getItems(Item i) {
+        return mc.player.inventory.mainInventory.stream().filter(itemStack -> itemStack.getItem() == i).mapToInt(ItemStack::getCount).sum() + mc.player.inventory.offHandInventory.stream().filter(itemStack -> itemStack.getItem() == i).mapToInt(ItemStack::getCount).sum();
+    }
 
     public void setup() {
-        announceUsage2 = this.registerB("Chat", "Chat",true);
-        totemdisable = this.registerB("TotemDisable", "TotemDisable",false);
-        health = this.registerD("Health","Health", 13, 1, 36);
-        crystalCheck = this.registerB("CrystalCheck","CrystalCheck", false);
+        announceUsage2 = this.registerB("Chat", "Chat", true);
+        totemdisable = this.registerB("TotemDisable", "TotemDisable", false);
+        health = this.registerD("Health", "Health", 13, 1, 36);
+        crystalCheck = this.registerB("CrystalCheck", "CrystalCheck", false);
     }
 
     public void onEnable() {
@@ -35,7 +38,7 @@ public class OffHandCrystal extends Module {
             ModuleManager.getModuleByName("AutoTotem").disable();
         }
         if (announceUsage2.getValue()) {
-            Wrapper.sendClientMessage("\u00A7aOffHandCrystal Enabled");
+            Wrapper.sendClientMessage("§aOffHandCrystal Enabled");
         }
     }
 
@@ -44,18 +47,13 @@ public class OffHandCrystal extends Module {
             ModuleManager.getModuleByName("AutoTotem").enable();
         }
         if (announceUsage2.getValue()) {
-            Wrapper.sendClientMessage("\u00A7cOffHandCrystal Disabled");
+            Wrapper.sendClientMessage("§cOffHandCrystal Disabled");
         }
     }
 
-    public static int getItems(Item i) {
-        return mc.player.inventory.mainInventory.stream().filter(itemStack -> itemStack.getItem() == i).mapToInt(ItemStack::getCount).sum() + mc.player.inventory.offHandInventory.stream().filter(itemStack -> itemStack.getItem() == i).mapToInt(ItemStack::getCount).sum();
-    }
-
-
     public void onTick() {
         if (mc.currentScreen instanceof GuiContainer) return;
-        if (!shouldTotem() || getItems(Items.TOTEM_OF_UNDYING) == 0)  {
+        if (!shouldTotem() || getItems(Items.TOTEM_OF_UNDYING) == 0) {
             if (!(mc.player.getHeldItemOffhand() != ItemStack.EMPTY && mc.player.getHeldItemOffhand().getItem() == Items.END_CRYSTAL)) {
                 final int slot = getCrystalSlot() < 9 ? getCrystalSlot() + 36 : getCrystalSlot();
                 if (getCrystalSlot() != -1) {
@@ -64,7 +62,8 @@ public class OffHandCrystal extends Module {
                     mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, mc.player);
                 }
             }
-        } else if (!(mc.player.getHeldItemOffhand() != ItemStack.EMPTY && mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING)) {
+        }
+        else if (!(mc.player.getHeldItemOffhand() != ItemStack.EMPTY && mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING)) {
             final int slot = getTotemSlot() < 9 ? getTotemSlot() + 36 : getTotemSlot();
             if (getTotemSlot() != -1) {
                 mc.playerController.windowClick(0, slot, 0, ClickType.PICKUP, mc.player);
@@ -103,7 +102,7 @@ public class OffHandCrystal extends Module {
 
     @Override
     public String getHudInfo() {
-        return "\u00A77[\u00A7f" + crystals + "\u00A77]";
+        return "§7[§f" + crystals + "§7]";
     }
 }
 

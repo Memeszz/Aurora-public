@@ -15,43 +15,52 @@ import net.minecraft.world.World;
 
 
 public class Wrapper {
-     private static CFontRenderer fontRenderer;
-     public static final Aurora mod;
-     private static String prefix;
-     public static void init() { fontRenderer = Aurora.fontRenderer; }
-     public static final Minecraft mc;
+    public static final Aurora mod;
+    public static final Minecraft mc;
+    private static final String prefix;
+    public static volatile Wrapper INSTANCE = new Wrapper();
+    private static CFontRenderer fontRenderer;
 
-     public static volatile Wrapper INSTANCE = new Wrapper();
+    static {
+        mc = Minecraft.getMinecraft();
+        mod = Aurora.getInstance();
+        prefix = ChatFormatting.DARK_AQUA + "[" + ChatFormatting.AQUA + "Aurora" + ChatFormatting.DARK_AQUA + "] ";
+    }
 
-   public static Minecraft getMinecraft() { return Minecraft.getMinecraft(); }
+    public static void init() {
+        fontRenderer = Aurora.fontRenderer;
+    }
 
-     public Minecraft mc() {
-         return Minecraft.getMinecraft();
-     }
-
-
+    public static Minecraft getMinecraft() {
+        return Minecraft.getMinecraft();
+    }
 
     public static Entity getRenderEntity() {
         return mc.getRenderViewEntity();
     }
 
-   public static EntityPlayerSP getPlayer() { return (getMinecraft()).player; }
+    public static EntityPlayerSP getPlayer() {
+        return (getMinecraft()).player;
+    }
 
 
-   public static World getWorld() { return (getMinecraft()).world; }
+    public static World getWorld() {
+        return (getMinecraft()).world;
+    }
 
+    public static void sendClientMessage(final String message) {
+        if (mc.player == null) {
+            return;
+        }
+        final ITextComponent itc = new TextComponentString(prefix + ChatFormatting.GRAY + message).setStyle(new Style().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Aurora"))));
+        mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(itc, 5936);
+    }
 
-    static {
-         mc = Minecraft.getMinecraft();
-         mod = Aurora.getInstance();
-         prefix = ChatFormatting.DARK_AQUA + "[" + ChatFormatting.AQUA + "Aurora" + ChatFormatting.DARK_AQUA + "] ";
-     }
-     public static void sendClientMessage(final String message) {
-     if (mc.player == null) {
-         return;
-     }
-     final ITextComponent itc = new TextComponentString(prefix + ChatFormatting.GRAY + message).setStyle(new Style().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponentString("Aurora"))));
-     mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(itc, 5936);
- }
-   public static CFontRenderer getFontRenderer() { return fontRenderer; }
+    public static CFontRenderer getFontRenderer() {
+        return fontRenderer;
+    }
+
+    public Minecraft mc() {
+        return Minecraft.getMinecraft();
+    }
 }

@@ -20,6 +20,7 @@ public class PacketEvent extends EventCancellable {
             super(packet);
         }
     }
+
     public static class Send extends PacketEvent {
         public Send(Packet packet) {
             super(packet);

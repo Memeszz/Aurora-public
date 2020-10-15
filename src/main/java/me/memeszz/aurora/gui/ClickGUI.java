@@ -7,11 +7,14 @@ import net.minecraft.client.gui.GuiScreen;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class ClickGUI extends GuiScreen
-{
+public class ClickGUI extends GuiScreen {
     public static ArrayList<Frame> frames;
     public static int color;
-    
+
+    static {
+        color = -1;
+    }
+
     public ClickGUI() {
         frames = new ArrayList<>();
         int frameX = 5;
@@ -22,12 +25,12 @@ public class ClickGUI extends GuiScreen
             frameX += frame.getWidth() + 10;
         }
     }
-    
+
     public void initGui() {
     }
-    
+
     public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
-        color = new Color(ClickGuiModule.red.getValue(), ClickGuiModule.green.getValue(),ClickGuiModule.blue.getValue(), ClickGuiModule.alpha.getValue()).getRGB();
+        color = new Color(ClickGuiModule.red.getValue(), ClickGuiModule.green.getValue(), ClickGuiModule.blue.getValue(), ClickGuiModule.alpha.getValue()).getRGB();
         for (final Frame frame : frames) {
             frame.renderFrame();
             frame.updatePosition(mouseX, mouseY);
@@ -36,7 +39,7 @@ public class ClickGUI extends GuiScreen
             }
         }
     }
-    
+
     protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) {
         for (final Frame frame : frames) {
             if (frame.isWithinHeader(mouseX, mouseY) && mouseButton == 0) {
@@ -54,7 +57,7 @@ public class ClickGUI extends GuiScreen
             }
         }
     }
-    
+
     protected void keyTyped(final char typedChar, final int keyCode) {
         for (final Frame frame : frames) {
             if (frame.isOpen() && keyCode != 1 && !frame.getComponents().isEmpty()) {
@@ -67,7 +70,7 @@ public class ClickGUI extends GuiScreen
             this.mc.displayGuiScreen(null);
         }
     }
-    
+
     protected void mouseReleased(final int mouseX, final int mouseY, final int state) {
         for (final Frame frame : frames) {
             frame.setDrag(false);
@@ -80,12 +83,8 @@ public class ClickGUI extends GuiScreen
             }
         }
     }
-    
+
     public boolean doesGuiPauseGame() {
         return false;
-    }
-    
-    static {
-        color = -1;
     }
 }

@@ -24,10 +24,6 @@ import net.minecraft.util.math.Vec3d;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class AutoEchest extends Module {
-    public AutoEchest() {
-        super("AutoEChest", Category.Combat, "Places echest around you");
-    }
-
     private int playerHotbarSlot = -1;
     private int lastHotbarSlot = -1;
     private int offsetStep = 0;
@@ -38,10 +34,14 @@ public class AutoEchest extends Module {
     private Setting.i blocksPerTick2;
     private Setting.b rotate2;
 
+    public AutoEchest() {
+        super("AutoEChest", Category.Combat, "Places echest around you");
+    }
+
     public void setup() {
-        tickDelay2 = this.registerI("Delay", "Delay",0, 0, 10);
+        tickDelay2 = this.registerI("Delay", "Delay", 0, 0, 10);
         blocksPerTick2 = this.registerI("Bpt", "Bpt", 4, 0, 10);
-        rotate2 = this.registerB("Rotate", "Rotate",true);
+        rotate2 = this.registerB("Rotate", "Rotate", true);
 
     }
 
@@ -72,7 +72,8 @@ public class AutoEchest extends Module {
             if (delayStep < tickDelay2.getValue()) {
                 delayStep++;
                 return;
-            } else {
+            }
+            else {
                 delayStep = 0;
             }
         }
@@ -86,7 +87,7 @@ public class AutoEchest extends Module {
         while (blocksPlaced < blocksPerTick2.getValue()) {
             Vec3d[] offsetPattern;
             int maxSteps;
-             {
+            {
                 offsetPattern = Offsets.SURROUND;
                 maxSteps = Offsets.SURROUND.length;
             }
@@ -180,7 +181,6 @@ public class AutoEchest extends Module {
         ((IMinecraft) mc).setRightClickDelayTimer(4);
 
         mc.player.connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.START_DESTROY_BLOCK, neighbour, opposite));
-
 
 
         return true;

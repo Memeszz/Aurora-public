@@ -20,16 +20,17 @@ public class MacroCommand extends Command {
 
     @Override
     public void onCommand(String command, String[] args) throws Exception {
-        if(args[0].equalsIgnoreCase("add")){
+        if (args[0].equalsIgnoreCase("add")) {
             Aurora.getInstance().macroManager.delMacro(Aurora.getInstance().macroManager.getMacroByKey(Keyboard.getKeyIndex(args[1])));
             Aurora.getInstance().macroManager.addMacro(new Macro(Keyboard.getKeyIndex(args[1].toUpperCase()), args[2].replace("_", " ")));
             Wrapper.sendClientMessage(ChatFormatting.GREEN + "Added" + ChatFormatting.GREEN + " macro for key \"" + args[1].toUpperCase() + "\" with value \"" + args[2].replace("_", " ") + "\".");
         }
-        if(args[0].equalsIgnoreCase("del")){
-            if(Aurora.getInstance().macroManager.getMacros().contains(Aurora.getInstance().macroManager.getMacroByKey(Keyboard.getKeyIndex(args[1].toUpperCase())))) {
+        if (args[0].equalsIgnoreCase("del")) {
+            if (Aurora.getInstance().macroManager.getMacros().contains(Aurora.getInstance().macroManager.getMacroByKey(Keyboard.getKeyIndex(args[1].toUpperCase())))) {
                 Aurora.getInstance().macroManager.delMacro(Aurora.getInstance().macroManager.getMacroByKey(Keyboard.getKeyIndex(args[1].toUpperCase())));
                 Wrapper.sendClientMessage(ChatFormatting.RED + "Removed " + ChatFormatting.RED + "macro for key \"" + args[1].toUpperCase() + "\".");
-            }else {
+            }
+            else {
                 Wrapper.sendClientMessage(ChatFormatting.RED + "That macro doesn't exist!");
             }
         }

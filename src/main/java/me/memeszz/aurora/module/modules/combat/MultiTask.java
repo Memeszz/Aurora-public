@@ -1,5 +1,3 @@
-
-
 package me.memeszz.aurora.module.modules.combat;
 
 import me.memeszz.aurora.event.events.UpdateEvent;
@@ -29,7 +27,8 @@ public class MultiTask extends Module {
                     mc.player.setActiveHand(EnumHand.OFF_HAND);
                     mc.player.swingArm(EnumHand.MAIN_HAND);
                 }
-            } else {
+            }
+            else {
                 mc.player.connection.sendPacket(new CPacketPlayerTryUseItemOnBlock(r.getBlockPos(), r.sideHit, EnumHand.OFF_HAND, 0.0F, 0.0F, 0.0F));
             }
         }

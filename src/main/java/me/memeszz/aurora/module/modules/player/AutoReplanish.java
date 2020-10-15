@@ -16,16 +16,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AutoReplanish extends Module {
-    public AutoReplanish() {
-        super("AutoReplenish", Category.Player, "Replenishes items in your hotbar");
-    }
-
     Setting.i threshold;
     Setting.i tickDelay;
     private int delayStep = 0;
-    public void setup(){
-        tickDelay = this.registerI("TickDelay", "TickDelay",4, 0, 20);
-        threshold = this.registerI("Threshold", "Threshold",4, 0, 20);
+
+    public AutoReplanish() {
+        super("AutoReplenish", Category.Player, "Replenishes items in your hotbar");
     }
 
     /**
@@ -59,6 +55,11 @@ public class AutoReplanish extends Module {
 
     }
 
+    public void setup() {
+        tickDelay = this.registerI("TickDelay", "TickDelay", 4, 0, 20);
+        threshold = this.registerI("Threshold", "Threshold", 4, 0, 20);
+    }
+
     @Listener
     public void onUpdate(UpdateEvent event) {
 
@@ -73,7 +74,8 @@ public class AutoReplanish extends Module {
         if (delayStep < tickDelay.getValue()) {
             delayStep++;
             return;
-        } else {
+        }
+        else {
             delayStep = 0;
         }
 
@@ -196,7 +198,7 @@ public class AutoReplanish extends Module {
             Block block1 = ((ItemBlock) stack1.getItem()).getBlock();
             Block block2 = ((ItemBlock) stack2.getItem()).getBlock();
 
-            }
+        }
 
 
         // check if not same names

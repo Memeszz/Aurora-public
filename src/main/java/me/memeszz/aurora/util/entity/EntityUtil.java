@@ -34,16 +34,17 @@ public class EntityUtil {
     public static void attackEntity(Entity entity, boolean packet, boolean swingArm) {
         if (packet) {
             mc.player.connection.sendPacket(new CPacketUseEntity(entity));
-        } else {
+        }
+        else {
             mc.playerController.attackEntity(mc.player, entity);
         }
         if (swingArm) {
             mc.player.swingArm(EnumHand.MAIN_HAND);
-        } else {
+        }
+        else {
             mc.player.connection.sendPacket(new CPacketAnimation(EnumHand.MAIN_HAND));
         }
     }
-
 
 
     public static float calculateDamage(double posX, double posY, double posZ, Entity entity) {

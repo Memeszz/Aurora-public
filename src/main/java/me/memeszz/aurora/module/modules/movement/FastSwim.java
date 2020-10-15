@@ -11,6 +11,7 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 public class FastSwim extends Module {
 
 
+    int divider = 5;
     private Setting.b up;
     private Setting.b water;
     private Setting.b lava;
@@ -18,28 +19,25 @@ public class FastSwim extends Module {
     private Setting.b only2b;
     private Setting.b down;
 
-
-
     public FastSwim() {
         super("FastSwim", Category.Movement, "Allows The Player To Swim Faster Horizontally and Vertically");
     }
 
     public void setup() {
-        up = this.registerB("FastSwimUp", "FastSwimUp",true);
-        down = this.registerB("FastSwimDown", "FastSwimDown",true);
-        water = this.registerB("StrafeWater", "StrafeWater",false);
-        lava = this.registerB("StrafeLava", "StrafeLava",true);
-        sprint = this.registerB("AutoSprintInLiquid", "AutoSprintInLiquid",true);
-        only2b = this.registerB("Only2b","Only2b", true);
+        up = this.registerB("FastSwimUp", "FastSwimUp", true);
+        down = this.registerB("FastSwimDown", "FastSwimDown", true);
+        water = this.registerB("StrafeWater", "StrafeWater", false);
+        lava = this.registerB("StrafeLava", "StrafeLava", true);
+        sprint = this.registerB("AutoSprintInLiquid", "AutoSprintInLiquid", true);
+        only2b = this.registerB("Only2b", "Only2b", true);
 
     }
-    int divider = 5;
 
     @Listener
     public void onUpdate(UpdateEvent event) {
         if (only2b.getValue()) {
             if (!mc.isSingleplayer()) {
-                if ( ((IMinecraft) mc).getCurrentServerData().serverIP.equalsIgnoreCase("2b2t.org")) {
+                if (((IMinecraft) mc).getCurrentServerData().serverIP.equalsIgnoreCase("2b2t.org")) {
 
                     if (sprint.getValue()) {
                         if (mc.player.isInLava() || mc.player.isInWater()) {
@@ -136,6 +134,7 @@ public class FastSwim extends Module {
             }
         }
     }
+
     private float GetRotationYawForCalc() {
         float rotationYaw = mc.player.rotationYaw;
         if (mc.player.moveForward < 0.0f) {

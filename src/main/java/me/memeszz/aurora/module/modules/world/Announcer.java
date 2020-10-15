@@ -22,35 +22,27 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Announcer extends Module {
-    public Announcer() {
-        super("Announcer", Category.World, "Announces what you do in chat");
-    }
-
     public static int blockBrokeDelay = 0;
-    static int blockPlacedDelay = 0;
-    static int jumpDelay = 0;
-    static int attackDelay = 0;
-    static int eattingDelay = 0;
-
-    static long lastPositionUpdate;
-    static double lastPositionX;
-    static double lastPositionY;
-    static double lastPositionZ;
-    private static double speed;
-    String heldItem = "";
-
-    int blocksPlaced = 0;
-    int blocksBroken = 0;
-    int eaten = 0;
-
     public static String walkMessage;
     public static String placeMessage;
     public static String jumpMessage;
     public static String breakMessage;
     public static String attackMessage;
     public static String eatMessage;
-
+    static int blockPlacedDelay = 0;
+    static int jumpDelay = 0;
+    static int attackDelay = 0;
+    static int eattingDelay = 0;
+    static long lastPositionUpdate;
+    static double lastPositionX;
+    static double lastPositionY;
+    static double lastPositionZ;
+    private static double speed;
     public Setting.b clientSide;
+    String heldItem = "";
+    int blocksPlaced = 0;
+    int blocksBroken = 0;
+    int eaten = 0;
     private Setting.b walk;
     private Setting.b place;
     private Setting.b jump;
@@ -60,6 +52,9 @@ public class Announcer extends Module {
     private Setting.d delay;
     private Setting.mode lang;
 
+    public Announcer() {
+        super("Announcer", Category.World, "Announces what you do in chat");
+    }
 
     public void setup() {
         ArrayList<String> modes = new ArrayList<>();
@@ -68,13 +63,13 @@ public class Announcer extends Module {
         modes.add("German");
         lang = registerMode("Language", "Language", modes, "German");
         clientSide = this.registerB("ClientSide", "ClientSide", false);
-        walk = this.registerB("Walk", "Walk",true);
+        walk = this.registerB("Walk", "Walk", true);
         place = this.registerB("BlockPlace", "BlockPlace", false);
         jump = this.registerB("Jump", "Jump", true);
-        breaking = this.registerB("BlockBreak", "BlockBreak",false);
+        breaking = this.registerB("BlockBreak", "BlockBreak", false);
         attack = this.registerB("AttackEntity", "AttackEntity", false);
-        eat = this.registerB("Eat", "Eat",true);
-        delay = this.registerD("DelayMultiplier", "DelayMultiplier",1, 1, 20);
+        eat = this.registerB("Eat", "Eat", true);
+        delay = this.registerD("DelayMultiplier", "DelayMultiplier", 1, 1, 20);
     }
 
 
@@ -96,12 +91,12 @@ public class Announcer extends Module {
             eatMessage = "I just ate {amount] {name} thanks to Aurora!";
         }
         if (lang.getValue().equals("Finnish")) {
-            walkMessage = "M\u00E4 just lensin {blocks} metrii, kiitokset Aurora!";
-            placeMessage = "M\u00E4 just pistin {amount} {name} blockii, kiitokset Aurora!";
-            jumpMessage = "M\u00E4 hyppäsin vitun korkeelle, kiitokset Aurora!";
-            breakMessage = "M\u00E4 paskoin {amount} {name}, kiitokset Aurora!";
-            attackMessage = "M\u00E4 just pistin {name} p\u00E4\u00E4h\u00E4 {item} avul, kiitokset Aurora!";
-            eatMessage = "M\u00E4 just s\u00F6in {amount} {name}, kiitokset Aurora!";
+            walkMessage = "Mä just lensin {blocks} metrii, kiitokset Aurora!";
+            placeMessage = "Mä just pistin {amount} {name} blockii, kiitokset Aurora!";
+            jumpMessage = "Mä hyppäsin vitun korkeelle, kiitokset Aurora!";
+            breakMessage = "Mä paskoin {amount} {name}, kiitokset Aurora!";
+            attackMessage = "Mä just pistin {name} päähä {item} avul, kiitokset Aurora!";
+            eatMessage = "Mä just söin {amount} {name}, kiitokset Aurora!";
         }
         if (lang.getValue().equals("English")) {
             walkMessage = "Ich bin gerade {blocks} verfickte Blöcke geflogen dank der Kraft von Aurora!";
@@ -126,7 +121,8 @@ public class Announcer extends Module {
 
                     if (clientSide.getValue()) {
                         Wrapper.sendClientMessage(walkMessage.replace("{blocks}", walkAmount));
-                    } else {
+                    }
+                    else {
                         mc.player.sendChatMessage(walkMessage.replace("{blocks}", walkAmount));
                     }
                     lastPositionUpdate = System.currentTimeMillis();
@@ -150,7 +146,8 @@ public class Announcer extends Module {
                         if (clientSide.getValue()) {
                             Wrapper.sendClientMessage
                                     (eatMessage.replace("{amount}", eaten + "").replace("{name}", mc.player.getHeldItemMainhand().getDisplayName()));
-                        } else {
+                        }
+                        else {
                             mc.player.sendChatMessage
                                     (eatMessage.replace("{amount}", eaten + "").replace("{name}", mc.player.getHeldItemMainhand().getDisplayName()));
                         }
@@ -172,7 +169,8 @@ public class Announcer extends Module {
                     String msg = placeMessage.replace("{amount}", blocksPlaced + "").replace("{name}", mc.player.getHeldItemMainhand().getDisplayName());
                     if (clientSide.getValue()) {
                         Wrapper.sendClientMessage(msg);
-                    } else {
+                    }
+                    else {
                         mc.player.sendChatMessage(msg);
                     }
                     blocksPlaced = 0;
@@ -193,7 +191,8 @@ public class Announcer extends Module {
                         .replace("{name}", mc.world.getBlockState(event.getBlockPos()).getBlock().getLocalizedName());
                 if (clientSide.getValue()) {
                     Wrapper.sendClientMessage(msg);
-                } else {
+                }
+                else {
                     mc.player.sendChatMessage(msg);
                 }
                 blocksBroken = 0;
@@ -209,7 +208,8 @@ public class Announcer extends Module {
                 String msg = attackMessage.replace("{name}", event.getTarget().getName()).replace("{item}", mc.player.getHeldItemMainhand().getDisplayName());
                 if (clientSide.getValue()) {
                     Wrapper.sendClientMessage(msg);
-                } else {
+                }
+                else {
                     mc.player.sendChatMessage(msg);
                 }
                 attackDelay = 0;
@@ -223,7 +223,8 @@ public class Announcer extends Module {
             if (jumpDelay >= 300 * delay.getValue()) {
                 if (clientSide.getValue()) {
                     Wrapper.sendClientMessage(jumpMessage);
-                } else {
+                }
+                else {
                     mc.player.sendChatMessage(jumpMessage);
                 }
                 jumpDelay = 0;

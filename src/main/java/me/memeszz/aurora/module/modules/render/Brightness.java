@@ -5,13 +5,13 @@ import me.memeszz.aurora.module.Module;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class Brightness extends Module {
+    float old;
+
     public Brightness() {
         super("Brightness", Category.Render, "Lets you see shit when it's dark");
     }
 
-    float old;
-
-    public void onEnable(){
+    public void onEnable() {
         old = mc.gameSettings.gammaSetting;
     }
 
@@ -22,7 +22,7 @@ public class Brightness extends Module {
         mc.gameSettings.gammaSetting = 666f;
     }
 
-    public void onDisable(){
+    public void onDisable() {
         mc.gameSettings.gammaSetting = old;
     }
 }

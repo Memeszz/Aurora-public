@@ -12,38 +12,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VisualRange extends Module {
-    public VisualRange() {
-        super("VisualRange", Category.World, "Sends a client side message when someone enters your render distance");
-    }
     List<Entity> knownPlayers = new ArrayList<>();
     List<Entity> players;
 
+    public VisualRange() {
+        super("VisualRange", Category.World, "Sends a client side message when someone enters your render distance");
+    }
+
     @Listener
     public void onUpdate(UpdateEvent event) {
-        if(mc.player == null) return;
+        if (mc.player == null) return;
         players = new ArrayList<>(mc.world.playerEntities);
         try {
             for (Entity e : players) {
                 if (e instanceof EntityPlayer && !e.getName().equalsIgnoreCase(mc.player.getName())) {
                     if (!knownPlayers.contains(e)) {
                         knownPlayers.add(e);
-                        Command.sendClientMessage(ChatFormatting.GREEN+e.getName() + ChatFormatting.RED+ " entered visual range.");
+                        Command.sendClientMessage(ChatFormatting.GREEN + e.getName() + ChatFormatting.RED + " entered visual range.");
                     }
                 }
             }
-        } catch(Exception e){} // ez no crasherino
-            try {
-                for (Entity e : knownPlayers) {
-                    if (e instanceof EntityPlayer && !e.getName().equalsIgnoreCase(mc.player.getName())) {
-                        if (!players.contains(e)) {
-                            knownPlayers.remove(e);
-                        }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        } // ez no crasherino
+        try {
+            for (Entity e : knownPlayers) {
+                if (e instanceof EntityPlayer && !e.getName().equalsIgnoreCase(mc.player.getName())) {
+                    if (!players.contains(e)) {
+                        knownPlayers.remove(e);
                     }
                 }
-            } catch(Exception e){} // ez no crasherino pt.2
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        } // ez no crasherino pt.2
     }
 
-    public void onDisable(){
+    public void onDisable() {
         knownPlayers.clear();
     }
 }

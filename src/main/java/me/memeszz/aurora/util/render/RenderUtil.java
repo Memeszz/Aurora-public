@@ -24,10 +24,13 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
 
-    static Minecraft mc = Minecraft.getMinecraft();
+    public static final HashMap<EnumFacing, Integer> FACEMAP = new HashMap<>();
+    public static final float DEFAULT_COLOR_SATURATION = 0.95F;
+    public static final float DEFAULT_COLOR_BRIGHTNESS = 0.95F;
     private final static Frustum frustrum = new Frustum();
     public static RenderUtil INSTANCE = new RenderUtil();
-    public static final HashMap<EnumFacing, Integer> FACEMAP = new HashMap<>();
+    static Minecraft mc = Minecraft.getMinecraft();
+
     static {
         FACEMAP.put(EnumFacing.DOWN, Quad.DOWN);
         FACEMAP.put(EnumFacing.WEST, Quad.WEST);
@@ -36,6 +39,7 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
         FACEMAP.put(EnumFacing.EAST, Quad.EAST);
         FACEMAP.put(EnumFacing.UP, Quad.UP);
     }
+
     public RenderUtil() {
         super(0x200000);
     }
@@ -43,6 +47,12 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
     public static void prepare(int mode) {
         prepareGL();
         begin(mode);
+    }
+
+    public static boolean isInViewFrustrum(AxisAlignedBB bb) {
+        Entity current = Minecraft.getMinecraft().getRenderViewEntity();
+        frustrum.setPosition(Objects.requireNonNull(current).posX, current.posY, current.posZ);
+        return frustrum.isBoundingBoxInFrustum(bb);
     }
 
     public static void drawBox(AxisAlignedBB boundingBox) {
@@ -133,12 +143,6 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
         GlStateManager.glVertex3f((float) boundingBox.minX, (float) boundingBox.minY, (float) boundingBox.maxZ);
         GlStateManager.glVertex3f((float) boundingBox.maxX, (float) boundingBox.minY, (float) boundingBox.maxZ);
         GlStateManager.glEnd();
-    }
-
-    public static boolean isInViewFrustrum(AxisAlignedBB bb) {
-        Entity current = Minecraft.getMinecraft().getRenderViewEntity();
-        frustrum.setPosition(Objects.requireNonNull(current).posX, current.posY, current.posZ);
-        return frustrum.isBoundingBoxInFrustum(bb);
     }
 
     public static void drawOutlinedBox(AxisAlignedBB bb) {
@@ -254,7 +258,6 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
         GL11.glColor4f(1f, 1f, 1f, 1f);
     }
 
-
     public static void drawGradientSideways(final double left, final double top, final double right, final double bottom, final int col1, final int col2) {
         final float f = (col1 >> 24 & 0xFF) / 255.0f;
         final float f2 = (col1 >> 16 & 0xFF) / 255.0f;
@@ -316,7 +319,15 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
         GL11.glColor4d(1.0, 1.0, 1.0, 1.0);
     }
 
-
+    public static void drawBorderedRect(double x, double y, double x1, double y1, double width, int internalColor, int borderColor) {
+        enableGL2D();
+        fakeGuiRect(x + width, y + width, x1 - width, y1 - width, internalColor);
+        fakeGuiRect(x + width, y, x1 - width, y + width, borderColor);
+        fakeGuiRect(x, y, x + width, y1, borderColor);
+        fakeGuiRect(x1 - width, y, x1, y1, borderColor);
+        fakeGuiRect(x + width, y1 - width, x1 - width, y1, borderColor);
+        disableGL2D();
+    }
 
     public static void rectangleBordered(final double x, final double y, final double x1, final double y1, final double width, final int internalColor, final int borderColor) {
         fakeGuiRect(x + width, y + width, x1 - width, y1 - width, internalColor);
@@ -330,7 +341,6 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
         fakeGuiRect(x + width, y1 - width, x1 - width, y1, borderColor);
         GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
     }
-
 
     public static void drawRect(final float x, final float y, final float x1, final float y1) {
         GL11.glBegin(7);
@@ -348,23 +358,10 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
                 (color >> 24 & 0xFF) / 255f);
     }
 
-
-    public static final float DEFAULT_COLOR_SATURATION = 0.95F;
-    public static final float DEFAULT_COLOR_BRIGHTNESS = 0.95F;
     public static int generateRainbowFadingColor(int offset, boolean drastic) {
         long offset_ = (drastic ? 200000000L : 20000000L) * offset;
         float hue = (System.nanoTime() + offset_) / 4.0E9f % 1.0F;
         return (int) Long.parseLong(Integer.toHexString(Color.HSBtoRGB(hue, DEFAULT_COLOR_SATURATION, DEFAULT_COLOR_BRIGHTNESS)), 16);
-    }
-
-    public static void drawBorderedRect(double x, double y, double x1, double y1, double width, int internalColor, int borderColor) {
-        enableGL2D();
-        fakeGuiRect(x + width, y + width, x1 - width, y1 - width, internalColor);
-        fakeGuiRect(x + width, y, x1 - width, y + width, borderColor);
-        fakeGuiRect(x, y, x + width, y1, borderColor);
-        fakeGuiRect(x1 - width, y, x1, y1, borderColor);
-        fakeGuiRect(x + width, y1 - width, x1 - width, y1, borderColor);
-        disableGL2D();
     }
 
 
@@ -381,10 +378,10 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
             bottom = j;
         }
 
-        float f3 = (float)(color >> 24 & 255) / 255.0F;
-        float f = (float)(color >> 16 & 255) / 255.0F;
-        float f1 = (float)(color >> 8 & 255) / 255.0F;
-        float f2 = (float)(color & 0xFF) / 255.0F;
+        float f3 = (float) (color >> 24 & 255) / 255.0F;
+        float f = (float) (color >> 16 & 255) / 255.0F;
+        float f1 = (float) (color >> 8 & 255) / 255.0F;
+        float f2 = (float) (color & 0xFF) / 255.0F;
 
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
@@ -401,19 +398,6 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
     }
-
-    public static final class Quad {
-        public static final int DOWN = 0x01;
-        public static final int UP = 0x02;
-        public static final int NORTH = 0x04;
-        public static final int SOUTH = 0x08;
-        public static final int WEST = 0x10;
-        public static final int EAST = 0x20;
-        public static final int ALL = DOWN | UP | NORTH | SOUTH | WEST | EAST;
-    }
-
-
-
 
     private static void enableGL2D() {
         GL11.glDisable(2929);
@@ -456,20 +440,20 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
         GlStateManager.disableLighting();
         GlStateManager.disableCull();
         GlStateManager.enableAlpha();
-        GlStateManager.color(1,1,1);
+        GlStateManager.color(1, 1, 1);
     }
 
     public static void begin(int mode) {
         INSTANCE.getBuffer().begin(mode, DefaultVertexFormats.POSITION_COLOR);
     }
 
+    public static void render() {
+        INSTANCE.draw();
+    }
+
     public static void release() {
         render();
         releaseGL();
-    }
-
-    public static void render() {
-        INSTANCE.draw();
     }
 
     public static void releaseGL() {
@@ -478,7 +462,7 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
         GlStateManager.enableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.enableDepth();
-        GlStateManager.color(1,1,1);
+        GlStateManager.color(1, 1, 1);
         GL11.glColor4f(1, 1, 1, 1);
     }
 
@@ -496,48 +480,94 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
 
     public static void drawBox(BufferBuilder buffer, float x, float y, float z, float w, float h, float d, int r, int g, int b, int a, int sides) {
         if ((sides & Quad.DOWN) != 0) {
-            buffer.pos(x+w, y, z).color(r, g, b, a).endVertex();
-            buffer.pos(x+w, y, z+d).color(r, g, b, a).endVertex();
-            buffer.pos(x, y, z+d).color(r, g, b, a).endVertex();
+            buffer.pos(x + w, y, z).color(r, g, b, a).endVertex();
+            buffer.pos(x + w, y, z + d).color(r, g, b, a).endVertex();
+            buffer.pos(x, y, z + d).color(r, g, b, a).endVertex();
             buffer.pos(x, y, z).color(r, g, b, a).endVertex();
         }
 
         if ((sides & Quad.UP) != 0) {
-            buffer.pos(x+w, y+h, z).color(r, g, b, a).endVertex();
-            buffer.pos(x, y+h, z).color(r, g, b, a).endVertex();
-            buffer.pos(x, y+h, z+d).color(r, g, b, a).endVertex();
-            buffer.pos(x+w, y+h, z+d).color(r, g, b, a).endVertex();
+            buffer.pos(x + w, y + h, z).color(r, g, b, a).endVertex();
+            buffer.pos(x, y + h, z).color(r, g, b, a).endVertex();
+            buffer.pos(x, y + h, z + d).color(r, g, b, a).endVertex();
+            buffer.pos(x + w, y + h, z + d).color(r, g, b, a).endVertex();
         }
 
         if ((sides & Quad.NORTH) != 0) {
-            buffer.pos(x+w, y, z).color(r, g, b, a).endVertex();
+            buffer.pos(x + w, y, z).color(r, g, b, a).endVertex();
             buffer.pos(x, y, z).color(r, g, b, a).endVertex();
-            buffer.pos(x, y+h, z).color(r, g, b, a).endVertex();
-            buffer.pos(x+w, y+h, z).color(r, g, b, a).endVertex();
+            buffer.pos(x, y + h, z).color(r, g, b, a).endVertex();
+            buffer.pos(x + w, y + h, z).color(r, g, b, a).endVertex();
         }
 
         if ((sides & Quad.SOUTH) != 0) {
-            buffer.pos(x, y, z+d).color(r, g, b, a).endVertex();
-            buffer.pos(x+w, y, z+d).color(r, g, b, a).endVertex();
-            buffer.pos(x+w, y+h, z+d).color(r, g, b, a).endVertex();
-            buffer.pos(x, y+h, z+d).color(r, g, b, a).endVertex();
+            buffer.pos(x, y, z + d).color(r, g, b, a).endVertex();
+            buffer.pos(x + w, y, z + d).color(r, g, b, a).endVertex();
+            buffer.pos(x + w, y + h, z + d).color(r, g, b, a).endVertex();
+            buffer.pos(x, y + h, z + d).color(r, g, b, a).endVertex();
         }
 
         if ((sides & Quad.WEST) != 0) {
             buffer.pos(x, y, z).color(r, g, b, a).endVertex();
-            buffer.pos(x, y, z+d).color(r, g, b, a).endVertex();
-            buffer.pos(x, y+h, z+d).color(r, g, b, a).endVertex();
-            buffer.pos(x, y+h, z).color(r, g, b, a).endVertex();
+            buffer.pos(x, y, z + d).color(r, g, b, a).endVertex();
+            buffer.pos(x, y + h, z + d).color(r, g, b, a).endVertex();
+            buffer.pos(x, y + h, z).color(r, g, b, a).endVertex();
         }
 
         if ((sides & Quad.EAST) != 0) {
-            buffer.pos(x+w, y, z+d).color(r, g, b, a).endVertex();
-            buffer.pos(x+w, y, z).color(r, g, b, a).endVertex();
-            buffer.pos(x+w, y+h, z).color(r, g, b, a).endVertex();
-            buffer.pos(x+w, y+h, z+d).color(r, g, b, a).endVertex();
+            buffer.pos(x + w, y, z + d).color(r, g, b, a).endVertex();
+            buffer.pos(x + w, y, z).color(r, g, b, a).endVertex();
+            buffer.pos(x + w, y + h, z).color(r, g, b, a).endVertex();
+            buffer.pos(x + w, y + h, z + d).color(r, g, b, a).endVertex();
         }
     }
 
+    public static void drawBox(AxisAlignedBB bb, int argb, int sides) {
+        final int a = (argb >>> 24) & 0xFF;
+        final int r = (argb >>> 16) & 0xFF;
+        final int g = (argb >>> 8) & 0xFF;
+        final int b = argb & 0xFF;
+        drawBox(INSTANCE.getBuffer(), bb, r, g, b, a, sides);
+    }
+
+    public static void drawBox(BufferBuilder buffer, AxisAlignedBB bb, int r, int g, int b, int a, int sides) {
+        if ((sides & Quad.DOWN) != 0) {
+            buffer.pos(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+        }
+        if ((sides & Quad.UP) != 0) {
+            buffer.pos(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+        }
+        if ((sides & Quad.NORTH) != 0) {
+            buffer.pos(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+        }
+        if ((sides & Quad.SOUTH) != 0) {
+            buffer.pos(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+        }
+        if ((sides & Quad.WEST) != 0) {
+            buffer.pos(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+        }
+        if ((sides & Quad.EAST) != 0) {
+            buffer.pos(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
+            buffer.pos(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
+        }
+    }
 
     public static void drawBoundingBox(final AxisAlignedBB bb, final float width, final int red, final int green, final int blue, final int alpha) {
         GlStateManager.pushMatrix();
@@ -592,6 +622,7 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
             scaleDistance = 1;
         GlStateManager.scale(scaleDistance, scaleDistance, scaleDistance);
     }
+
     public static Vec3d getInterpolatedPos(Entity entity, float ticks) {
         return new Vec3d(entity.lastTickPosX, entity.lastTickPosY, entity.lastTickPosZ).add(getInterpolatedAmount(entity, ticks));
     }
@@ -616,7 +647,7 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
         GlStateManager.disableTexture2D();
         GlStateManager.depthMask(false);
         GL11.glEnable(2848);
-        GL11.glHint(3154,  4354);
+        GL11.glHint(3154, 4354);
         GL11.glLineWidth(width);
         Minecraft mc = Minecraft.getMinecraft();
         double x = (double) bp.getX() - mc.getRenderManager().viewerPosX;
@@ -691,7 +722,6 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
         GlStateManager.popMatrix();
     }
 
-
     public static void drawBoundingBox(final AxisAlignedBB bb, final float width, final int argb) {
         final int a = argb >>> 24 & 0xFF;
         final int r = argb >>> 16 & 0xFF;
@@ -699,50 +729,15 @@ public class RenderUtil extends net.minecraft.client.renderer.Tessellator {
         final int b = argb & 0xFF;
         drawBoundingBox(bb, width, r, g, b, a);
     }
-    public static void drawBox(AxisAlignedBB bb, int argb, int sides) {
-        final int a = (argb >>> 24) & 0xFF;
-        final int r = (argb >>> 16) & 0xFF;
-        final int g = (argb >>> 8) & 0xFF;
-        final int b = argb & 0xFF;
-        drawBox(INSTANCE.getBuffer(), bb, r, g, b, a, sides);
-    }
-    public static void drawBox(BufferBuilder buffer, AxisAlignedBB bb, int r, int g, int b, int a, int sides) {
-        if ((sides & Quad.DOWN) != 0) {
-            buffer.pos(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
-        }
-        if ((sides & Quad.UP) != 0) {
-            buffer.pos(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
-        }
-        if ((sides & Quad.NORTH) != 0) {
-            buffer.pos(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
-        }
-        if ((sides & Quad.SOUTH) != 0) {
-            buffer.pos(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
-        }
-        if ((sides & Quad.WEST) != 0) {
-            buffer.pos(bb.minX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.minX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.minX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.minX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
-        }
-        if ((sides & Quad.EAST) != 0) {
-            buffer.pos(bb.maxX, bb.minY, bb.maxZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.maxX, bb.minY, bb.minZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.maxX, bb.maxY, bb.minZ).color(r, g, b, a).endVertex();
-            buffer.pos(bb.maxX, bb.maxY, bb.maxZ).color(r, g, b, a).endVertex();
-        }
+
+    public static final class Quad {
+        public static final int DOWN = 0x01;
+        public static final int UP = 0x02;
+        public static final int NORTH = 0x04;
+        public static final int SOUTH = 0x08;
+        public static final int WEST = 0x10;
+        public static final int EAST = 0x20;
+        public static final int ALL = DOWN | UP | NORTH | SOUTH | WEST | EAST;
     }
 
 

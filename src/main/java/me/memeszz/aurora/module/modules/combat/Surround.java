@@ -31,9 +31,6 @@ import java.util.ArrayList;
 
 
 public class Surround extends Module {
-    public Surround() {
-        super("Surround", Category.Combat, "Attacks nearby players");
-    }
     private int totalTicksRunning = 0;
     private int playerHotbarSlot = -1;
     private int lastHotbarSlot = -1;
@@ -51,19 +48,89 @@ public class Surround extends Module {
     private Setting.i timeoutTicks;
     private Setting.b offInAir;
 
+    public Surround() {
+        super("Surround", Category.Combat, "Attacks nearby players");
+    }
+
+    /*public static boolean placeBlockScaffold(BlockPos pos, boolean rotate) {
+
+        for (EnumFacing side : EnumFacing.values()) {
+            BlockPos neighbor = pos.offset(side);
+            EnumFacing side2 = side.getOpposite();
+
+            // check if neighbor can be right clicked
+            if (!canBeClicked(neighbor))
+                continue;
+
+            Vec3d hitVec = new Vec3d(neighbor).add(0.5, 0.5, 0.5)
+                    .add(new Vec3d(side2.getDirectionVec()).scale(0.5));
+
+            // check if hitVec is within range (4.25 blocks)
+            //if(eyesPos.squareDistanceTo(hitVec) > 18.0625)
+            //continue;
+
+            // place block
+        }
+
+        return false;
+    }*/
+    public static IBlockState getState(BlockPos pos) {
+        return mc.world.getBlockState(pos);
+    }
+
+    public static Block getBlock(BlockPos pos) {
+        return getState(pos).getBlock();
+    }
+
+    public static boolean canBeClicked(BlockPos pos) {
+        return getBlock(pos).canCollideCheck(getState(pos), false);
+    }
+
+    public static void faceVectorPacketInstant(Vec3d vec) {
+        float[] rotations = getNeededRotations2(vec);
+
+        mc.player.connection.sendPacket(new CPacketPlayer.Rotation(rotations[0],
+                rotations[1], mc.player.onGround));
+    }
+
+    private static float[] getNeededRotations2(Vec3d vec) {
+        Vec3d eyesPos = getEyesPos();
+
+        double diffX = vec.x - eyesPos.x;
+        double diffY = vec.y - eyesPos.y;
+        double diffZ = vec.z - eyesPos.z;
+
+        double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
+
+        float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
+        float pitch = (float) -Math.toDegrees(Math.atan2(diffY, diffXZ));
+
+        return new float[]{
+                mc.player.rotationYaw
+                        + MathHelper.wrapDegrees(yaw - mc.player.rotationYaw),
+                mc.player.rotationPitch + MathHelper
+                        .wrapDegrees(pitch - mc.player.rotationPitch)};
+    }
+
+    public static Vec3d getEyesPos() {
+        return new Vec3d(mc.player.posX,
+                mc.player.posY + mc.player.getEyeHeight(),
+                mc.player.posZ);
+    }
+
     public void setup() {
         tickDelay = this.registerI("Delay", "Delay", 0, 0, 10);
         timeoutTicks = this.registerI("TimeoutTicks", "TimeoutTicks", 0, 0, 10);
-        blocksPerTick = this.registerI("Bpt", "Bpt",10, 0, 10);
-        rotate = this.registerB("Rotate", "Rotate",true);
-        triggerable = this.registerB("Triggerable","Triggerable", false);
-        autoCenter = this.registerB("CenterTp", "CenterTp",true);
-        offInAir = this.registerB("ToggleInAir","ToggleInAir",  true);
+        blocksPerTick = this.registerI("Bpt", "Bpt", 10, 0, 10);
+        rotate = this.registerB("Rotate", "Rotate", true);
+        triggerable = this.registerB("Triggerable", "Triggerable", false);
+        autoCenter = this.registerB("CenterTp", "CenterTp", true);
+        offInAir = this.registerB("ToggleInAir", "ToggleInAir", true);
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Disable");
         modes.add("EnableAndDisable");
         modes.add("None");
-        onChorus = this.registerMode("OnChorus","OnChorus", modes, "None");
+        onChorus = this.registerMode("OnChorus", "OnChorus", modes, "None");
 
 
     }
@@ -76,6 +143,7 @@ public class Surround extends Module {
     double getDst(Vec3d vec) {
         return playerPos.distanceTo(vec);
     }
+
     /* End of Autocenter */
     @Override
     protected void onEnable() {
@@ -144,7 +212,8 @@ public class Surround extends Module {
         if (onChorus.getValue().equals("None")) return;
         if (onChorus.getValue().equals("Enable")) {
             enable();
-        } else {
+        }
+        else {
             enable();
             if (StopwatchUtil.hasCompleted(1000)) {
                 disable();
@@ -152,10 +221,9 @@ public class Surround extends Module {
         }
     }
 
-
     @Listener
     public void onUpdate(UpdateEvent event) {
-    if (triggerable.getValue() && totalTicksRunning >= timeoutTicks.getValue()) {
+        if (triggerable.getValue() && totalTicksRunning >= timeoutTicks.getValue()) {
             totalTicksRunning = 0;
             this.disable();
             return;
@@ -168,7 +236,8 @@ public class Surround extends Module {
             if (delayStep < tickDelay.getValue()) {
                 delayStep++;
                 return;
-            } else {
+            }
+            else {
                 delayStep = 0;
             }
         }
@@ -308,75 +377,6 @@ public class Surround extends Module {
         return slot;
 
     }
-
-    /*public static boolean placeBlockScaffold(BlockPos pos, boolean rotate) {
-
-        for (EnumFacing side : EnumFacing.values()) {
-            BlockPos neighbor = pos.offset(side);
-            EnumFacing side2 = side.getOpposite();
-
-            // check if neighbor can be right clicked
-            if (!canBeClicked(neighbor))
-                continue;
-
-            Vec3d hitVec = new Vec3d(neighbor).add(0.5, 0.5, 0.5)
-                    .add(new Vec3d(side2.getDirectionVec()).scale(0.5));
-
-            // check if hitVec is within range (4.25 blocks)
-            //if(eyesPos.squareDistanceTo(hitVec) > 18.0625)
-            //continue;
-
-            // place block
-        }
-
-        return false;
-    }*/
-    public static IBlockState getState(BlockPos pos)
-    {
-        return mc.world.getBlockState(pos);
-    }
-    public static Block getBlock(BlockPos pos)
-    {
-        return getState(pos).getBlock();
-    }
-
-    public static boolean canBeClicked(BlockPos pos)
-    {
-        return getBlock(pos).canCollideCheck(getState(pos), false);
-    }
-    public static void faceVectorPacketInstant(Vec3d vec)
-    {
-        float[] rotations = getNeededRotations2(vec);
-
-        mc.player.connection.sendPacket(new CPacketPlayer.Rotation(rotations[0],
-                rotations[1], mc.player.onGround));
-    }
-    private static float[] getNeededRotations2(Vec3d vec)
-    {
-        Vec3d eyesPos = getEyesPos();
-
-        double diffX = vec.x - eyesPos.x;
-        double diffY = vec.y - eyesPos.y;
-        double diffZ = vec.z - eyesPos.z;
-
-        double diffXZ = Math.sqrt(diffX * diffX + diffZ * diffZ);
-
-        float yaw = (float)Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
-        float pitch = (float)-Math.toDegrees(Math.atan2(diffY, diffXZ));
-
-        return new float[]{
-                mc.player.rotationYaw
-                        + MathHelper.wrapDegrees(yaw - mc.player.rotationYaw),
-                mc.player.rotationPitch + MathHelper
-                        .wrapDegrees(pitch - mc.player.rotationPitch)};
-    }
-    public static Vec3d getEyesPos()
-    {
-        return new Vec3d(mc.player.posX,
-                mc.player.posY + mc.player.getEyeHeight(),
-                mc.player.posZ);
-    }
-
 
     private static class Offsets {
 

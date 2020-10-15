@@ -16,15 +16,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(EntityPlayer.class)
 public abstract class MixinEntityPlayer extends EntityLivingBase {
-    @Shadow public abstract String getName();
-
     public MixinEntityPlayer(World worldIn) {
         super(worldIn);
     }
 
+    @Shadow
+    public abstract String getName();
+
     @Inject(method = "jump", at = @At("HEAD"), cancellable = true)
     public void onJump(CallbackInfo ci) {
-        if(Minecraft.getMinecraft().player.getName().equals(this.getName())){
+        if (Minecraft.getMinecraft().player.getName().equals(this.getName())) {
             Aurora.getInstance().getEventManager().dispatchEvent(new PlayerJumpEvent());
         }
     }

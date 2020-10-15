@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class Fov extends Module {
 
+    public float defaultFov;
     Setting.i fovSlider;
     Setting.mode mode;
 
@@ -22,12 +23,10 @@ public class Fov extends Module {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("ViewModelChanger");
         modes.add("FovChanger");
-        mode = this.registerMode("Mode","Mode", modes, "ViewModelChanger");
+        mode = this.registerMode("Mode", "Mode", modes, "ViewModelChanger");
 
 
     }
-
-    public float defaultFov;
 
     @SubscribeEvent
     public void fovOn(EntityViewRenderEvent.FOVModifier e) {
@@ -39,9 +38,9 @@ public class Fov extends Module {
 
     @Listener
     public void gui(GuiScreenDisplayedEvent event) {
-       if (mode.getValue().equals("FovChanger")) {
-           mc.gameSettings.fovSetting = fovSlider.getValue();
-       }
+        if (mode.getValue().equals("FovChanger")) {
+            mc.gameSettings.fovSetting = fovSlider.getValue();
+        }
     }
 
 

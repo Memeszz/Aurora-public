@@ -8,16 +8,16 @@ import net.minecraft.util.EnumHand;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class LowHand extends Module {
-    public LowHand() {
-        super ("LowHand", Category.Render);
-    }
-
     Setting.d offhand;
     Setting.d mainhand;
 
+    public LowHand() {
+        super("LowHand", Category.Render);
+    }
+
     public void setup() {
-        offhand = registerD("Offhand", "Offhand",1, 0, 1);
-        mainhand = registerD("Mainhand", "Mainhand",1, 0, 1);
+        offhand = registerD("Offhand", "Offhand", 1, 0, 1);
+        mainhand = registerD("Mainhand", "Mainhand", 1, 0, 1);
     }
 
 

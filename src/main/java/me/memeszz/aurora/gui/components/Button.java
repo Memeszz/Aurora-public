@@ -12,17 +12,17 @@ import net.minecraft.client.gui.Gui;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Button extends Component
-{
+public class Button extends Component {
+    private final ArrayList<Component> subcomponents;
+    private final int height;
     public Module mod;
     public Frame parent;
     public int offset;
-    private boolean isHovered;
-    private final ArrayList<Component> subcomponents;
     public boolean open;
-    private final int height;
     int ClickGuiColor;
     int ClickGuiColor2;
+    private boolean isHovered;
+
     public Button(final Module mod, final Frame parent, final int offset) {
         this.mod = mod;
         this.parent = parent;
@@ -35,24 +35,26 @@ public class Button extends Component
             for (final Setting s : Aurora.getInstance().settingsManager.getSettingsForMod(mod)) {
                 switch (s.getType()) {
                     case M: {
-                        this.subcomponents.add(new ModeButton((Setting.mode)s, this, mod, opY));
+                        this.subcomponents.add(new ModeButton((Setting.mode) s, this, mod, opY));
                         opY += 16;
                         continue;
                     }
                     case B: {
-                        this.subcomponents.add(new CheckBox((Setting.b)s, this, opY));
+                        this.subcomponents.add(new CheckBox((Setting.b) s, this, opY));
                         opY += 16;
                         continue;
                     }
                     case D: {
-                        this.subcomponents.add(new DoubleSlider((Setting.d)s, this, opY));
+                        this.subcomponents.add(new DoubleSlider((Setting.d) s, this, opY));
                         opY += 16;
                         continue;
                     }
                     case I: {
-                        this.subcomponents.add(new IntSlider((Setting.i)s, this, opY));
+                        this.subcomponents.add(new IntSlider((Setting.i) s, this, opY));
                         opY += 16;
                     }
+                    default:
+                        break;
                 }
             }
         }
@@ -71,19 +73,20 @@ public class Button extends Component
 
     @Override
     public void renderComponent() {
-        ClickGuiColor = new Color (ClickGuiModule.red.getValue(), ClickGuiModule.green.getValue(), ClickGuiModule.blue.getValue()).getRGB();
-        ClickGuiColor2 = new Color (ClickGuiModule.redB.getValue(), ClickGuiModule.greenB.getValue(), ClickGuiModule.blueB.getValue(), 150).getRGB();
+        ClickGuiColor = new Color(ClickGuiModule.red.getValue(), ClickGuiModule.green.getValue(), ClickGuiModule.blue.getValue()).getRGB();
+        ClickGuiColor2 = new Color(ClickGuiModule.redB.getValue(), ClickGuiModule.greenB.getValue(), ClickGuiModule.blueB.getValue(), 150).getRGB();
 
-        if(this.isHovered) {
+        if (this.isHovered) {
             Gui.drawRect(this.parent.getX(), this.parent.getY() + this.offset + 1, this.parent.getX() + this.parent.getWidth(), this.parent.getY() + 16 + this.offset, new Color(0, 0, 0, 180).getRGB());
-        } else {
+        }
+        else {
             Gui.drawRect(this.parent.getX(), this.parent.getY() + this.offset + 1, this.parent.getX() + this.parent.getWidth(), this.parent.getY() + 16 + this.offset, ClickGuiColor2);
         }
         Gui.drawRect(this.parent.getX(), this.parent.getY() + this.offset, this.parent.getX() + this.parent.getWidth(), this.parent.getY() + this.offset + 1, new Color(0, 0, 0, 150).getRGB());
 
         FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), this.mod.getName(), this.parent.getX() + 2, this.parent.getY() + this.offset + 2 + 2, !this.mod.isEnabled() ? -1 : ClickGuiColor);
 
-        if(ClickGuiModule.desc.getValue()) {
+        if (ClickGuiModule.desc.getValue()) {
             if (isHovered) {
                 Gui.drawRect(10, 40, 10, 40, new Color(0, 0, 0, 150).getRGB());
                 FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), this.mod.getDescription(), 0, 995 / 2, -1);

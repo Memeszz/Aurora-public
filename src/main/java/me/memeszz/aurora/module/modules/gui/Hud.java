@@ -31,14 +31,13 @@ import java.util.Objects;
  * @author Memeszz & hollow
  */
 public class Hud extends Module {
+    static final RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
+    public static Setting.b rainbow;
+    public static Setting.i red;
+    public static Setting.i green;
+    public static Setting.i blue;
+    final String time = new SimpleDateFormat("h:mm a").format(new Date());
     int y;
-
-    public Hud() {
-        super("Hud", Category.Gui, "Attacks nearby players");
-        setDrawn(false);
-    }
-
-
     Setting.b welcomer;
     Setting.b server;
     Setting.b ping;
@@ -53,36 +52,35 @@ public class Hud extends Module {
     Setting.i animS;
     Setting.i rainbowSpeed;
     Setting.i thing;
-    public static Setting.b rainbow;
-    public static Setting.i red;
-    public static Setting.i green;
-    public static Setting.i blue;
-    static final RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
     Setting.mode mode;
     String coords;
-    final String time = new SimpleDateFormat("h:mm a").format(new Date());
+
+    public Hud() {
+        super("Hud", Category.Gui, "Attacks nearby players");
+        setDrawn(false);
+    }
 
     public void setup() {
-        watermark = this.registerB("Watermark", "Watermark",true);
-        welcomer = this.registerB("Welcomer","Welcomer",  true);
-        server = this.registerB("Server", "Server",true);
-        ping = this.registerB("Ping","Ping",  true);
-        time1 = registerB("Time", "Time",true);
-        tps = this.registerB("Tps", "Tps",true);
+        watermark = this.registerB("Watermark", "Watermark", true);
+        welcomer = this.registerB("Welcomer", "Welcomer", true);
+        server = this.registerB("Server", "Server", true);
+        ping = this.registerB("Ping", "Ping", true);
+        time1 = registerB("Time", "Time", true);
+        tps = this.registerB("Tps", "Tps", true);
         fps = this.registerB("Fps", "Fps", true);
         coordinates = this.registerB("Coords", "Coords", true);
-        ArmorHud = this.registerB("ArmorHud","ArmorHud", true);
-        arraylist = this.registerB("ArrayList","ArrayList", true);
+        ArmorHud = this.registerB("ArmorHud", "ArmorHud", true);
+        arraylist = this.registerB("ArrayList", "ArrayList", true);
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Top");
-        mode = this.registerMode("Mode","Mode", modes, "Bottom");
-        arraylistOutline = this.registerB("ArraylistOutline", "ArraylistOutline",true);
-        animS = registerI("AnimSpeed", "AnimSpeed",1, 0, 10);
-        red = this.registerI("Red", "Red",255, 0, 255);
+        mode = this.registerMode("Mode", "Mode", modes, "Bottom");
+        arraylistOutline = this.registerB("ArraylistOutline", "ArraylistOutline", true);
+        animS = registerI("AnimSpeed", "AnimSpeed", 1, 0, 10);
+        red = this.registerI("Red", "Red", 255, 0, 255);
         green = this.registerI("Green", "Green", 255, 0, 255);
-        blue = this.registerI("Blue", "Blue",255, 0, 255);
-        rainbow = this.registerB("Rainbow","Rainbow",  false);
-        rainbowSpeed = this.registerI("RainbowSpeed", "RainbowSpeed",1, 1, 25);
+        blue = this.registerI("Blue", "Blue", 255, 0, 255);
+        rainbow = this.registerB("Rainbow", "Rainbow", false);
+        rainbowSpeed = this.registerI("RainbowSpeed", "RainbowSpeed", 1, 1, 25);
         thing = registerI("Thing", "1", 1, 1, 3000);
     }
 
@@ -104,9 +102,11 @@ public class Hud extends Module {
                     int lWidth = FontUtils.getStringWidth(ClickGuiModule.customFont.getValue(), module.getName() + ChatFormatting.GRAY + module.getHudInfo());
                     if (module.animPos < lWidth && module.isEnabled()) {
                         module.animPos = Animation.moveTowards(module.animPos, lWidth + 1, 0.01f + animS.getValue() / 30, 0.1f);
-                    } else if (module.animPos > 1.5f && !module.isEnabled()) {
+                    }
+                    else if (module.animPos > 1.5f && !module.isEnabled()) {
                         module.animPos = Animation.moveTowards(module.animPos, -1.5f, 0.01f + animS.getValue() / 30, 0.1f);
-                    } else if (module.animPos <= 1.5f && !module.isEnabled()) {
+                    }
+                    else if (module.animPos <= 1.5f && !module.isEnabled()) {
                         module.animPos = -1f;
                     }
                     if (module.animPos > lWidth && module.isEnabled()) {
@@ -167,7 +167,7 @@ public class Hud extends Module {
         if (server.getValue()) {
             if (mc.player != null) {
                 if (!mc.isSingleplayer()) {
-                    FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "\u00A7rServer \u00A7f" + ((IMinecraft) mc).getCurrentServerData().serverIP + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
+                    FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "§rServer §f" + ((IMinecraft) mc).getCurrentServerData().serverIP + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
                     counter1[0]++;
                     posY += 10;
                 }
@@ -175,7 +175,7 @@ public class Hud extends Module {
         }
 
         if (ping.getValue()) {
-            FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "\u00A7rPing \u00A7f" + getPing() + "ms", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
+            FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "§rPing §f" + getPing() + "ms", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
             counter1[0]++;
             posY += 10;
         }
@@ -187,14 +187,14 @@ public class Hud extends Module {
         }
 
         if (tps.getValue()) {
-            FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "\u00A7rTPS \u00A7f" + TickRate.TPS + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
+            FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "§rTPS §f" + TickRate.TPS + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
             counter1[0]++;
             posY += 10;
         }
 
 
         if (fps.getValue()) {
-            FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "\u00A7rFPS \u00A7f" + Minecraft.getDebugFPS() + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
+            FontUtils.drawStringWithShadow(ClickGuiModule.customFont.getValue(), "§rFPS §f" + Minecraft.getDebugFPS() + "", 2, posY, rainbow.getValue() ? RainbowUtil.rainbow(counter1[0] * RainbowOffset.offset.getValue()) : new Color(red.getValue(), green.getValue(), blue.getValue(), 255).getRGB());
             counter1[0]++;
         }
 
@@ -204,7 +204,8 @@ public class Hud extends Module {
             if (mc.player.dimension == -1) {
                 coords = ChatFormatting.GRAY + "XYZ " + ChatFormatting.WHITE + mc.player.getPosition().getX() + ", " + mc.player.getPosition().getY() + ", " + mc.player.getPosition().getZ() +
                         ChatFormatting.GRAY + " [" + ChatFormatting.WHITE + mc.player.getPosition().getX() * 8 + ", " + mc.player.getPosition().getZ() * 8 + ChatFormatting.GRAY + "]";
-            } else {
+            }
+            else {
                 coords = ChatFormatting.GRAY + "XYZ " + ChatFormatting.WHITE + mc.player.getPosition().getX() + ", " + mc.player.getPosition().getY() + ", " + Math.floor(mc.player.getPosition().getZ()) +
                         ChatFormatting.GRAY + " [" + ChatFormatting.WHITE + mc.player.getPosition().getX() / 8 + ", " + mc.player.getPosition().getZ() / 8 + ChatFormatting.GRAY + "]";
             }
@@ -222,7 +223,8 @@ public class Hud extends Module {
         int p;
         if (mc.player == null || mc.getConnection() == null || mc.getConnection().getPlayerInfo(mc.player.getName()) == null) {
             p = -1;
-        } else {
+        }
+        else {
             mc.player.getName();
             p = Objects.requireNonNull(mc.getConnection().getPlayerInfo(mc.player.getName())).getResponseTime();
         }

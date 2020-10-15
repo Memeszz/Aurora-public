@@ -13,41 +13,41 @@ import net.minecraft.util.math.MathHelper;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class HoleTP extends Module {
+    private final double[] oneblockPositions = new double[]{0.42, 0.75};
+    private int packets;
+    private boolean jumped;
+
     public HoleTP() {
         super("HoleTP", Category.Movement);
     }
-    private int packets;
-    private boolean jumped;
-    private final double[] oneblockPositions = new double[] { 0.42, 0.75 };
-
 
     @Listener
     public void onUpdate(UpdateEvent event) {
         if (mc.world == null || mc.player == null) {
             return;
         }
-            if (!mc.player.onGround) {
-                if (mc.gameSettings.keyBindJump.isKeyDown()) {
-                    this.jumped = true;
-                }
-            }
-            else {
-                this.jumped = false;
-            }
-            if (!this.jumped && mc.player.fallDistance < 0.5 && this.isInHole() && mc.player.posY - this.getNearestBlockBelow() <= 1.125 && mc.player.posY - this.getNearestBlockBelow() <= 0.95 && !this.isOnLiquid() && !this.isInLiquid()) {
-                if (!mc.player.onGround) {
-                    ++this.packets;
-                }
-                if (!mc.player.onGround && !mc.player.isInsideOfMaterial(Material.WATER) && !mc.player.isInsideOfMaterial(Material.LAVA) && !mc.gameSettings.keyBindJump.isKeyDown() && !mc.player.isOnLadder() && this.packets > 0) {
-                    final BlockPos blockPos = new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ);
-                    for (final double position : this.oneblockPositions) {
-                        mc.player.connection.sendPacket(new CPacketPlayer.Position(blockPos.getX() + 0.5f, mc.player.posY - position, blockPos.getZ() + 0.5f, true));
-                    }
-                    mc.player.setPosition(blockPos.getX() + 0.5f, this.getNearestBlockBelow() + 0.1, blockPos.getZ() + 0.5f);
-                    this.packets = 0;
-                }
+        if (!mc.player.onGround) {
+            if (mc.gameSettings.keyBindJump.isKeyDown()) {
+                this.jumped = true;
             }
         }
+        else {
+            this.jumped = false;
+        }
+        if (!this.jumped && mc.player.fallDistance < 0.5 && this.isInHole() && mc.player.posY - this.getNearestBlockBelow() <= 1.125 && mc.player.posY - this.getNearestBlockBelow() <= 0.95 && !this.isOnLiquid() && !this.isInLiquid()) {
+            if (!mc.player.onGround) {
+                ++this.packets;
+            }
+            if (!mc.player.onGround && !mc.player.isInsideOfMaterial(Material.WATER) && !mc.player.isInsideOfMaterial(Material.LAVA) && !mc.gameSettings.keyBindJump.isKeyDown() && !mc.player.isOnLadder() && this.packets > 0) {
+                final BlockPos blockPos = new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ);
+                for (final double position : this.oneblockPositions) {
+                    mc.player.connection.sendPacket(new CPacketPlayer.Position(blockPos.getX() + 0.5f, mc.player.posY - position, blockPos.getZ() + 0.5f, true));
+                }
+                mc.player.setPosition(blockPos.getX() + 0.5f, this.getNearestBlockBelow() + 0.1, blockPos.getZ() + 0.5f);
+                this.packets = 0;
+            }
+        }
+    }
 
     private boolean isInHole() {
         final BlockPos blockPos = new BlockPos(mc.player.posX, mc.player.posY, mc.player.posZ);
@@ -70,7 +70,7 @@ public class HoleTP extends Module {
 
     private boolean isObbyHole(final BlockPos blockPos) {
         final BlockPos[] array;
-        final BlockPos[] touchingBlocks = array = new BlockPos[] { blockPos.north(), blockPos.south(), blockPos.east(), blockPos.west(), blockPos.down() };
+        final BlockPos[] touchingBlocks = array = new BlockPos[]{blockPos.north(), blockPos.south(), blockPos.east(), blockPos.west(), blockPos.down()};
         for (final BlockPos touching : array) {
             final IBlockState touchingState = mc.world.getBlockState(touching);
             if (touchingState.getBlock() == Blocks.AIR || touchingState.getBlock() != Blocks.OBSIDIAN) {
@@ -82,7 +82,7 @@ public class HoleTP extends Module {
 
     private boolean isBedrockHole(final BlockPos blockPos) {
         final BlockPos[] array;
-        final BlockPos[] touchingBlocks = array = new BlockPos[] { blockPos.north(), blockPos.south(), blockPos.east(), blockPos.west(), blockPos.down() };
+        final BlockPos[] touchingBlocks = array = new BlockPos[]{blockPos.north(), blockPos.south(), blockPos.east(), blockPos.west(), blockPos.down()};
         for (final BlockPos touching : array) {
             final IBlockState touchingState = mc.world.getBlockState(touching);
             if (touchingState.getBlock() == Blocks.AIR || touchingState.getBlock() != Blocks.BEDROCK) {
@@ -94,7 +94,7 @@ public class HoleTP extends Module {
 
     private boolean isBothHole(final BlockPos blockPos) {
         final BlockPos[] array;
-        final BlockPos[] touchingBlocks = array = new BlockPos[] { blockPos.north(), blockPos.south(), blockPos.east(), blockPos.west(), blockPos.down() };
+        final BlockPos[] touchingBlocks = array = new BlockPos[]{blockPos.north(), blockPos.south(), blockPos.east(), blockPos.west(), blockPos.down()};
         for (final BlockPos touching : array) {
             final IBlockState touchingState = mc.world.getBlockState(touching);
             if (touchingState.getBlock() == Blocks.AIR || (touchingState.getBlock() != Blocks.BEDROCK && touchingState.getBlock() != Blocks.OBSIDIAN)) {
@@ -106,7 +106,7 @@ public class HoleTP extends Module {
 
     private boolean isElseHole(final BlockPos blockPos) {
         final BlockPos[] array;
-        final BlockPos[] touchingBlocks = array = new BlockPos[] { blockPos.north(), blockPos.south(), blockPos.east(), blockPos.west(), blockPos.down() };
+        final BlockPos[] touchingBlocks = array = new BlockPos[]{blockPos.north(), blockPos.south(), blockPos.east(), blockPos.west(), blockPos.down()};
         for (final BlockPos touching : array) {
             final IBlockState touchingState = mc.world.getBlockState(touching);
             if (touchingState.getBlock() == Blocks.AIR || !touchingState.isFullBlock()) {
@@ -133,7 +133,7 @@ public class HoleTP extends Module {
         final double y = mc.player.posY + 0.01;
         for (int x = MathHelper.floor(mc.player.posX); x < MathHelper.ceil(mc.player.posX); ++x) {
             for (int z = MathHelper.floor(mc.player.posZ); z < MathHelper.ceil(mc.player.posZ); ++z) {
-                final BlockPos pos = new BlockPos(x, (int)y, z);
+                final BlockPos pos = new BlockPos(x, (int) y, z);
                 if (mc.world.getBlockState(pos).getBlock() instanceof BlockLiquid) {
                     return true;
                 }

@@ -15,12 +15,7 @@ import java.util.Objects;
 
 
 public class Speed extends Module {
-    public Speed() {
-        super("Speed", Category.Movement, "Makes you go fast");
-    }
-
-
-
+    private final int ticks = 0;
     Setting.mode mode;
     Setting.i acceleration;
     Setting.i specialMoveSpeed;
@@ -29,21 +24,13 @@ public class Speed extends Module {
     Setting.b potion;
     Setting.i potionSpeed1;
     Setting.i potionSpeed2;
-
-    public void setup() {
-        acceleration = registerI("Accel","Accel", 2149, 1000, 2500);
-        specialMoveSpeed = registerI("Speed","Speed", 100, 0, 150);
-        limiter = registerB("Limiter", "Limiter",true);
-        limiter2 = registerB("Limiter 2","Limiter 2",  true);
-        potion = registerB("Speed", "Speed",true);
-        potionSpeed1 = registerI("Speed1", "Speed1",130, 0, 150);
-        potionSpeed2 = registerI("Speed2", "Speed2",125, 0, 150);
-    }
-
     private int stage;
     private int cooldownHops;
-    private final int ticks = 0;
     private double moveSpeed, lastDist;
+
+    public Speed() {
+        super("Speed", Category.Movement, "Makes you go fast");
+    }
 
     public static double defaultSpeed() {
         double baseSpeed = 0.2873D;
@@ -54,6 +41,25 @@ public class Speed extends Module {
         return baseSpeed;
     }
 
+    public static double round(double value, int places) {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        BigDecimal bigDecimal = new BigDecimal(value).setScale(places, RoundingMode.HALF_UP);
+        return bigDecimal.doubleValue();
+    }
+
+    public void setup() {
+        acceleration = registerI("Accel", "Accel", 2149, 1000, 2500);
+        specialMoveSpeed = registerI("Speed", "Speed", 100, 0, 150);
+        limiter = registerB("Limiter", "Limiter", true);
+        limiter2 = registerB("Limiter 2", "Limiter 2", true);
+        potion = registerB("Speed", "Speed", true);
+        potionSpeed1 = registerI("Speed1", "Speed1", 130, 0, 150);
+        potionSpeed2 = registerI("Speed2", "Speed2", 125, 0, 150);
+    }
+
     public void onEnable() {
         if (mc.player != null) {
             moveSpeed = defaultSpeed();
@@ -61,8 +67,6 @@ public class Speed extends Module {
         lastDist = 0.0;
         stage = 2;
     }
-
-
 
     @Listener
     public void onMove(PlayerMoveEvent event) {
@@ -73,7 +77,7 @@ public class Speed extends Module {
             if (this.limiter2.getValue() && mc.player.onGround) {
                 this.stage = 2;
             }
-            if (this.limiter.getValue() && round(mc.player.posY - (int)mc.player.posY, 3) == round(0.138, 3)) {
+            if (this.limiter.getValue() && round(mc.player.posY - (int) mc.player.posY, 3) == round(0.138, 3)) {
                 final EntityPlayerSP player = mc.player;
                 player.motionY -= 0.13;
                 event.setY(event.getY() - 0.13);
@@ -141,8 +145,6 @@ public class Speed extends Module {
         }
     }
 
-
-
     private float getMultiplier() {
         float baseSpeed = this.specialMoveSpeed.getValue();
         if (this.potion.getValue() && mc.player.isPotionActive(MobEffects.SPEED)) {
@@ -168,15 +170,6 @@ public class Speed extends Module {
         }
 
         return baseSpeed;
-    }
-
-    public static double round(double value, int places) {
-        if (places < 0) {
-            throw new IllegalArgumentException();
-        }
-
-        BigDecimal bigDecimal = new BigDecimal(value).setScale(places, RoundingMode.HALF_UP);
-        return bigDecimal.doubleValue();
     }
 
 

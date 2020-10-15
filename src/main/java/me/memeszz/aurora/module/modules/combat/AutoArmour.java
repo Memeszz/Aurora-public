@@ -16,17 +16,15 @@ import net.minecraft.item.ItemStack;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class AutoArmour extends Module {
-    public AutoArmour() {
-        super("AutoArmour", Category.Combat, "Puts on armor");
-        delay = this.registerI("Delay", "Delay",50, 0, 1000);
-        curse = this.registerB("Cursed", "Cursed",false);
-    }
-
+    private final TimerUtil timer = new TimerUtil();
     Setting.b curse;
     Setting.i delay;
 
-    private final TimerUtil timer = new TimerUtil();
-
+    public AutoArmour() {
+        super("AutoArmour", Category.Combat, "Puts on armor");
+        delay = this.registerI("Delay", "Delay", 50, 0, 1000);
+        curse = this.registerB("Cursed", "Cursed", false);
+    }
 
     @Listener
     public void onUpdate(UpdateEvent event) {
@@ -75,7 +73,6 @@ public class AutoArmour extends Module {
             }
         }
     }
-
 
 
     private void clickSlot(int slot) {

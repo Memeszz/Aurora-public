@@ -8,9 +8,9 @@ public interface IMinecraft {
 
     Timer getTimer();
 
-    void setSession(Session session);
-
     Session getSession();
+
+    void setSession(Session session);
 
     void setRightClickDelayTimer(int delay);
 

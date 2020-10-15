@@ -10,18 +10,18 @@ import net.minecraft.item.ItemStack;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class AutoTotem extends Module {
+    public int totems;
+    public Setting mode;
+    Setting.b soft;
+    boolean moving = false;
+    boolean returnI = false;
+
     public AutoTotem() {
         super("AutoTotem", Category.Combat, "Respawn when you die");
     }
 
-    Setting.b soft;
-    public int totems;
-    boolean moving = false;
-    boolean returnI = false;
-    public Setting mode;
-
-    public void setup(){
-        soft = this.registerB("Soft", "Soft",false);
+    public void setup() {
+        soft = this.registerB("Soft", "Soft", false);
     }
 
     @Listener
@@ -46,7 +46,8 @@ public class AutoTotem extends Module {
         totems = mc.player.inventory.mainInventory.stream().filter(itemStack -> itemStack.getItem() == Items.TOTEM_OF_UNDYING).mapToInt(ItemStack::getCount).sum();
         if (mc.player.getHeldItemOffhand().getItem() == Items.TOTEM_OF_UNDYING) {
             totems++;
-        } else {
+        }
+        else {
             if (soft.getValue() && !mc.player.getHeldItemOffhand().isEmpty()) {
                 return;
             }
@@ -74,7 +75,8 @@ public class AutoTotem extends Module {
                 }
                 mc.playerController.windowClick(0, t < 9 ? t + 36 : t, 0, ClickType.PICKUP, mc.player);
                 moving = true;
-            } else if (!soft.getValue()) {
+            }
+            else if (!soft.getValue()) {
                 int t = -1;
                 for (int i = 0; i < 45; i++) {
                     if (mc.player.inventory.getStackInSlot(i).isEmpty()) {
@@ -92,6 +94,6 @@ public class AutoTotem extends Module {
 
     @Override
     public String getHudInfo() {
-        return "\u00A77[\u00A7f" + totems + "\u00A77]";
+        return "§7[§f" + totems + "§7]";
     }
 }

@@ -14,7 +14,7 @@ public class InventoryMove2b extends Module {
     public InventoryMove2b() {
         super("InventoryMove", Category.Misc);
         sprint = registerB("Sprint", "Sprint", false);
-        sneak = this.registerB("Sneak", "Sneak",true);
+        sneak = this.registerB("Sneak", "Sneak", true);
 
     }
 

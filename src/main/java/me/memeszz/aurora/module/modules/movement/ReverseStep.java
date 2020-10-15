@@ -6,17 +6,15 @@ import me.memeszz.aurora.util.setting.Setting;
 import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 
 public class ReverseStep extends Module {
+    private Setting.d height;
+
     public ReverseStep() {
         super("ReverseStep", Category.Movement, "Makes you fall faster");
     }
 
-    private Setting.d height;
-
-
     public void setup() {
-        height = registerD("Height","Height",  2, 1, 15);
+        height = registerD("Height", "Height", 2, 1, 15);
     }
-
 
 
     @Listener

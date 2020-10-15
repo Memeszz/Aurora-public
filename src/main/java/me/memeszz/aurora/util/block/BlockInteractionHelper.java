@@ -19,18 +19,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
- public class BlockInteractionHelper
- {
+public class BlockInteractionHelper {
 
     public static List<Block> blackList;
 
     public static List<Block> shulkerList;
+    private static Minecraft mc = Minecraft.getMinecraft();
 
-    public enum ValidResult {
-        NoEntityCollision,
-        AlreadyBlockThere,
-        NoNeighbors,
-        Ok,
+    static {
+        blackList = Arrays.asList(Blocks.ENDER_CHEST, Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.CRAFTING_TABLE, Blocks.ANVIL, Blocks.BREWING_STAND, Blocks.HOPPER, Blocks.DROPPER, Blocks.DISPENSER);
+        shulkerList = Arrays.asList(Blocks.WHITE_SHULKER_BOX, Blocks.ORANGE_SHULKER_BOX, Blocks.MAGENTA_SHULKER_BOX, Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX, Blocks.PINK_SHULKER_BOX, Blocks.GRAY_SHULKER_BOX, Blocks.SILVER_SHULKER_BOX, Blocks.CYAN_SHULKER_BOX, Blocks.PURPLE_SHULKER_BOX, Blocks.BLUE_SHULKER_BOX, Blocks.BROWN_SHULKER_BOX, Blocks.GREEN_SHULKER_BOX, Blocks.RED_SHULKER_BOX, Blocks.BLACK_SHULKER_BOX);
+        mc = Minecraft.getMinecraft();
     }
 
     public static ValidResult valid(BlockPos pos) {
@@ -39,7 +38,7 @@ import java.util.List;
             return ValidResult.NoEntityCollision;
 
         if (mc.world.getBlockState(pos.down()).getBlock() == Blocks.WATER)
-                return ValidResult.Ok;
+            return ValidResult.Ok;
 
         if (!checkForNeighbours(pos))
             return ValidResult.NoNeighbors;
@@ -48,7 +47,7 @@ import java.util.List;
 
         if (l_State.getBlock() == Blocks.AIR) {
             final BlockPos[] l_Blocks =
-                    { pos.north(), pos.south(), pos.east(), pos.west(), pos.up(), pos.down() };
+                    {pos.north(), pos.south(), pos.east(), pos.west(), pos.up(), pos.down()};
 
             for (BlockPos l_Pos : l_Blocks) {
                 IBlockState l_State2 = mc.world.getBlockState(l_Pos);
@@ -72,12 +71,9 @@ import java.util.List;
         return ValidResult.AlreadyBlockThere;
     }
 
-    public static BlockPos GetLocalPlayerPosFloored()
-    {
+    public static BlockPos GetLocalPlayerPosFloored() {
         return new BlockPos(Math.floor(mc.player.posX), Math.floor(mc.player.posY), Math.floor(mc.player.posZ));
     }
-
-    private static Minecraft mc = Minecraft.getMinecraft();
 
     public static void placeBlockScaffold(BlockPos pos) {
         Vec3d eyesPos = new Vec3d(Wrapper.getPlayer().posX,
@@ -190,30 +186,23 @@ import java.util.List;
         return false;
     }
 
-     public static List<BlockPos> getCircle(final BlockPos loc, final int y, final float r, final boolean hollow) {
-         final List<BlockPos> circleblocks = new ArrayList<BlockPos>();
-         final int cx = loc.getX();
-         final int cz = loc.getZ();
-         for (int x = cx - (int)r; x <= cx + r; ++x) {
-             for (int z = cz - (int)r; z <= cz + r; ++z) {
-                 final double dist = (cx - x) * (cx - x) + (cz - z) * (cz - z);
-                 if (dist < r * r && (!hollow || dist >= (r - 1.0f) * (r - 1.0f))) {
-                     final BlockPos l = new BlockPos(x, y, z);
-                     circleblocks.add(l);
-                 }
-             }
-         }
-         return circleblocks;
-     }
+    public static List<BlockPos> getCircle(final BlockPos loc, final int y, final float r, final boolean hollow) {
+        final List<BlockPos> circleblocks = new ArrayList<BlockPos>();
+        final int cx = loc.getX();
+        final int cz = loc.getZ();
+        for (int x = cx - (int) r; x <= cx + r; ++x) {
+            for (int z = cz - (int) r; z <= cz + r; ++z) {
+                final double dist = (cx - x) * (cx - x) + (cz - z) * (cz - z);
+                if (dist < r * r && (!hollow || dist >= (r - 1.0f) * (r - 1.0f))) {
+                    final BlockPos l = new BlockPos(x, y, z);
+                    circleblocks.add(l);
+                }
+            }
+        }
+        return circleblocks;
+    }
 
-     static {
-         blackList = Arrays.asList(Blocks.ENDER_CHEST, Blocks.CHEST, Blocks.TRAPPED_CHEST, Blocks.CRAFTING_TABLE, Blocks.ANVIL, Blocks.BREWING_STAND, Blocks.HOPPER, Blocks.DROPPER, Blocks.DISPENSER);
-         shulkerList = Arrays.asList(Blocks.WHITE_SHULKER_BOX, Blocks.ORANGE_SHULKER_BOX, Blocks.MAGENTA_SHULKER_BOX, Blocks.LIGHT_BLUE_SHULKER_BOX, Blocks.YELLOW_SHULKER_BOX, Blocks.LIME_SHULKER_BOX, Blocks.PINK_SHULKER_BOX, Blocks.GRAY_SHULKER_BOX, Blocks.SILVER_SHULKER_BOX, Blocks.CYAN_SHULKER_BOX, Blocks.PURPLE_SHULKER_BOX, Blocks.BLUE_SHULKER_BOX, Blocks.BROWN_SHULKER_BOX, Blocks.GREEN_SHULKER_BOX, Blocks.RED_SHULKER_BOX, Blocks.BLACK_SHULKER_BOX);
-         mc = Minecraft.getMinecraft();
-     }
-
-
-     public static List<BlockPos> getSphere(BlockPos loc, float r, int h, boolean hollow, boolean sphere, int plus_y) {
+    public static List<BlockPos> getSphere(BlockPos loc, float r, int h, boolean hollow, boolean sphere, int plus_y) {
         List<BlockPos> circleblocks = new ArrayList<>();
         int cx = loc.getX();
         int cy = loc.getY();
@@ -231,7 +220,6 @@ import java.util.List;
         }
         return circleblocks;
     }
-
 
     public static EnumFacing getPlaceableSide(BlockPos pos) {
 
@@ -252,5 +240,13 @@ import java.util.List;
 
         return null;
 
+    }
+
+
+    public enum ValidResult {
+        NoEntityCollision,
+        AlreadyBlockThere,
+        NoNeighbors,
+        Ok,
     }
 }

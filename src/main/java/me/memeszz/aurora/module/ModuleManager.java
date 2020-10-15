@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class ModuleManager {
     public static ArrayList<Module> modules;
 
-    public ModuleManager(){
+    public ModuleManager() {
         modules = new ArrayList<>();
         /**
          * Combat
@@ -127,8 +127,9 @@ public class ModuleManager {
         addMod(new InvPreview());
 
     }
-//
-    public static void addMod(Module m){
+
+    //
+    public static void addMod(Module m) {
         modules.add(m);
     }
 
@@ -186,30 +187,30 @@ public class ModuleManager {
         return modules;
     }
 
-    public static ArrayList<Module> getModulesInCategory(Module.Category c){
+    public static ArrayList<Module> getModulesInCategory(Module.Category c) {
         return (ArrayList<Module>) getModules().stream().filter(m -> m.getCategory().equals(c)).collect(Collectors.toList());
     }
 
     public static void onBind(int key) {
         if (key == 0) return;
         modules.forEach(module -> {
-            if(module.getBind() == key){
+            if (module.getBind() == key) {
                 module.toggle();
             }
         });
     }
 
-    public static Module getModuleByName(String name){
-        return getModules().stream().filter(mm->mm.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    public static Module getModuleByName(String name) {
+        return getModules().stream().filter(mm -> mm.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
-    public static boolean isModuleEnabled(String name){
-        Module m = getModules().stream().filter(mm->mm.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    public static boolean isModuleEnabled(String name) {
+        Module m = getModules().stream().filter(mm -> mm.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
         assert m != null;
         return m.isEnabled();
     }
 
-    public static boolean isModuleEnabled(Module m){
+    public static boolean isModuleEnabled(Module m) {
         return m.isEnabled();
     }
 

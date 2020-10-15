@@ -1,4 +1,3 @@
-
 package me.memeszz.aurora.util.render;
 
 import net.minecraft.client.Minecraft;

@@ -19,8 +19,8 @@ public class BindCommand extends Command {
     @Override
     public void onCommand(String command, String[] args) {
         int key = Keyboard.getKeyIndex(args[1].toUpperCase());
-        ModuleManager.getModules().forEach(m ->{
-            if(args[0].equalsIgnoreCase(m.getName())){
+        ModuleManager.getModules().forEach(m -> {
+            if (args[0].equalsIgnoreCase(m.getName())) {
                 m.setBind(key);
                 Wrapper.sendClientMessage(args[0] + " bound to " + args[1].toUpperCase());
             }

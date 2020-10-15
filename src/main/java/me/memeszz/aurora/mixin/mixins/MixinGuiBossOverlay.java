@@ -14,7 +14,7 @@ public class MixinGuiBossOverlay {
     @Inject(method = "renderBossHealth", at = @At("HEAD"), cancellable = true)
     private void renderBossHealth(CallbackInfo info) {
         if (ModuleManager.getModuleByName("NoRender").isEnabled())
-        info.cancel();
+            info.cancel();
     }
 
 }

@@ -12,7 +12,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(Entity.class)
 public abstract class MixinEntity implements IEntity {
 
-    @Accessor @Override public abstract boolean getIsInWeb();
+    @Accessor
+    @Override
+    public abstract boolean getIsInWeb();
 
     @Redirect(method = "applyEntityCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;addVelocity(DDD)V"))
     public void velocity(Entity entity, double x, double y, double z) {

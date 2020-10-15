@@ -11,11 +11,11 @@ public class StopwatchUtil {
         return (getCurrentMS() - previousMS >= milliseconds);
     }
 
-    public void reset() {
-        previousMS = getCurrentMS();
-    }
-
     public static long getCurrentMS() {
         return System.nanoTime() / 1000000L;
+    }
+
+    public void reset() {
+        previousMS = getCurrentMS();
     }
 }

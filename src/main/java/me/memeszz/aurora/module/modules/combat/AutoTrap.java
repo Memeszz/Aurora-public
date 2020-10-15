@@ -30,10 +30,9 @@ import java.util.List;
 
 import static me.memeszz.aurora.util.block.BlockInteractionHelper.canBeClicked;
 import static me.memeszz.aurora.util.block.BlockInteractionHelper.faceVectorPacketInstant;
+
 public class AutoTrap extends Module {
-    public AutoTrap() {
-        super("AutoTrap", Category.Combat, "Traps Players In Obsidian");
-    }
+    Setting.mode mode;
     private Setting.i range;
     private Setting.i blocksPerTick;
     private Setting.i tickDelay;
@@ -47,22 +46,24 @@ public class AutoTrap extends Module {
     private int offsetStep = 0;
     private boolean firstRun;
     private int delayTimeout;
-    Setting.mode mode;
     private Setting.b triggerable;
     private Setting.i timeoutTicks;
 
+    public AutoTrap() {
+        super("AutoTrap", Category.Combat, "Traps Players In Obsidian");
+    }
 
     public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Trap");
         modes.add("TrapFullRoof");
-        mode = this.registerMode("Mode","AutoTrapMode", modes, "TrapFullRoof");
-        rotate = this.registerB("Rotate","Rotate", true);
-        range = this.registerI("Range","Range", 5, 0, 6);
-        blocksPerTick = this.registerI("BlockPerTick", "BlockPerTick",5, 0, 10);
+        mode = this.registerMode("Mode", "AutoTrapMode", modes, "TrapFullRoof");
+        rotate = this.registerB("Rotate", "Rotate", true);
+        range = this.registerI("Range", "Range", 5, 0, 6);
+        blocksPerTick = this.registerI("BlockPerTick", "BlockPerTick", 5, 0, 10);
         tickDelay = this.registerI("Delay", "Delay", 0, 0, 10);
         timeoutTicks = this.registerI("TimeoutTicks", "TimeoutTicks", 7, 0, 20);
-        triggerable = this.registerB("Triggerable", "Triggerable",true);
+        triggerable = this.registerB("Triggerable", "Triggerable", true);
 
 
     }
@@ -118,7 +119,8 @@ public class AutoTrap extends Module {
             if (delayStep < tickDelay.getValue()) {
                 delayStep++;
                 return;
-            } else {
+            }
+            else {
                 delayStep = 0;
             }
         }
@@ -137,7 +139,8 @@ public class AutoTrap extends Module {
             firstRun = false;
             lastTickTargetName = closestTarget.getName();
 
-        } else if (!lastTickTargetName.equals(closestTarget.getName())) {
+        }
+        else if (!lastTickTargetName.equals(closestTarget.getName())) {
             lastTickTargetName = closestTarget.getName();
             offsetStep = 0;
 
@@ -145,20 +148,20 @@ public class AutoTrap extends Module {
 
         List<Vec3d> placeTargets = new ArrayList<>();
 
-        if(mode.getValue().equalsIgnoreCase("Trap")) {
+        if (mode.getValue().equalsIgnoreCase("Trap")) {
             Collections.addAll(placeTargets, Offsets.TRAP);
         }
 //antistep
-        if(mode.getValue().equalsIgnoreCase("TrapFullRoof")) {
+        if (mode.getValue().equalsIgnoreCase("TrapFullRoof")) {
             Collections.addAll(placeTargets, Offsets.TRAPFULLROOF);
         }
 
 
-        // TODO: dont use static bridging in offset but calculate them on the fly
-        //  based on view direction (or relative direction of target to player)
-        //  (add full/half n/e/s/w patterns to append dynamically)
+        ä
+                //  based on view direction (or relative direction of target to player)
+                //  (add full/half n/e/s/w patterns to append dynamically)
 
-        // TODO: sort offsetList by optimal caging success factor ->
+                ä
         // sort them by pos y up AND start building behind target
 
         int blocksPlaced = 0;
@@ -325,7 +328,7 @@ public class AutoTrap extends Module {
 
     @Override
     public String getHudInfo() {
-        return "\u00A77[\u00A7f" + mode.getValue() + "\u00A77]";
+        return "§7[§f" + mode.getValue() + "§7]";
     }
 
     private static class Offsets {

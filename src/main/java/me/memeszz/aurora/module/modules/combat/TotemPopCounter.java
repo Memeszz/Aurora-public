@@ -18,14 +18,14 @@ import java.util.HashMap;
 public class TotemPopCounter extends Module {
 
     private final Setting.b friend;
+    //e
+    private HashMap<String, Integer> popList = new HashMap();
 
     public TotemPopCounter() {
         super("PopCounter", Category.Combat, "Alerts When A Player Pops A Totem");
-        friend = this.registerB("AlertFriends","AlertFriends", true);
+        friend = this.registerB("AlertFriends", "AlertFriends", true);
 
     }
-//e
-    private HashMap<String, Integer> popList = new HashMap();
 
     @Listener
     public void onUpdate(TotemPopEvent event) {
@@ -44,7 +44,8 @@ public class TotemPopCounter extends Module {
                     Command.sendClientMessage(ChatFormatting.RED + event.getEntity().getName() + " popped " + ChatFormatting.YELLOW + 1 + ChatFormatting.RED + " totem!");
                 }
 
-            } else if (!(popList.get(event.getEntity().getName()) == null)) {
+            }
+            else if (!(popList.get(event.getEntity().getName()) == null)) {
                 int popCounter = popList.get(event.getEntity().getName());
                 int newPopCounter = popCounter += 1;
                 popList.put(event.getEntity().getName(), newPopCounter);
@@ -56,7 +57,8 @@ public class TotemPopCounter extends Module {
             if (popList.get(event.getEntity().getName()) == null) {
                 popList.put(event.getEntity().getName(), 1);
                 Command.sendClientMessage(ChatFormatting.RED + event.getEntity().getName() + ChatFormatting.RED + " popped " + ChatFormatting.YELLOW + 1 + ChatFormatting.RED + " totem!");
-            } else if (!(popList.get(event.getEntity().getName()) == null)) {
+            }
+            else if (!(popList.get(event.getEntity().getName()) == null)) {
                 int popCounter = popList.get(event.getEntity().getName());
                 int newPopCounter = popCounter += 1;
                 popList.put(event.getEntity().getName(), newPopCounter);
@@ -75,6 +77,7 @@ public class TotemPopCounter extends Module {
             }
         }
     }
+
     public int getTotemPops(final EntityPlayer player) {
         final Integer pops = this.popList.get(player);
         if (pops == null) {
@@ -83,9 +86,9 @@ public class TotemPopCounter extends Module {
         return pops;
     }
 
-        public String getTotemPopString ( final EntityPlayer player){
-            return "§f" + ((this.getTotemPops(player) <= 0) ? "" : ("-" + this.getTotemPops(player) + " "));
-        }
+    public String getTotemPopString(final EntityPlayer player) {
+        return "§f" + ((this.getTotemPops(player) <= 0) ? "" : ("-" + this.getTotemPops(player) + " "));
+    }
 
 
     @Listener

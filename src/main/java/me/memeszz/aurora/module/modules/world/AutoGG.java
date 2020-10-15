@@ -19,24 +19,32 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class AutoGG extends Module {
     public static AutoGG INSTANCE;
+    static List<String> AutoGgMessages = new ArrayList<>();
+    Setting.mode mode;
+    int index = -1;
+    private ConcurrentHashMap targetedPlayers = null;
+
     public AutoGG() {
         super("AutoGG", Category.World, "Sends a message in chat when you kill someone");
         INSTANCE = this;
     }
 
-    Setting.mode mode;
+    public static void addAutoGgMessage(String s) {
+        AutoGgMessages.add(s);
+    }
+
+    public static List<String> getAutoGgMessages() {
+        return AutoGgMessages;
+    }
 
     public void setup() {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Get fuck by aurora");
         modes.add("Get fuck by nutgod");
         modes.add("GG, {name}");
-        mode = this.registerMode("Mode","Mode", modes, "GG, {name}");
+        mode = this.registerMode("Mode", "Mode", modes, "GG, {name}");
 
     }
-    static List<String> AutoGgMessages = new ArrayList<>();
-    private ConcurrentHashMap targetedPlayers = null;
-    int index = -1;
 
     @Listener
     public void send(PacketEvent.Send event) {
@@ -46,7 +54,7 @@ public class AutoGG extends Module {
             }
 
             if (event.getPacket() instanceof CPacketUseEntity) {
-                CPacketUseEntity cPacketUseEntity = (CPacketUseEntity)event.getPacket();
+                CPacketUseEntity cPacketUseEntity = (CPacketUseEntity) event.getPacket();
                 if (cPacketUseEntity.getAction().equals(CPacketUseEntity.Action.ATTACK)) {
                     Entity targetEntity = cPacketUseEntity.getEntityFromWorld(mc.world);
                     if (targetEntity instanceof EntityPlayer) {
@@ -67,7 +75,7 @@ public class AutoGG extends Module {
             EntityLivingBase entity = event.getEntityLiving();
             if (entity != null) {
                 if (entity instanceof EntityPlayer) {
-                    EntityPlayer player = (EntityPlayer)entity;
+                    EntityPlayer player = (EntityPlayer) entity;
                     if (player.getHealth() <= 0.0F) {
                         String name = player.getName();
                         if (this.shouldAnnounce(name)) {
@@ -90,9 +98,9 @@ public class AutoGG extends Module {
 
     @Listener
     public void onUpdate(UpdateEvent event) {
-            if (this.targetedPlayers == null) {
-                this.targetedPlayers = new ConcurrentHashMap();
-            }
+        if (this.targetedPlayers == null) {
+            this.targetedPlayers = new ConcurrentHashMap();
+        }
 
         for (Entity entity : mc.world.getLoadedEntityList()) {
             if (entity instanceof EntityPlayer) {
@@ -108,15 +116,15 @@ public class AutoGG extends Module {
         }
 
 
+        targetedPlayers.forEach((namex, timeout) -> {
+            if ((int) timeout <= 0) {
+                this.targetedPlayers.remove(namex);
+            }
+            else {
+                this.targetedPlayers.put(namex, (int) timeout - 1);
+            }
 
-            targetedPlayers.forEach((namex, timeout) -> {
-                if ((int)timeout <= 0) {
-                    this.targetedPlayers.remove(namex);
-                } else {
-                    this.targetedPlayers.put(namex, (int)timeout - 1);
-                }
-
-            });
+        });
     }
 
     private boolean shouldAnnounce(String name) {
@@ -156,14 +164,5 @@ public class AutoGG extends Module {
 
             targetedPlayers.put(name, 20);
         }
-    }
-
-
-    public static void addAutoGgMessage(String s){
-        AutoGgMessages.add(s);
-    }
-
-    public static List<String> getAutoGgMessages(){
-        return AutoGgMessages;
     }
 }

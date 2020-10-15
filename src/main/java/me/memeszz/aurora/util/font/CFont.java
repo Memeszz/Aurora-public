@@ -1,4 +1,5 @@
 package me.memeszz.aurora.util.font;
+
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import org.lwjgl.opengl.GL11;
 
@@ -30,16 +31,17 @@ public class CFont {
 
         try {
             return new DynamicTexture(img);
-        } catch (Exception var7) {
+        }
+        catch (Exception var7) {
             var7.printStackTrace();
             return null;
         }
     }
 
     protected BufferedImage generateFontImage(Font font, boolean antiAlias, boolean fractionalMetrics, CFont.CharData[] chars) {
-        int imgSize = (int)this.imgSize;
+        int imgSize = (int) this.imgSize;
         BufferedImage bufferedImage = new BufferedImage(imgSize, imgSize, 2);
-        Graphics2D g = (Graphics2D)bufferedImage.getGraphics();
+        Graphics2D g = (Graphics2D) bufferedImage.getGraphics();
         g.setFont(font);
         g.setColor(new Color(255, 255, 255, 0));
         g.fillRect(0, 0, imgSize, imgSize);
@@ -52,8 +54,8 @@ public class CFont {
         int positionX = 0;
         int positionY = 1;
 
-        for(int i = 0; i < chars.length; ++i) {
-            char ch = (char)i;
+        for (int i = 0; i < chars.length; ++i) {
+            char ch = (char) i;
             CFont.CharData charData = new CharData();
             Rectangle2D dimensions = fontMetrics.getStringBounds(String.valueOf(ch), g);
             charData.width = dimensions.getBounds().width + 8;
@@ -84,8 +86,9 @@ public class CFont {
 
     public void drawChar(CFont.CharData[] chars, char c, float x, float y) throws ArrayIndexOutOfBoundsException {
         try {
-            this.drawQuad(x, y, (float)chars[c].width, (float)chars[c].height, (float)chars[c].storedX, (float)chars[c].storedY, (float)chars[c].width, (float)chars[c].height);
-        } catch (Exception var6) {
+            this.drawQuad(x, y, (float) chars[c].width, (float) chars[c].height, (float) chars[c].storedX, (float) chars[c].storedY, (float) chars[c].width, (float) chars[c].height);
+        }
+        catch (Exception var6) {
             var6.printStackTrace();
         }
 
@@ -123,7 +126,7 @@ public class CFont {
         char[] var3 = text.toCharArray();
         int var4 = var3.length;
 
-        for(int var5 = 0; var5 < var4; ++var5) {
+        for (int var5 = 0; var5 < var4; ++var5) {
             char c = var3[var5];
             if (c < this.charData.length && c >= 0) {
                 width += this.charData[c].width - 8 + this.charOffset;

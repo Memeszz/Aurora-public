@@ -17,8 +17,8 @@ public class SetCommand extends Command {
 
     @Override
     public void onCommand(String command, String[] args) throws Exception {
-        for(Module m : ModuleManager.getModules()) {
-            if(m.getName().equalsIgnoreCase(args[0])) {
+        for (Module m : ModuleManager.getModules()) {
+            if (m.getName().equalsIgnoreCase(args[0])) {
                 System.out.println("no");
             }
         }

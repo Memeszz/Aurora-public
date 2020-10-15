@@ -20,6 +20,9 @@ public class OpenFolderCommand extends Command {
     public void onCommand(String command, String[] args) throws Exception {
         try {
             Desktop.getDesktop().open(new File("Aurora"));
-        } catch(Exception e){sendClientMessage("Error: " + e.getMessage());}
+        }
+        catch (Exception e) {
+            sendClientMessage("Error: " + e.getMessage());
+        }
     }
 }

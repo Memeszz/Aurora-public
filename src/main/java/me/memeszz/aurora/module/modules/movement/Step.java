@@ -8,12 +8,12 @@ import team.stiff.pomelo.impl.annotated.handler.annotation.Listener;
 import java.util.ArrayList;
 
 public class Step extends Module {
+    Setting.d height;
+    Setting.mode mode;
+
     public Step() {
         super("Step", Category.Movement);
     }
-
-    Setting.d height;
-    Setting.mode mode;
 
     @Override
     public void onDisable() {
@@ -24,7 +24,7 @@ public class Step extends Module {
         ArrayList<String> modes = new ArrayList<>();
         modes.add("Vanilla");
         mode = registerMode("Mode", "Mode", modes, "Vanilla");
-        height = registerD("Height","Height", 2.0, 0.0, 6.0);
+        height = registerD("Height", "Height", 2.0, 0.0, 6.0);
     }
 
     @Listener

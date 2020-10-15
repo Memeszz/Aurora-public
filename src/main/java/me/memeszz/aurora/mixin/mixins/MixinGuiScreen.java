@@ -23,8 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinGuiScreen {
 
     /**
-     * @author
-     * cookiedragon & bella?
+     * @author cookiedragon & bella?
      * https://github.com/kami-blue/client/blob/master/src/main/java/me/zeroeightsix/kami/mixin/client/MixinGuiScreen.java
      */
 

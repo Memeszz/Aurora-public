@@ -42,15 +42,16 @@ import java.util.Map;
 
 public class EventProcessor {
     public static EventProcessor INSTANCE;
+    private final Map<String, String> uuidNameCache = Maps.newConcurrentMap();
     Minecraft mc = Minecraft.getMinecraft();
     CommandManager commandManager = new CommandManager();
 
-    public EventProcessor(){
+
+    public EventProcessor() {
         INSTANCE = this;
     }
 
-
-    public void init(){
+    public void init() {
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -99,8 +100,8 @@ public class EventProcessor {
     }
 
     @SubscribeEvent
-    public void onMouseInput(InputEvent.MouseInputEvent event){
-        if(Mouse.getEventButtonState())
+    public void onMouseInput(InputEvent.MouseInputEvent event) {
+        if (Mouse.getEventButtonState())
             Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
@@ -112,7 +113,8 @@ public class EventProcessor {
             try {
                 mc.ingameGUI.getChatGUI().addToSentMessages(event.getMessage());
                 commandManager.callCommand(event.getMessage().substring(1));
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
                 Wrapper.sendClientMessage(ChatFormatting.DARK_RED + "Error: " + e.getMessage());
             }
@@ -126,7 +128,7 @@ public class EventProcessor {
     }
 
     @SubscribeEvent
-    public void onChatReceived(ClientChatReceivedEvent event){
+    public void onChatReceived(ClientChatReceivedEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
@@ -136,22 +138,22 @@ public class EventProcessor {
     }
 
     @SubscribeEvent
-    public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event){
+    public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onDrawBlockHighlight(DrawBlockHighlightEvent event){
+    public void onDrawBlockHighlight(DrawBlockHighlightEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onRenderBlockOverlay(RenderBlockOverlayEvent event){
+    public void onRenderBlockOverlay(RenderBlockOverlayEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onLivingDamage(LivingDamageEvent event){
+    public void onLivingDamage(LivingDamageEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
@@ -161,14 +163,14 @@ public class EventProcessor {
     }
 
     @SubscribeEvent
-    public void onInputUpdate(InputUpdateEvent event){
+    public void onInputUpdate(InputUpdateEvent event) {
         Aurora.getInstance().getEventManager().dispatchEvent(event);
     }
 
     @SubscribeEvent
-    public void onLivingDeath(LivingDeathEvent event){
-        Aurora.getInstance().getEventManager().dispatchEvent(event);}
-
+    public void onLivingDeath(LivingDeathEvent event) {
+        Aurora.getInstance().getEventManager().dispatchEvent(event);
+    }
 
     @Listener
     public void onPacketRecieve(PacketEvent.Receive event) {
@@ -203,9 +205,6 @@ public class EventProcessor {
         }
     }
 
-
-    private final Map<String, String> uuidNameCache = Maps.newConcurrentMap();
-
     public String resolveName(String uuid) {
         uuid = uuid.replace("-", "");
         if (uuidNameCache.containsKey(uuid)) {
@@ -224,7 +223,8 @@ public class EventProcessor {
                     }
                 }
             }
-        } catch (IOException | ParseException e) {
+        }
+        catch (IOException | ParseException e) {
             e.printStackTrace();
         }
 

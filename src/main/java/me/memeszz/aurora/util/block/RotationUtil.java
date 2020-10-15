@@ -18,43 +18,12 @@ public class RotationUtil {
 
     Minecraft mc = Minecraft.getMinecraft();
 
-    public void updateRotations() {
-        this.yaw = mc.player.rotationYaw;
-        this.pitch = mc.player.rotationPitch;
-    }
-
-    public void restoreRotations() {
-        mc.player.rotationYaw = this.yaw;
-        mc.player.rotationYawHead = this.yaw;
-        mc.player.rotationPitch = this.pitch;
-    }
-
-    public void setPlayerRotations(float yaw, float pitch) {
-        mc.player.rotationYaw = yaw;
-        mc.player.rotationYawHead = yaw;
-        mc.player.rotationPitch = pitch;
-    }
-
-
-    public void lookAtVec3d(Vec3d vec3d) {
-        float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d(vec3d.x, vec3d.y, vec3d.z));
-        this.setPlayerRotations(angle[0], angle[1]);
-    }
-
-
-    /*public void lookAtEntity(Entity entity) {
-        float[] angle = MathUtil.calcAngle(RotationManager.mc.field_71439_g.func_174824_e(mc.func_184121_ak()), entity.func_174824_e(mc.func_184121_ak()));
-        this.setPlayerRotations(angle[0], angle[1]);
-    }*/
-
-
     public static float[] getRotations(final EntityLivingBase ent) {
         final double x = ent.posX;
         final double z = ent.posZ;
         final double y = ent.posY + ent.getEyeHeight() / 2.0f - 0.5;
         return getRotationFromPosition(x, z, y);
     }
-
 
     public static float[] getAverageRotations(final List<EntityLivingBase> targetList) {
         double posX = 0.0;
@@ -68,8 +37,9 @@ public class RotationUtil {
         posX /= targetList.size();
         posY /= targetList.size();
         posZ /= targetList.size();
-        return new float[] { getRotationFromPosition(posX, posZ, posY)[0], getRotationFromPosition(posX, posZ, posY)[1] };
+        return new float[]{getRotationFromPosition(posX, posZ, posY)[0], getRotationFromPosition(posX, posZ, posY)[1]};
     }
+
     public static float[] getPredictedRotations(final EntityLivingBase ent) {
         final double x = ent.posX + (ent.posX - ent.lastTickPosX);
         final double z = ent.posZ + (ent.posZ - ent.lastTickPosZ);
@@ -77,10 +47,15 @@ public class RotationUtil {
         return getRotationFromPosition(x, z, y);
     }
 
-
     public static Vec3i getRandomCenter(AxisAlignedBB bb) {
         return new Vec3i(bb.minX + (bb.maxX - bb.minX) * 0.8 * Math.random(), bb.minY + (bb.maxY - bb.minY) * 1 * Math.random(), bb.minZ + (bb.maxZ - bb.minZ) * 0.8 * Math.random());
     }
+
+
+    /*public void lookAtEntity(Entity entity) {
+        float[] angle = MathUtil.calcAngle(RotationManager.mc.field_71439_g.func_174824_e(mc.func_184121_ak()), entity.func_174824_e(mc.func_184121_ak()));
+        this.setPlayerRotations(angle[0], angle[1]);
+    }*/
 
     public static float[] getRotationsBlock(final BlockPos block, final EnumFacing face) {
         final double x = block.getX() + 0.5 - Minecraft.getMinecraft().player.posX + face.getXOffset() / 2.0;
@@ -88,12 +63,12 @@ public class RotationUtil {
         final double y = block.getY() + 0.5;
         final double d1 = Minecraft.getMinecraft().player.posY + Minecraft.getMinecraft().player.getEyeHeight() - y;
         final double d2 = MathHelper.sqrt(x * x + z * z);
-        float yaw = (float)(Math.atan2(z, x) * 180.0 / 3.141592653589793) - 90.0f;
-        final float pitch = (float)(Math.atan2(d1, d2) * 180.0 / 3.141592653589793);
+        float yaw = (float) (Math.atan2(z, x) * 180.0 / 3.141592653589793) - 90.0f;
+        final float pitch = (float) (Math.atan2(d1, d2) * 180.0 / 3.141592653589793);
         if (yaw < 0.0f) {
             yaw += 360.0f;
         }
-        return new float[] { yaw, pitch };
+        return new float[]{yaw, pitch};
     }
 
     public static float getYawChange(final float yaw, final double posX, final double posZ) {
@@ -113,7 +88,7 @@ public class RotationUtil {
         else if (deltaZ != 0.0) {
             yawToEntity = Math.toDegrees(-Math.atan(deltaX / deltaZ));
         }
-        return MathHelper.wrapDegrees(-(yaw - (float)yawToEntity));
+        return MathHelper.wrapDegrees(-(yaw - (float) yawToEntity));
     }
 
     public static float getPitchChange(final float pitch, final Entity entity, final double posY) {
@@ -122,7 +97,7 @@ public class RotationUtil {
         final double deltaY = posY - 2.2 + entity.getEyeHeight() - Minecraft.getMinecraft().player.posY;
         final double distanceXZ = MathHelper.sqrt(deltaX * deltaX + deltaZ * deltaZ);
         final double pitchToEntity = -Math.toDegrees(Math.atan(deltaY / distanceXZ));
-        return -MathHelper.wrapDegrees(pitch - (float)pitchToEntity) - 2.5f;
+        return -MathHelper.wrapDegrees(pitch - (float) pitchToEntity) - 2.5f;
     }
 
     public static float[] getRotationFromVector(final Vec3i vec) {
@@ -136,15 +111,13 @@ public class RotationUtil {
         return new float[]{MathHelper.wrapDegrees(yaw), MathHelper.wrapDegrees(pitch)};
     }
 
-    public static Vec3i getVectorForRotation(float pitch, float yaw)
-    {
-        float f = MathHelper.cos(-yaw * 0.017453292F - (float)Math.PI);
-        float f1 = MathHelper.sin(-yaw * 0.017453292F - (float)Math.PI);
+    public static Vec3i getVectorForRotation(float pitch, float yaw) {
+        float f = MathHelper.cos(-yaw * 0.017453292F - (float) Math.PI);
+        float f1 = MathHelper.sin(-yaw * 0.017453292F - (float) Math.PI);
         float f2 = -MathHelper.cos(-pitch * 0.017453292F);
         float f3 = MathHelper.sin(-pitch * 0.017453292F);
         return new Vec3i(f1 * f2, f3, f * f2);
     }
-
 
     public static float[] getDirectionToBlock(int var0, int var1, int var2, EnumFacing var3) {
         EntityEgg var4 = new EntityEgg(Minecraft.getMinecraft().world);
@@ -178,9 +151,11 @@ public class RotationUtil {
 
         if (var3 < 0.0D && var1 < 0.0D) {
             var5 = 90.0D + Math.toDegrees(Math.atan(var3 / var1));
-        } else if (var3 < 0.0D && var1 > 0.0D) {
+        }
+        else if (var3 < 0.0D && var1 > 0.0D) {
             var5 = -90.0D + Math.toDegrees(Math.atan(var3 / var1));
-        } else {
+        }
+        else {
             var5 = Math.toDegrees(-Math.atan(var1 / var3));
         }
 
@@ -201,34 +176,30 @@ public class RotationUtil {
         final double zDiff = z - Minecraft.getMinecraft().player.posZ;
         final double yDiff = y - Minecraft.getMinecraft().player.posY - 0.6;
         final double dist = MathHelper.sqrt(xDiff * xDiff + zDiff * zDiff);
-        final float yaw = (float)(Math.atan2(zDiff, xDiff) * 180.0 / 3.141592653589793) - 90.0f;
-        final float pitch = (float)(-(Math.atan2(yDiff, dist) * 180.0 / 3.141592653589793));
-        return new float[] { yaw, pitch };
+        final float yaw = (float) (Math.atan2(zDiff, xDiff) * 180.0 / 3.141592653589793) - 90.0f;
+        final float pitch = (float) (-(Math.atan2(yDiff, dist) * 180.0 / 3.141592653589793));
+        return new float[]{yaw, pitch};
     }
 
     public static float getTrajAngleSolutionLow(final float d3, final float d1, final float velocity) {
         final float g = 0.006f;
         final float sqrt = velocity * velocity * velocity * velocity - g * (g * (d3 * d3) + 2.0f * d1 * (velocity * velocity));
-        return (float)Math.toDegrees(Math.atan((velocity * velocity - Math.sqrt(sqrt)) / (g * d3)));
+        return (float) Math.toDegrees(Math.atan((velocity * velocity - Math.sqrt(sqrt)) / (g * d3)));
     }
 
-    public static float wrapAngleTo180(float angle)
-    {
+    public static float wrapAngleTo180(float angle) {
         angle %= 360f;
 
-        if (angle >= 180f)
-        {
+        if (angle >= 180f) {
             angle -= 360f;
         }
 
-        if (angle < -180f)
-        {
+        if (angle < -180f) {
             angle += 360f;
         }
 
         return angle;
     }
-
 
     public static float getNewAngle(float angle) {
         angle %= 360.0f;
@@ -247,5 +218,27 @@ public class RotationUtil {
             angle3 = 360.0f - angle3;
         }
         return angle3;
+    }
+
+    public void updateRotations() {
+        this.yaw = mc.player.rotationYaw;
+        this.pitch = mc.player.rotationPitch;
+    }
+
+    public void restoreRotations() {
+        mc.player.rotationYaw = this.yaw;
+        mc.player.rotationYawHead = this.yaw;
+        mc.player.rotationPitch = this.pitch;
+    }
+
+    public void setPlayerRotations(float yaw, float pitch) {
+        mc.player.rotationYaw = yaw;
+        mc.player.rotationYawHead = yaw;
+        mc.player.rotationPitch = pitch;
+    }
+
+    public void lookAtVec3d(Vec3d vec3d) {
+        float[] angle = MathUtil.calcAngle(mc.player.getPositionEyes(mc.getRenderPartialTicks()), new Vec3d(vec3d.x, vec3d.y, vec3d.z));
+        this.setPlayerRotations(angle[0], angle[1]);
     }
 }

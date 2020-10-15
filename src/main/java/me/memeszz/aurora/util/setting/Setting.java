@@ -24,7 +24,7 @@ public class Setting {
         return this.name;
     }
 
-    public String getConfigName(){
+    public String getConfigName() {
         return this.configname;
     }
 
@@ -49,9 +49,9 @@ public class Setting {
     }
 
     public static class i extends Setting {
-        private int value;
         private final int min;
         private final int max;
+        private int value;
 
         public i(final String name, final String configname, final Module parent, final Module.Category category, final int value, final int min, final int max) {
             super(name, configname, parent, category, Type.I);
@@ -78,9 +78,9 @@ public class Setting {
     }
 
     public static class d extends Setting {
-        private double value;
         private final double min;
         private final double max;
+        private double value;
 
         public d(final String name, final String configname, final Module parent, final Module.Category category, final double value, final double min, final double max) {
             super(name, configname, parent, category, Type.D);
@@ -124,8 +124,8 @@ public class Setting {
     }
 
     public static class mode extends Setting {
-        private String value;
         private final java.util.List<String> modes;
+        private String value;
 
         public mode(final String name, final String configname, final Module parent, final Module.Category category, final java.util.List<String> modes, final String value) {
             super(name, configname, parent, category, Type.M);
